@@ -158,7 +158,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
 > 주간 목표: 분야 전체 지도를 그리고 회사 스택 위치를 안다 + 이후 모든 논문의 수학적 공통 기반을 손으로 구현한다.
 
 - [ ] **01-physical-ai-landscape** `W1-M1` · Tier B · [P0] — 스택 5계층 · 주요 플레이어 지도 · 데이터 피라미드 / 산출물: 본인 언어의 스택 다이어그램
-  - [ ] lesson.md 초안 (pai-agent)
+  - [x] lesson.md 초안 (pai-agent)
   - [ ] practice/ (.py + .ipynb)
   - [ ] labs/
   - [ ] 윤문 (/humanize-korean)
