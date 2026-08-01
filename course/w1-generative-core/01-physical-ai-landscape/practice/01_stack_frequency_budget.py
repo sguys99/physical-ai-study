@@ -645,9 +645,11 @@ def main(argv: list[str] | None = None) -> None:
     print("  MPC 대응: H_chunk는 receding horizon의 예측 지평 N이다 (lesson §3).")
     print("  지평을 늘리면 지연에는 강해지지만 그 구간 동안 새 관측을 반영하지 못한다.")
 
+    # 영문 폴백 렌더는 한글본을 덮어쓰지 않고 따로 저장한다 (02·03과 동일 규약)
+    suffix = "_ascii" if args.ascii_labels else ""
     out = plot_budget(
         args.f2, args.f4, args.tau_infer, args.tau_comm, n_sweep, duration,
-        artifacts_dir() / "01_frequency_budget.png",
+        artifacts_dir() / f"01_frequency_budget{suffix}.png",
     )
     print(f"\n[저장] {out}")
 
