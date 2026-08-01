@@ -166,7 +166,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
 - [ ] **02-simulator-bootcamp** `W1-M2` · Tier A · [P0] — 클라우드 셋업 → MuJoCo 기초 → G1 로드·sin파 구동 → playground 스모크
   - [x] lesson.md 초안 (pai-agent)
   - [x] practice/ (.py + .ipynb)
-  - [ ] labs/
+  - [x] labs/
   - [ ] 윤문 (/humanize-korean)
   - [ ] 실행검증 _(학습자)_
 - [ ] **03-diffusion-ddpm-dit** `W1-M3` · Tier C · [P0] — DDPM forward/reverse · DiT(patchify, adaLN-zero) / **VLA 액션 헤드 대부분이 DiT 구조**
