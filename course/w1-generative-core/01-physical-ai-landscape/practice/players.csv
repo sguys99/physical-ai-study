@@ -1,0 +1,12 @@
+org,lineage,latest,date,date_confidence,bet_layer,note
+NVIDIA GEAR,GR00T N1 -> N1.5 -> N1.6,Isaac GR00T N1.6 (3B),2026-01,estimated,L4;L2;SIM,"SigLip2(비전)+T5(언어) 백본. flow matching과 world-modeling objective 공동 학습. N1.5 대비 MLP connector 개선. HF nvidia/GR00T-N1.6-3B. 학습 데이터 규모 비공개. 공개일은 CES 2026(1월 추정, 날짜 미확정)"
+NVIDIA,Cosmos -> Cosmos 3,Cosmos 3,2026,estimated,DATA,"월드 생성 + 비전 추론 + 액션 시뮬 통합. 오픈 Cosmos WFM 누적 300만+ 다운로드. 정확한 릴리스 시점 미확정"
+NVIDIA,Isaac Sim / Isaac Lab,Isaac Sim 5.0 GA / Isaac Lab 3.0 (early access),2025,estimated,SIM,"Isaac Sim 5.0 GA는 SIGGRAPH 2025. Isaac Lab 3.0은 얼리 액세스. Isaac Lab 2.2는 휴머노이드 정책 평가·GR00T N1 벤치마킹 중심. 2025~2026 구간"
+Physical Intelligence,pi0 -> pi0.5 -> pi*0.6 -> pi0.7,pi0.7 (arXiv:2604.15483),2026-04-16,confirmed,L4,"L4 VLA 단일 베팅. pi*0.6(2025-11-17)은 VLA에서 RL Token을 뽑아 온라인 RL. pi0.7은 diverse context conditioning — 수행 품질 메타데이터·서브골 이미지를 학습 조건으로 주입해 준최적·실패 데이터까지 활용. 공저자 87명"
+Google DeepMind,RT-2 -> Gemini Robotics 1.5 -> ER 1.6 -> Gemini Robotics 2,Gemini Robotics 2,2026-07-31,confirmed,L4;L2,"이전 세대의 상체 조작 중심에서 whole-body control(보행·웅크리기·굽히기 + 조작)로 확장. Gemini Robotics On-Device 2 동시 공개(수 시간 데이터로 새 임바디먼트 적응). Apptronik 휴머노이드 데모"
+Shanghai AI Lab / InternRobotics,InternVLA-M1 / N1 / A1,InternVLA M1 / N1 / A1,2025,estimated,L4;L5;L2,"N1은 듀얼 시스템 VLN — wheeled/quadruped/humanoid zero-shot, >150m 장기 계획 + >30Hz 실시간 결정. OpenHomie도 이 조직 산하. 2025~2026 구간"
+Unitree,G1 / H1 / R1 / H2,,2026-08,confirmed,L1,"L1 하드웨어. 2026-08 STAR Market 상장 절차 진행 중(08-10 청약 개시 예정). 2025년 휴머노이드 5,500대+ 출하 — 테슬라보다 많음. 매출 16.9억 위안"
+AgiBot,AgiBot World Alpha -> Beta -> 2026,AgiBot World 2026,2026,estimated,DATA,"100% 실환경. AGIBOT G2 플랫폼 free-form 수집. 원논문 arXiv:2503.06669, IROS 2025 Best Paper Finalist & IEEE TRO 2026"
+Figure AI,자체 하드웨어 + 자체 VLA 수직 통합,,,unknown,L1;L4,"lesson §4: 1차 출처로 확인된 정량 수치가 없어 정성 서술만. 생산 대수 등 수치는 의도적으로 넣지 않음"
+Tesla,Optimus,,,unknown,L1,"lesson §4: 대량 생산 전제의 수직 통합 노선. V3는 2026년 7월 기준 아직 공개 시연 전. 정량 수치 1차 출처 미확인"
+1X,NEO,,,unknown,L1,"lesson §4: 가정용(NEO) 포지셔닝에 텔레옵 폴백을 전제한 배포 전략. 선주문 수량 등 수치는 1차 출처 미확인"

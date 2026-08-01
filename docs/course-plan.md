@@ -159,7 +159,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
 
 - [ ] **01-physical-ai-landscape** `W1-M1` · Tier B · [P0] — 스택 5계층 · 주요 플레이어 지도 · 데이터 피라미드 / 산출물: 본인 언어의 스택 다이어그램
   - [x] lesson.md 초안 (pai-agent)
-  - [ ] practice/ (.py + .ipynb)
+  - [x] practice/ (.py + .ipynb)
   - [ ] labs/
   - [ ] 윤문 (/humanize-korean)
   - [ ] 실행검증 _(학습자)_
