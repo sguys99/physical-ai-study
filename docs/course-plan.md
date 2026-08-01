@@ -165,7 +165,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
   - [ ] 실행검증 _(학습자)_
 - [ ] **02-simulator-bootcamp** `W1-M2` · Tier A · [P0] — 클라우드 셋업 → MuJoCo 기초 → G1 로드·sin파 구동 → playground 스모크
   - [x] lesson.md 초안 (pai-agent)
-  - [ ] practice/ (.py + .ipynb)
+  - [x] practice/ (.py + .ipynb)
   - [ ] labs/
   - [ ] 윤문 (/humanize-korean)
   - [ ] 실행검증 _(학습자)_
