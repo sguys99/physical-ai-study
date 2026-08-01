@@ -209,3 +209,32 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ── Physical AI 스터디 ──────────────────────────────────
+# 외부 리포 클론 (OpenHomie, DualMap, unitree_rl_gym 등)
+repos/*
+!repos/.gitkeep
+
+# 실험 산출물 — 대용량 바이너리는 추적하지 않음
+artifacts/**/*.mp4
+artifacts/**/*.avi
+artifacts/**/*.gif
+artifacts/**/*.pt
+artifacts/**/*.ckpt
+artifacts/**/*.onnx
+artifacts/**/*.npz
+artifacts/**/*.hdf5
+
+# 학습 로그·체크포인트
+wandb/
+runs/
+outputs/
+checkpoints/
+logs/
+
+# 데이터셋 캐시
+data/
+*.zarr/
+
+# jupytext 산출물이 아닌 노트북 체크포인트
+.ipynb_checkpoints/

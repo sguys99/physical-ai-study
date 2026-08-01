@@ -1,115 +1,147 @@
-# CLAUDE.md
+# CLAUDE.md — Physical AI 온보딩 스터디
 
-AI Agent 프로젝트를 빠르게 시작하기 위한 템플릿입니다.
-FastAPI 백엔드 + Next.js 프론트엔드 + LangGraph 에이전트 구조를 기본으로 합니다.
+## 이 저장소
 
-## 기술 스택
+Physical AI 온보딩 4주 스터디의 학습자료 저작 + 실습 저장소입니다.
+`docs/physical-ai-4week-master-plan.md`(이하 **마스터 플랜**)가 **SSOT**이며, 여기서 하는 모든 작업은 그 플랜의 모듈(`W1-M1` 형식)을 토픽으로 구현하는 것입니다.
 
-- **Backend**: FastAPI, LangGraph, LangChain, Pydantic, uvicorn
-- **Frontend**: Next.js (App Router), TypeScript, Tailwind CSS
-- **AI/LLM**: Anthropic Claude, OpenAI (langchain-anthropic, langchain-openai)
-- **Package manager**: uv (Python), npm (Node)
-- **Linter/Formatter**: ruff
-- **Test**: pytest
+**세션 시작 시 반드시**: 작업 대상 모듈이 정해지면 마스터 플랜에서 **해당 모듈 섹션 + §2(회사 스택) + §3(갭 분석)을 먼저 읽고** 시작하세요. 플랜 없이 일반 지식으로 쓰면 회사 스택 연결이 빠져 가치가 절반이 됩니다.
 
-## 디렉토리 구조
+---
+
+## 저장소 구조
 
 ```
-.
-├── backend/app/          # FastAPI 앱
-│   ├── main.py           # 앱 진입점 (CORS, /health)
-│   ├── agents/           # LangGraph 에이전트
-│   ├── api/              # API 라우터
-│   └── utils/
-│       ├── config_loader.py  # YAML 설정 로더
-│       └── path.py           # 프로젝트 경로 상수
-├── frontend/             # Next.js 앱
-├── configs/
-│   └── prompts/          # 프롬프트 템플릿
-├── data/
-│   ├── raw/
-│   ├── intermediate/
-│   └── processed/
-├── notebooks/            # Jupyter 실험 노트북
-├── docs/                 # 문서 및 PRD 템플릿
-└── tests/                # pytest 테스트
+docs/
+  physical-ai-4week-master-plan.md   # SSOT — 커리큘럼 전체 설계 (수정 시 사용자 승인 필요)
+  course-plan.md                     # 집필 현황 SSOT — 토픽별 산출물 체크박스 + 작성 표준·규약
+  progress.md                        # 학습 실행 로그 — 무엇을 돌렸나·막힌 지점·소요시간·GPU 비용
+course/
+  w1-generative-core/                # 주차 = Phase
+    01-physical-ai-landscape/        # 토픽 (= 모듈 W1-M1)
+      ├─ lesson.md                   # 이론 + 코드 실습 본문
+      ├─ practice/                   # 실행 가능한 .py / notebook.ipynb / requirements.txt
+      └─ labs/                       # 단계별 핸즈온 명령 + 예상 출력
+    02-simulator-bootcamp/           # W1-M2
+    ...
+  w2-policy-vla/  w3-wbc-rl/  w4-worldmodel-nav/
+  capstone/                          # W4-M5 산출물 (스택 해설 문서 + 발표자료)
+notes/
+  glossary.md                        # 용어집 (매일 5개 누적)
+  papers/                            # 논문 노트 1편 = 1파일
+  repo-tours/                        # 외부 리포 투어 노트 1개 = 1파일
+  questions-for-team.md              # 팀 확인 질문 누적 ← 온보딩의 핵심 산출물
+repos/                               # 외부 리포 클론 (OpenHomie, DualMap 등) — gitignore
+artifacts/                           # 롤아웃 mp4, 학습 커브, 다이어그램 (대용량은 gitignore)
+img/
+CLAUDE.md   README.md   .env.example   .gitignore
 ```
 
-## 개발 워크플로우
+### 명명 규칙
 
-### 환경 설정
+- 주차 폴더: `w{N}-{slug}` / 토픽 폴더: `{NN}-{topic-slug}` — **숫자 prefix가 정렬 순서를 결정**
+- 토픽 번호는 모듈 번호와 1:1 (`W2-M3` → `course/w2-policy-vla/03-vla-lineage/`)
+- `lesson.md` 상단에 모듈 ID를 프론트매터로 명시: `module: W2-M3`
+- 링크는 상대 경로, 이미지는 `../../img/` 사용
 
-```bash
-# Python 환경 (uv)
-uv sync --extra dev
+---
 
-# 환경 변수
-cp backend/.env.example backend/.env
-# backend/.env에 API 키 입력
-```
+## 사용자 프로필
 
-### 백엔드 실행
+- Control engineering 10년 + 데이터 사이언티스트 / ML 엔지니어 / 에이전트 엔지니어
+- **강점**: 동역학·상태공간·최적제어·MPC, ML/DL 전반, LLM/Agent/RAG 실무
+- **갭**: 로봇 시뮬레이터 실무(경험 전무), 로봇 RL 학습 실무, 모방학습/VLA 파이프라인, sim2real·로봇 미들웨어, 3D 비전/SLAM
+- 영어 논문 독해 가능. 문서·설명은 **한국어**
 
-```bash
-uvicorn backend.app.main:app --reload
-```
+**설명 방식**: 제어공학·LLM 개념에 빗대어 설명할 것(FSQ ≈ 액션의 토크나이저 / 보상 설계 ≈ 비용함수 설계 / RSSM ≈ 학습된 상태공간 모델). 제어·ML·LLM 영역은 기초 생략하고 바로 심화, 로봇 시뮬·SLAM 영역은 기초부터. 수식은 직관과 함께, 유도는 필요한 것만 1회.
 
-### 프론트엔드 실행
+---
 
-```bash
-cd frontend && npm install && npm run dev
-```
+## 회사 기술 스택 (모든 lesson이 여기로 연결되어야 함)
 
-### 테스트
+| 계층 | 기술 | 역할 |
+|---|---|---|
+| L5 인지·매핑 | **DualMap** ★ | 온라인 open-vocabulary 시맨틱 매핑, 자연어 목표 내비게이션 |
+| L4 상위 지능 | VLA / World Model | 목표 → 행동 의도 |
+| L3 액션 인터페이스 | **FSQ 기반 계층 모델** ★ | 상위 모델 ↔ 하위 제어기를 잇는 이산 액션 토큰 |
+| L2 전신 제어 | **GEAR-SONIC** ★ / **HOMIE** ★ | WBC 모션 트래킹 파운데이션 정책 / 텔레옵 기반 데이터 수집 |
+| L1 하드웨어 | **Unitree G1** ★ | 23~43 DoF 휴머노이드, DDS/SDK |
 
-```bash
-pytest tests/ -v
-```
+★ = 회사 사용 중. 3-pass 정독 대상 6편: FSQ(2309.15505) / SONIC(2511.07820) / HOMIE(2502.13013) / pi0(2410.24164) / Diffusion Policy(2303.04137) / DualMap.
 
-### 린트/포맷
+---
 
-```bash
-ruff check .
-ruff format .
-```
+## 실행 환경
 
-## Claude 에이전트 목록
+**클라우드 GPU 인스턴스 전용. 로컬 GPU 없음. G1 실기 접근 불가. 시뮬레이터 경험 전무.**
 
-`.claude/agents/` 에 프리셋 에이전트가 준비되어 있습니다.
+| 역할 | 기본 선택 | 대안 |
+|---|---|---|
+| 물리 시뮬 | MuJoCo (pip) | Genesis |
+| RL 학습 | mujoco_playground (MJX, GPU 병렬) | — |
+| sim2sim 검증 | unitree_mujoco (표준 MuJoCo) | — |
+| 모방학습·VLA | LeRobot | — |
+| 로봇 모델 | mujoco_menagerie (G1) | unitree_ros |
+| 실험 추적 | W&B 또는 TensorBoard | — |
+| Isaac Sim/Lab | **[P1] 개념만, 실행은 선택** | — |
 
-### Dev 에이전트
+- 렌더링은 항상 headless: `MUJOCO_GL=egl`. **뷰어를 띄우는 코드를 제안하지 말 것** — 결과는 mp4/png로 저장해 확인.
+- 장시간 작업은 tmux. 체크포인트·데이터셋은 퍼시스턴트 볼륨에 (인스턴스는 소모품).
+- **비용 주의**: 30분 이상 걸릴 학습 전에 예상 소요 시간·GPU 시간을 먼저 알리고 확인받을 것. 종료 후 인스턴스 정지 리마인드.
+- 패키지 설치·환경 변경은 실행 전에 무엇을 왜 설치하는지 한 줄로 알릴 것.
+- 버전이 빠른 항목(LeRobot, playground)은 작성 시점에 공식 문서로 재확인.
 
-| 에이전트 | 용도 |
-|---------|------|
-| `development-planner` | ROADMAP.md 작성 및 개발 계획 수립 |
-| `nextjs-app-developer` | Next.js App Router 구조 설계 및 구현 |
-| `starter-cleaner` | 스타터킷 보일러플레이트 정리 |
-| `ui-markup-specialist` | UI 컴포넌트 마크업 및 스타일링 |
-| `code-reviewer` | 코드 리뷰 |
+---
 
-### Docs 에이전트
+## 작성 표준
 
-| 에이전트 | 용도 |
-|---------|------|
-| `prd-generator` | PRD 문서 생성 |
-| `prd-validator` | PRD 기술적 타당성 검증 |
+### `lesson.md` — 이론 + 코드 실습 본문
 
-## 코딩 컨벤션
+마스터 플랜 §11.1 템플릿을 따르며 다음 구성을 지킵니다.
 
-- Python: ruff 설정 준수 (line-length=105, target=py312)
-- 비동기: FastAPI 엔드포인트는 `async def` 사용
-- 설정: YAML 파일은 `configs/`에, 경로 상수는 `backend/app/utils/path.py`에서 관리
-- 환경 변수: `python-dotenv` 사용, `.env` 파일은 git에 커밋하지 않음
+1. 개념 설명 (제어/LLM 비유 적극 사용)
+2. 핵심 수식 — 최소 유도 + 직관
+3. 아키텍처 — 텍스트 다이어그램에 입출력·차원 명시
+4. **회사 스택 연결** — 이 개념이 우리 파이프라인 어디에 쓰이는가
+5. 흔한 오해 3가지와 교정
+6. 셀프 체크 퀴즈 10문항 (답은 문서 끝 별도 섹션)
 
-## 프론트엔드 디자인 가이드
+분량 A4 4~6장. 최신 정보는 웹 검색으로 보강하고 출처 URL을 남길 것.
+**모르는 것은 모른다고 쓸 것** — 특히 회사 내부 구현(FSQ 모델의 실제 구조 등)은 추측하지 말고 `notes/questions-for-team.md`에 질문으로 적립.
 
-프론트엔드 작업(UI 컴포넌트, 페이지, 레이아웃 생성/수정) 시 반드시 [DESIGN.md](DESIGN.md)를 참조하여 디자인 시스템을 일관되게 적용해야 합니다.
+### `practice/` — 실행 가능한 코드
 
-- **컬러**: `DESIGN.md`의 `colors` 토큰만 사용 (예: `{colors.primary}` = #0066cc). 임의의 hex 값 인라인 금지.
-- **타이포그래피**: SF Pro Display/Text 폰트 패밀리와 정의된 타이포 토큰(`hero-display`, `display-lg`, `body` 등) 사용. body 본문은 17px 고정.
-- **컴포넌트**: `DESIGN.md`의 `components` 정의(`button-primary`, `product-tile-light`, `store-utility-card` 등)에 맞춰 구현. radius/padding/색상 토큰 그대로 적용.
-- **간격/모서리**: `spacing`(8px 기반)과 `rounded` 토큰만 사용. 임의 값 금지.
-- **상호작용 색상**: 모든 인터랙티브 요소는 단일 Action Blue(`{colors.primary}`)만 사용. 보조 액센트 컬러 추가 금지.
-- **그림자**: 제품 이미지 외에는 그림자 사용 금지. 카드/버튼/텍스트에 shadow 적용 금지.
-- **Do's and Don'ts**: `DESIGN.md`의 해당 섹션을 항상 준수.
-- UI 작업을 시작하기 전에 `DESIGN.md`의 관련 컴포넌트 정의를 먼저 읽고, 의문이 생기면 토큰 참조(`{token.refs}`)로 해결.
+- `requirements.txt`(버전 고정) 포함. 노트북은 **커널 재시작 후 Run All로 완주**되어야 함.
+- **스모크 경로 우선**: 무거운 학습은 `--smoke` 플래그(수백 스텝, 수 분)로 먼저 완주되게 설계하고, 본 학습은 그 뒤에. GPU 시간 낭비와 입문자 좌절을 동시에 줄이는 장치.
+- 코드는 학습용이므로 **읽기 쉬운 것 > 최적화**. 핵심 수식이 코드 어디에 대응하는지 주석으로 표시.
+- 작성 후 가능한 범위에서 직접 실행해 검증. 실행 불가한 부분은 그렇다고 명시.
+
+### `labs/` — 단계별 핸즈온
+
+- 각 단계마다 **명령 + 예상 출력(성공 판정 기준)**을 명시. 시뮬 입문자에게 가장 중요한 부분.
+- 흔한 에러 3~5개와 대처법을 하단에 정리.
+
+### `notes/papers/` — 논문 노트
+
+마스터 플랜 §11.2 템플릿. 1편 = ①한 줄 요약 ②아키텍처 그림 ③우리 스택과의 연결 ④의문점. ④는 `questions-for-team.md`에도 복사. 3-pass는 위 6편만, 나머지는 2-pass까지.
+
+### `repos/` — 리포 투어
+
+마스터 플랜 §11.3 템플릿. 디렉토리 맵 → 진입점부터 콜스택 순 핵심 파일 5개 → 논문 수식↔코드 매핑 → 주요 하이퍼파라미터 → 최소 실행 가이드 → 우리 스택 통합 시 손댈 인터페이스. **파일 경로:라인을 인용할 것.**
+
+---
+
+## 전역 규칙
+
+- **awesome 리스트 통독 금지.** 검색이 필요할 때만 색인으로 사용. 마스터 플랜의 핵심 논문 목록을 벗어나 자료를 무한 확장하지 말 것.
+- 서베이 4편(2605.00080, 2512.11362, 2510.16732, 2503.21765)은 **지도이지 목적지가 아님**. 필요한 섹션만 참조.
+- 시간 부족 시 컷 순서는 마스터 플랜 §12. **끝까지 지킬 것: FSQ 구현(W1-M5), LeRobot 완주(W2-M2), G1 보행 학습+sim2sim(W3), 캡스톤 문서(W4-M5).**
+- 마스터 플랜은 SSOT입니다. 수정이 필요해 보이면 먼저 제안하고 승인받을 것.
+- 용어는 마스터 플랜 §3 용어 사전과 일치시킬 것. 새 용어는 `notes/glossary.md`에 추가.
+- 토픽 하나를 끝내면 `docs/course-plan.md`의 해당 체크박스를 갱신할 것. 집필 절차·규약(frontmatter·시각자료·jupytext·미검증 배지)도 이 문서를 따른다. 집필은 `/pai-course-author <모듈ID>`로 호출.
+- 실습을 돌린 날은 `docs/progress.md`에 실행 로그(돌린 것·막힌 지점·소요시간·GPU 비용)를 남길 것. 여기 쌓인 실측값이 다음 주 자료의 입력이 된다.
+- 원칙: **환경이 안 돌아가는 상태로 다음 주로 넘어가지 않는다.** 셋업이 막히면 이론 진도보다 셋업 해결이 우선.
+
+## [P2] 여유가 생기면
+
+- `site/` — `course/`를 스캔해 정적 사이트로 빌드 + GitHub Pages 배포. W4 캡스톤에서 팀 공유용으로 검토 (kb-study 저장소의 `site/build.mjs` 패턴 재사용 가능).
