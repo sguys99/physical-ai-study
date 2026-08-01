@@ -1,0 +1,36 @@
+# W1-M5 practice 의존성 — 버전 고정
+# 집필 환경에서 실제로 설치·실행 검증한 버전입니다.
+#   Python 3.12.12 / Ubuntu on WSL2 / NVIDIA RTX 3080 12GB (capability 8.6) / 2026-08-02
+#
+# ⚠️ Python 3.12 이상. W1-M2 practice와 같은 venv를 그대로 써도 됩니다(추가는 torch 계열뿐).
+# ⚠️ 01은 CPU로 수 초에 끝납니다. 02·03은 GPU 권장이지만 --device cpu 로도 완주합니다.
+
+# --- 학습 (이 모듈에서 새로 추가되는 것) ---
+# CUDA 13.0 빌드입니다. PyPI 기본 인덱스가 아니라 PyTorch 인덱스에서 받아야 합니다:
+#   pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cu130
+# CPU만 있는 환경이면 대신:
+#   pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu
+# (버전 번호는 같고 빌드만 다릅니다. 스크립트는 --device cpu 로 자동 폴백합니다.)
+torch==2.13.0
+
+# --- 물리 엔진과 렌더링 (W1-M2에서 이미 설치했다면 그대로) ---
+mujoco==3.11.0            # G1 관절 한계·stand 키프레임 조회 + 오프스크린 렌더
+numpy==2.5.1
+
+# --- 영상·그림 저장 (뷰어 금지, 결과는 전부 파일로) ---
+imageio==2.37.4           # mp4 저장 (기본 경로)
+imageio-ffmpeg            # ffmpeg 바이너리 동봉 — 시스템에 ffmpeg가 없어도 mp4가 써진다
+mediapy==1.2.7            # mp4 저장 폴백
+matplotlib==3.11.1        # 학습 커브 · 사용률 · 오버레이 (Agg 백엔드 고정)
+
+# --- 노트북 동기화 (.py <-> .ipynb) ---
+jupytext==1.19.5
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 로봇 모델은 pip 패키지가 아니라 git clone입니다 (약 2.3 GB, W1-M2에서 이미 받았다면 재사용):
+#   git clone --depth 1 https://github.com/google-deepmind/mujoco_menagerie.git repos/mujoco_menagerie
+#
+# 이 모듈은 einops / scikit-learn / jax / playground 를 쓰지 않습니다.
+# FSQ 구현에 외부 양자화 라이브러리(vector-quantize-pytorch 등)를 쓰지 않는 것이 요점입니다 —
+# 40줄이면 되기 때문입니다 (01_fsq_minimal.py).
+# ─────────────────────────────────────────────────────────────────────────────

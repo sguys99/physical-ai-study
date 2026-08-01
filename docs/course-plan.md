@@ -197,7 +197,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
   - [ ] 실행검증 _(학습자)_
 - [ ] **05-latent-discrete-fsq** `W1-M5` · Tier B · [P0] ★ — LDM → VQ-VAE → **FSQ 직접 구현** / **이번 주 가장 중요한 실습, 끝까지 지킬 것**
   - [x] lesson.md 초안 (pai-agent)
-  - [ ] practice/ (.py + .ipynb)
+  - [x] practice/ (.py + .ipynb) — 로컬 RTX 3080에서 실행검증 완료
   - [ ] labs/
   - [ ] 윤문 (/humanize-korean)
   - [ ] 실행검증 _(학습자)_
