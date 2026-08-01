@@ -238,3 +238,6 @@ data/
 
 # jupytext 산출물이 아닌 노트북 체크포인트
 .ipynb_checkpoints/
+
+# 폰트 폴백 테스트 부산물 — --ascii-labels로 언제든 재생성
+artifacts/**/*_ascii.png
