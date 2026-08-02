@@ -199,7 +199,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
   - [x] lesson.md 초안 (pai-agent)
   - [x] practice/ (.py + .ipynb) — 로컬 RTX 3080에서 실행검증 완료
   - [x] labs/
-  - [ ] 윤문 (/humanize-korean)
+  - [x] 윤문 (/humanize-korean) — v1.6 register:course · strict · 변경률 2.32%(Tier B 하한 이탈, §9.1 근거 적용) · 등급 A
   - [ ] 실행검증 _(학습자)_
 
 ### W2 — 로봇 정책학습 & VLA & 액션 표현 `course/w2-policy-vla/`
