@@ -55,6 +55,21 @@
 | **`MUJOCO_GL`** | 렌더링 백엔드 선택 환경변수. `egl`(GPU 오프스크린) / `osmesa`(소프트웨어) / `glfw`(디스플레이 필요) | 클라우드는 `egl`. **`import mujoco` 이전에 설정**해야 적용됨 — 순서를 틀리는 것이 입문 최다 실수 | W1-M2 |
 | **`n_substeps`** | 정책 한 스텝 동안 물리를 몇 번 적분하는가. `ctrl_dt / sim_dt` | `G1JoystickFlatTerrain`은 0.02 / 0.002 = **10**. 정책 50 Hz · 물리 500 Hz로 W1-M1 주파수 예산의 L2 대역과 정확히 일치 | W1-M2 → W4-M4 |
 
+### W1-M5 — 잠재공간과 이산화: FSQ ★
+
+| 용어 | 정의 | 비유 / 메모 | 모듈 |
+|---|---|---|---|
+| **FSQ (Finite Scalar Quantization)** | 인코더 출력을 채널별로 bounding(`tanh`)한 뒤 정수로 반올림해 고정 격자에 매핑하는 이산화. $\hat z = \mathrm{round}(f(z))$, $\|\mathcal{C}\| = \prod L_i$ | **액션의 BPE.** 코드북이 학습되지 않고 격자가 고정 — VQ-VAE의 "개선판"이 아니라 "단순화판" | W1-M5 → W2-M5 |
+| **codebook collapse** | VQ 계열에서 코드북 크기를 키울수록 많은 코드워드가 안 쓰이는 현상 | **도달하지 않는 상태공간 영역.** 안 뽑히면 학습 안 되고 학습 안 되면 안 뽑히는 닭-달걀 문제 | W1-M5 |
+| **STE (Straight-Through Estimator)** | 미분 불가능한 반올림 연산의 그래디언트를 1로 대체해 통과시키는 트릭. `x + sg(round(x) - x)` | **비선형 요소를 선형화해 루프를 닫는 것.** VQ·FSQ 둘 다 사용 | W1-M5 |
+| **implied codebook** | FSQ에서 코드북을 명시적으로 저장하지 않고, 레벨 조합의 곱으로 암묵적으로 정의되는 격자 $\mathcal{C}$ | 학습 파라미터 0개 — DAC의 양자화 레벨이 회로 설계 시점에 고정되는 것과 같음 | W1-M5 |
+| **mixed-radix 열거** | 채널별 이산 좌표 $(\hat z_1, \dots, \hat z_d)$를 정수 인덱스 하나로 바꾸는 전단사 매핑 | LLM 토큰 ID로 그대로 쓸 수 있는 이유 | W1-M5 |
+| **LDM (Latent Diffusion Model)** | 픽셀 공간이 아니라 VAE 잠재공간에서 확산 과정을 학습 | perceptual compression(VAE)과 semantic compression(확산)의 분리 | W1-M5 → W4-M2 |
+| **perceptual / semantic compression** | 전자는 지각적으로 무의미한 고주파 디테일 제거(VAE), 후자는 의미 있는 구조의 분포 학습(확산 모델) | 압축 2단 분리가 비디오 월드모델 백본의 표준 구조 | W1-M5 → W4-M1 |
+| **양자화 오차 (이산화 관점)** | 연속 값을 유한 레벨로 반올림할 때 생기는 복원 오차 | 제어의 **DAC 분해능·데드밴드**와 동일 개념. 토큰 레이트를 올리면 줄어들지만 압축률과 상충 | W1-M5 |
+| **코드북 사용률** | 검증셋을 인코딩할 때 최소 1회 쓰인 코드워드의 비율 | FSQ 실측 96.8%(\|C\|=1000) vs VQ 21.1% — 논문 Fig 3의 $2^{10}$ 교차를 G1 데이터로 재현 | W1-M5 |
+| **토큰 홀드 (zero-order hold)** | 상위가 새 토큰을 내지 않는 구간에서 하위가 마지막 토큰(또는 그 디코딩값)을 유지하는 것 | 제어의 **ZOH**와 동일 개념. action chunking·주파수 접합의 실체 | W1-M5 → W4-M4 |
+
 ## W2
 
 ## W3
