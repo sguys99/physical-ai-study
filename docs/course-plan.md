@@ -13,7 +13,7 @@
 
 | 트랙 | 완료 | 비고 |
 |---|---|---|
-| W1 모듈 (생성모델 코어) | 0 / 5 | **W1-M1 · W1-M2 · W1-M5 ★ 집필 4종 완료**, 학습자 실행검증만 남음 · **W1-M3 집필 중**(lesson.md 완료) |
+| W1 모듈 (생성모델 코어) | 0 / 5 | **W1-M1 · W1-M2 · W1-M5 ★ 집필 4종 완료**, 학습자 실행검증만 남음 · **W1-M3 집필 중**(lesson.md + practice/ 완료, labs/ 남음) |
 | W2 모듈 (정책·VLA) | 0 / 5 | — |
 | W3 모듈 (WBC·RL) | 0 / 5 | — |
 | W4 모듈 (월드모델·내비·통합) | 0 / 5 | — |
@@ -186,7 +186,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
   - [ ] 실행검증 _(학습자)_
 - [ ] **03-diffusion-ddpm-dit** `W1-M3` · Tier C · [P0] — DDPM forward/reverse · DiT(patchify, adaLN-zero) / **VLA 액션 헤드 대부분이 DiT 구조**
   - [x] lesson.md 초안 (pai-agent) — 31,421자 · Tier C 상한 초과, 근거는 §9.2
-  - [ ] practice/ (.py + .ipynb)
+  - [x] practice/ (.py + .ipynb) — 로컬 RTX 3080 + CPU 양쪽 실행검증 완료 (본 실행 GPU 2분 55초 / CPU 10분)
   - [ ] labs/
   - [ ] 윤문 (/humanize-korean)
   - [ ] 실행검증 _(학습자)_

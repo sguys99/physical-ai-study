@@ -1,0 +1,43 @@
+# W1-M3 practice 의존성 — 버전 고정
+# 집필 환경에서 실제로 설치·실행 검증한 버전입니다.
+#   Python 3.12.12 / Ubuntu on WSL2 / i7-12700K (20 스레드) / RTX 3080 12GB (capability 8.6) / 2026-08-03
+#
+# ⚠️ Python 3.12 이상. W1-M2·M5 practice와 같은 venv를 그대로 쓰면 됩니다 (추가 설치가 없습니다).
+# ⚠️ **세 스크립트 전부 CPU로 완주합니다** (합계 약 10분). GPU가 있으면 약 3분입니다.
+#    `--smoke`는 세 개 합쳐 30초 이내.
+
+# --- 학습 ---
+# CUDA 13.0 빌드입니다. PyPI 기본 인덱스가 아니라 PyTorch 인덱스에서 받아야 합니다:
+#   pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cu130
+# CPU만 있는 환경이면 대신:
+#   pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu
+# (버전 번호는 같고 빌드만 다릅니다. 스크립트는 --device cpu 로 자동 폴백합니다.)
+torch==2.13.0
+
+# --- 데이터와 수치 ---
+numpy==2.5.1
+scikit-learn==1.9.0       # 01의 2D toy 분포 make_moons / make_swiss_roll — 그 용도 하나뿐
+
+# --- 물리 엔진 (03에서만, D=29를 읽는 용도) ---
+# 03은 G1의 model.nu 와 actuator_ctrlrange 만 읽습니다. 렌더는 하지 않습니다.
+# menagerie가 없으면 03이 경고만 하고 D=29 상수로 계속 진행하므로, mujoco 없이도 나머지는 돕니다.
+mujoco==3.11.0
+
+# --- 그림 저장 (뷰어 금지, 결과는 전부 파일로) ---
+matplotlib==3.11.1        # 세 스크립트 모두 Agg 백엔드 고정
+
+# --- 노트북 동기화 (.py <-> .ipynb) ---
+jupytext==1.19.5
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 로봇 모델은 pip 패키지가 아니라 git clone입니다 (약 2.3 GB, W1-M2에서 이미 받았다면 재사용):
+#   git clone --depth 1 https://github.com/google-deepmind/mujoco_menagerie.git repos/mujoco_menagerie
+#
+# 이 모듈이 **쓰지 않는** 것:
+#   · diffusers / denoising-diffusion-pytorch 등 외부 diffusion 라이브러리
+#     — DDPM 스케줄·손실·두 샘플러·DiT 블록을 직접 짜는 것이 실습의 요점입니다.
+#       01의 스케줄은 4줄, DDIM 갱신은 3줄, DiT 블록은 30줄입니다.
+#   · torchvision — MNIST 같은 이미지 데이터셋을 쓰지 않습니다. 2D toy와 G1 액션 청크뿐입니다.
+#   · einops · imageio · mediapy — mp4를 만들지 않습니다(결과가 전부 정지 그림).
+#   · jax / playground — RL 학습이 없습니다.
+# ─────────────────────────────────────────────────────────────────────────────
