@@ -1,10 +1,17 @@
 ---
 name: humanize-korean
-version: "1.5.0"
-description: AI(ChatGPT·Claude·Gemini 등)가 쓴 한글 텍스트를 "사람이 쓴 글처럼" 윤문해주는 오케스트레이터 스킬. 번역투·영어 인용 과다·기계적 병렬·관용구·피동태 남용·접속사 남발·리듬 균일성·이모지/불릿 과다 등 10대 카테고리 40+ AI 티 패턴을 탐지·분류해 내용은 한 글자도 건드리지 않고 문체·리듬·표현만 자연스러운 한국어로 재작성한다. 트리거 — "AI 티 없애줘", "AI 같은 글 자연스럽게", "GPT/ChatGPT 문체", "AI 번역투 고쳐", "사람이 쓴 것처럼 윤문", "AI 윤문", "ChatGPT 티 제거", "한글 AI 탐지·윤문", "AI 글 사람처럼", "번역투 제거", "영어 인용 많은 글 윤문", "AI 글 티 안 나게", "휴머나이저", "humanize Korean", "AI detector bypass 한글". 후속 작업 — "특정 카테고리만 다시", "윤문 강도 조정", "장르 바꿔서", "이 문단만", "2차 윤문" 도 모두 이 스킬. 단순 맞춤법·오탈자 교정은 직접 처리, 번역은 번역 스킬, 내용 추가·삭제를 동반한 재작성은 별도 집필 스킬.
+version: "1.6.0"
+description: AI(ChatGPT·Claude·Gemini 등)가 쓴 한글 텍스트를 "사람이 쓴 글처럼" 윤문해주는 오케스트레이터 스킬. 번역투·영어 인용 과다·기계적 병렬·관용구·피동태 남용·접속사 남발·리듬 균일성·이모지/불릿 과다 등 10대 카테고리 40+ AI 티 패턴을 탐지·분류해 내용은 한 글자도 건드리지 않고 문체·리듬·표현만 자연스러운 한국어로 재작성한다. 트리거 — "AI 티 없애줘", "AI 같은 글 자연스럽게", "GPT/ChatGPT 문체", "AI 번역투 고쳐", "사람이 쓴 것처럼 윤문", "AI 윤문", "ChatGPT 티 제거", "한글 AI 탐지·윤문", "AI 글 사람처럼", "번역투 제거", "영어 인용 많은 글 윤문", "AI 글 티 안 나게", "휴머나이저", "humanize Korean", "AI detector bypass 한글". 후속 작업 — "특정 카테고리만 다시", "윤문 강도 조정", "장르 바꿔서", "이 문단만", "2차 윤문" 도 모두 이 스킬. 교육자료(`course/**/lesson.md`) 윤문은 `register: course` 프로파일로 호출 — strict 강제 + 산문 라인 기준 판정 + 문단 흐름 복원 + 문학체 어휘 드리프트 차단. 단순 맞춤법·오탈자 교정은 직접 처리, 번역은 번역 스킬, 내용 추가·삭제를 동반한 재작성은 별도 집필 스킬.
 ---
 
-# Humanize Korean — AI 한글 티 제거 오케스트레이터 (v1.5)
+# Humanize Korean — AI 한글 티 제거 오케스트레이터 (v1.6)
+
+> **v1.6 변경 고지 (2026-08-02) — `register: course` 프로파일 신설**
+> 이 저장소의 교육자료(`course/**/lesson.md`) 윤문에서 두 가지 실패가 관찰됐습니다. ① 저윤문 — AI 티가 남았는데 전체 문자 변경률이 낮게 나와 등급 A로 통과(W1-M2: 1.48%). ② 과교정 — 번역투를 걷어내려다 잘 안 쓰는 문어체 어휘로 갈아탐. v1.6은 두 축을 함께 잡는 `register: course` 프로파일을 추가합니다. 그 외 동작은 v1.5 그대로입니다.
+>
+> - **신설**: `register: course` — strict 강제 + 산문 라인 기준 판정 + 문단 흐름 복원 + plain-language 가드.
+> - **판정 지표 SSOT 이관**: `register: course`의 변경률 판정은 `docs/course-plan.md` §9.1(티어별 지표)을 따릅니다. 전체 문자 변경률은 기록만 하고 단독 판정 근거로 쓰지 않습니다.
+> - 출처: `sguys99/ai-wiki`의 `register: wiki`(2026-07-10)를 이 저장소 문서 구조에 맞춰 이식.
 
 > **v1.5 변경 고지 (2026-04-26) — v1.1 베이스라인 + Monolith Fast Path**
 > v1.2(voice profile)·v1.3(candidate pool)·v1.4(역할별 모델 분산)는 모두 핫패스 비용을 잡지 못해 5,000자 입력에 25분이 걸렸습니다. v1.5는 **v1.1 단순 구조로 롤백한 뒤 단일 호출 monolith 에이전트만 추가**한 설계입니다.
@@ -19,13 +26,38 @@ description: AI(ChatGPT·Claude·Gemini 등)가 쓴 한글 텍스트를 "사람�
 작업 시작 시 가장 먼저 다음 한 줄을 사용자에게 출력한다.
 
 ```
-humanize-korean v1.5 — {fast|strict} 모드 / run_id: {YYYY-MM-DD-NNN}
+humanize-korean v1.6 — {fast|strict} 모드{, register: course} / run_id: {YYYY-MM-DD-NNN}
 ```
 
 ### 모드 결정
 - 사용자가 `--strict`·"정밀 모드"·"5인 파이프라인" 명시 → **strict**
+- **`register: course` (또는 대상 파일이 `course/**/lesson.md`) → strict 강제** (길이 무관, 자동 승급 + 1줄 고지). 교육자료 산문은 얕은 Fast Path로는 티가 남아, 독립 탐지·자연성 리뷰가 있는 strict로만 처리한다. §register: course 참조.
 - 입력 8,000자 초과 → **strict** (자동 승급 + 사용자에 1줄 고지)
 - 그 외 모두 → **fast (디폴트)**
+
+### register: course (교육자료 전용)
+
+`register: course`는 이 저장소의 `course/**/lesson.md` 교육자료 산문에 특화된 프로파일이다. 다음 4가지를 한 묶음으로 적용한다:
+
+1. **strict 강제** — 위 모드 결정대로 5인 파이프라인으로 라우팅.
+2. **판정 지표를 산문 라인 기준으로 전환** — 아래 밴드 블록 참조. lesson.md는 문자의 40% 이상이 코드·표·수식(전량 보존 대상)이라 **전체 문자 변경률이 구조적으로 낮게 나온다.** 그 수치로 저윤문을 판정하면 오판이고, 재윤문을 지시하면 오히려 과윤문을 유발한다.
+3. **문단 흐름 복원 허용** — 국소 span 편집을 넘어 문단 단위 재구조화 허용(문서 전체 재작성은 여전히 금지). `rewriting-playbook.md §1.Y` 참조.
+4. **plain-language 가드** — 번역투를 피하려다 잘 안 쓰는 문어체·문학체 어휘로 갈아타지 않는다. `quick-rules.md`·`rewriting-playbook.md`의 "흔한 어휘 우선" 규칙 적용.
+
+**변경률 판정 밴드** (SSOT는 `docs/course-plan.md` §9.1. 아래는 사본이며, 불일치 시 course-plan이 우선한다)
+
+| 티어 | 주지표 | 목표 |
+|---|---|---|
+| **Tier A** | 산문 라인 변경률 + 잔존 burden 감소율 | 라인 **20~50%** · burden **80%↓** 이상 |
+| Tier B · C | 전체 문자 변경률 | **5~30%** |
+
+- **산문 = 코드펜스·표 행·LaTeX 블록·Mermaid·frontmatter를 제외한 라인.**
+- 전체 문자 변경률은 **기록만** 하고 단독 판정 근거로 쓰지 않는다.
+- **저윤문** — 주지표가 하한 미달이면서 S1이 잔존 → `rewrite_round_2`.
+- **과윤문** — 주지표 상한 초과, 또는 문학체 드리프트 어휘 3개 이상 → `rollback_and_rewrite`.
+- 상한을 올려도 안전한 이유는 strict의 `content-fidelity-auditor`가 의미 불변을 독립 감사하기 때문이다.
+
+장르 힌트(칼럼·리포트 등)와 별개 축이다. register는 문체 register를, genre_hint는 글의 장르를 가리킨다. 오케스트레이터는 register=course일 때 하위 에이전트(`korean-style-rewriter`·`naturalness-reviewer`)에 `register: course`와 티어를 전달한다.
 
 ### run_id 결정
 - 모든 경로는 **cwd 기준**. 새 폴더 생성도 cwd 기준 `_workspace/{YYYY-MM-DD-NNN}/`에 만든다.
@@ -82,6 +114,8 @@ v1.1 5인 파이프라인 그대로. 검증 분리·재윤문 루프가 의미 �
 ### Phase B: 윤문 (최대 3회 루프)
 `korean-style-rewriter` 호출 → `03_rewrite.md` + `03_rewrite_diff.json`
 
+`register: course`면 호출 인자에 `register: course`와 `tier: A|B|C`를 함께 전달한다. Phase C의 `naturalness-reviewer`에도 동일하게 전달한다.
+
 ### Phase C: 병렬 검증 (에이전트 팀)
 `TeamCreate`로 `humanize-review-team` 구성:
 - `content-fidelity-auditor` → `04_fidelity_audit.json` (의미 동등성)
@@ -116,6 +150,8 @@ v1.1 5인 파이프라인 그대로. 검증 분리·재윤문 루프가 의미 �
 
 ## 옵션 (인자 끝에 자연어로)
 
+- `register: course` — 교육자료 프로파일 (strict 강제 + 산문 라인 기준 판정 + 문단 흐름 복원 + plain-language 가드). §register: course 참조. `course/**/lesson.md`가 대상이면 자동 적용.
+- `tier: A|B|C` — `register: course`의 판정 티어 (생략 시 `docs/course-plan.md`의 해당 모듈 티어를 확인하고, 확인 불가면 A로 간주)
 - `장르: 칼럼|리포트|블로그|공적` — 장르 명시 (생략 시 자동 추정)
 - `강도: 보수|기본|적극` — 윤문 강도 (기본값: 기본)
 - `최소심각도: S1|S2|S3` — 탐지 임계값 (기본값: S2)
@@ -169,6 +205,11 @@ v1.1 5인 파이프라인 그대로. 검증 분리·재윤문 루프가 의미 �
 - 사용자 명시 `--strict` 또는 8,000자+ 입력
 - 5인 파이프라인 끝까지 실행, 변경률 18~22%, 검증팀 full_pass
 
+### register: course 흐름
+- 입력: `course/**/lesson.md` 교육자료 산문 (코드·표·수식이 40%+ 섞인 Tier A 문서)
+- 기대: strict 자동 라우팅, **산문 라인 변경률 20~50% · 잔존 burden 80%↓**, S1 잔존 0, `naturalness-reviewer`가 희귀 어휘·문단 흐름 항목 통과, `content-fidelity-auditor` full_pass. 코드펜스·LaTeX·URL·표 행은 바이트 동일. plain-language 가드로 문학체 드리프트 0 시그널.
+- **전체 문자 변경률이 5% 미만이어도 그 자체로는 저윤문 판정 근거가 아니다.** 주지표(산문 라인)를 보고 판정하고, 전체 문자율은 참고 기록으로만 남긴다.
+
 ### 엣지 케이스 — 이미 사람이 쓴 글
 - monolith 자체 탐지에서 매치 거의 없음 → 변경률 5% 미만 + summary.md에 "윤문 불필요 가능성" 메모
 - 사용자가 `--strict`로 강제 검증 가능
@@ -179,8 +220,9 @@ v1.1 5인 파이프라인 그대로. 검증 분리·재윤문 루프가 의미 �
 - **수치·고유명사·직접 인용은 탐지/윤문 대상 아님.** Do-NOT list 엄수.
 - **장르 이탈 금지.** 칼럼이 에세이로, 에세이가 문학으로 옮겨가지 않는다.
 - **register 보존.** 격식체 입력 → 격식체 출력. AI 티는 문법·수사이지 격식 자체가 아님.
-- **변경률 30% 초과 → 경고, 50% 초과 → 강제 중단.**
-- **자동 로드 금지.** 프로젝트 CLAUDE.md 등 다른 파일을 자동 파싱해 옵션을 추론하지 않는다.
+- **변경률(일반) 30% 초과 → 경고, 50% 초과 → 강제 중단.** 단 `register: course`는 주지표가 다르다 — Tier A는 산문 라인 20~50%(하한 미달 시 저윤문, 상한 초과 시 과윤문), Tier B·C는 전체 문자 5~30%. §register: course 참조.
+- **문학체 드리프트 금지.** 번역투를 걷어내려다 잘 안 쓰는 문어체 어휘로 갈아타는 것은 과교정이다. 치환어는 "일반 기술 문서에서 쓰는 말인가"를 기준으로 고른다.
+- **자동 로드 금지.** 프로젝트 CLAUDE.md 등 다른 파일을 자동 파싱해 옵션을 추론하지 않는다. (`register: course`의 티어 확인 목적으로 `docs/course-plan.md`를 읽는 것은 예외 — 사용자가 `tier:`를 생략했을 때만.)
 
 ## 참고 자료
 

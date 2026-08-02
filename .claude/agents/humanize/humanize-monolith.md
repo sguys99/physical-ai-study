@@ -27,6 +27,8 @@ model: opus
 5. **과윤문 금지**: 변경률 30% 초과 = 경고, 50% 초과 = 작업 중단·롤백.
 6. **Do-NOT list**: 고유명사·수치·인용·법률 조문·영어 약어(LLM·GPU·MCP·API 등) 원형 보존.
 
+> **`register: course`는 이 에이전트 대상 아님.** 교육자료 산문(`course/**/lesson.md`)은 오케스트레이터가 strict 5인 파이프라인으로 라우팅한다(산문 라인 기준 판정·문단 흐름 복원·독립 검증). monolith는 일반 Fast Path(칼럼·리포트·블로그)만 처리한다. course 입력이 잘못 들어오면 "register: course는 strict 필요" 안내 후 종료.
+
 ## 입력/출력
 
 ### 입력
