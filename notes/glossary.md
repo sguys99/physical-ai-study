@@ -55,6 +55,21 @@
 | **`MUJOCO_GL`** | 렌더링 백엔드 선택 환경변수. `egl`(GPU 오프스크린) / `osmesa`(소프트웨어) / `glfw`(디스플레이 필요) | 클라우드는 `egl`. **`import mujoco` 이전에 설정**해야 적용됨 — 순서를 틀리는 것이 입문 최다 실수 | W1-M2 |
 | **`n_substeps`** | 정책 한 스텝 동안 물리를 몇 번 적분하는가. `ctrl_dt / sim_dt` | `G1JoystickFlatTerrain`은 0.02 / 0.002 = **10**. 정책 50 Hz · 물리 500 Hz로 W1-M1 주파수 예산의 L2 대역과 정확히 일치 | W1-M2 → W4-M4 |
 
+### W1-M3 — Diffusion 계보: DDPM → DiT
+
+| 용어 | 정의 | 비유 / 메모 | 모듈 |
+|---|---|---|---|
+| **NFE (Number of Function Evaluations)** | 샘플 하나를 얻는 데 신경망을 forward하는 횟수. 디노이징 스텝 수와 같다 | 이미지에서는 사용자 대기 시간이지만 **로봇에서는 제어 지연 예산 항목.** 이산화 격자 수에 해당 — 250 NFE면 청크가 82스텝·1.64초 개방루프가 된다 | W1-M3 → W1-M4 |
+| **$\bar\alpha_t$ (누적 신호 이득)** | $\prod_{s\le t}(1-\beta_s)$. forward 과정에서 $t$까지 살아남은 원신호의 비율 | 공분산 전파 재귀 $P_t = A_tP_{t-1}A_t^\top + Q_t$를 손으로 푼 것. $\mathrm{SNR}(t)=\bar\alpha_t/(1-\bar\alpha_t)$이고 $T=1000$ 선형 스케줄에서 SNR=1 교차점은 $t=259$ | W1-M3 |
+| **$\mathcal{L}_{\text{simple}}$** | DDPM의 실제 학습 손실 $\mathbb{E}\|\epsilon-\epsilon_\theta\|^2$. ELBO에서 가중치 $\lambda_t$를 떼어낸 재가중 목적함수 | **LQR 최적 이득을 실기에서 디튠하는 것과 같은 거래** — 하한 자격을 반납하고 지각 품질을 산다. $\lambda_1/\lambda_{1000}\approx49$ | W1-M3 |
+| **ancestral sampling** | 매 스텝 노이즈를 다시 주입하며 마르코프 체인을 거꾸로 내려가는 샘플링. 역시간 SDE의 이산화 | Euler-Maruyama에 촘촘한 고정 격자. 확률성 때문에 격자를 마음대로 건너뛸 수 없다 | W1-M3 |
+| **DDIM** | 비마르코프 forward 족으로 재정식화해 확률성을 0으로 둔 결정론적 샘플러. 학습된 모델을 그대로 쓴다 | probability flow ODE라 **격자 부분수열을 그대로 쓸 수 있음.** 실측으로 NFE 4~20 구간에서 ancestral 대비 1.2~1.8배 우세, NFE 50 이상은 차이 소멸 | W1-M3 |
+| **probability flow ODE** | 확산 과정의 결정론적 등가 ODE | 고차 solver(DPM-Solver 계열) 적용의 문턱이자 스텝 축약의 근거. **NFE 1~2는 샘플러 교체로 뚫리지 않는다** — 그래서 경로 자체를 직선화하는 W1-M4로 간다 | W1-M3 → W1-M4 |
+| **patchify** | 텐서를 $p\times p$(액션이면 시간축 $p_t$) 패치로 잘라 토큰열로 만드는 것 | 이미지는 $(I/p)^2$개 토큰, 액션 청크는 $H/p_t$개. **파라미터가 아니라 Gflops가 품질을 결정**한다는 DiT의 중심 주장이 이 노브에서 나온다 | W1-M3 → W2-M4 |
+| **adaLN** | LayerNorm의 스케일·시프트를 조건 임베딩에서 회귀해 주입하는 조건부 정규화 | **FiLM 계열.** 조건을 프롬프트 토큰으로 붙이는 in-context 방식보다 강하다(FID 35.24 → 25.21) — 조건이 시퀀스 전체에 균일하게 작용할 때 토큰보다 정규화에 태우는 것이 낫다 | W1-M3 |
+| **adaLN-Zero** | adaLN + 잔차 직전의 차원별 스케일 $\alpha$를 추가하고 그 MLP를 0으로 초기화 | $\alpha=0$이면 블록이 항등함수 = **제어의 소프트 스타트.** 게인을 0에서 올리는 순서를 옵티마이저에 위임한 것. 이 하나로 FID 25.21 → 19.47 | W1-M3 |
+| **액션 전문가 (action expert)** | VLM 백본과 분리된, 액션 생성 전용 파라미터 집합 | pi0는 300M Gemma 블록(**AdaLN 미사용**), GR00T N1/N1.5는 DiT + AdaLN. "VLA 액션 헤드는 DiT"라는 요약은 **objective와 블록 계보를 구분해** 읽어야 정확하다 | W1-M3 → W2-M4 |
+
 ### W1-M5 — 잠재공간과 이산화: FSQ ★
 
 | 용어 | 정의 | 비유 / 메모 | 모듈 |
