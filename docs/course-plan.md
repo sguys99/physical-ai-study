@@ -192,7 +192,7 @@ sources_checked: 2026-08-01            # 최신성 검증 날짜
   - [ ] 실행검증 _(학습자)_
 - [ ] **04-flow-matching** `W1-M4` · Tier C · [P0] — CFM objective · Rectified Flow / 적은 스텝 샘플링 = 실시간 제어 가능
   - [x] lesson.md 초안 (pai-agent) — 35,165자 · 14절 · Tier C 상한 초과, 근거는 §9.4
-  - [ ] practice/ (.py + .ipynb)
+  - [x] practice/ (.py + .ipynb) — 3종 · **W1-M3 practice를 모듈로 재사용**(재사용 376줄 / 신규 83줄). 로컬 RTX 3080 본 실행 4분 9초 · CPU 스모크 4분 7초 완주. **`02`가 `artifacts/W1-M3/02_results.csv`를 읽어 DDPM/DDIM 곡선과 같은 축에 겹칩니다**(분포 bit 대조 + 같은 지표 함수 import로 자격 검사). 노트북 경로는 셀 단위 exec 시뮬레이터로 검증(`nbclient` 부재)
   - [ ] labs/
   - [ ] 윤문 (/humanize-korean)
   - [ ] 실행검증 _(학습자)_
