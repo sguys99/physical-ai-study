@@ -9,8 +9,8 @@ priority: P0
 prereq: [W1-M1]
 tags: [imitation-learning, act, cvae, action-chunking]
 est_reading_min: 55
-updated: 2026-08-06
-sources_checked: 2026-08-05
+updated: 2026-08-09
+sources_checked: 2026-08-09
 ---
 
 # 모방학습 기초 + ACT
@@ -179,7 +179,7 @@ LeRobot ACT 설정에 비슷하게 생긴 두 필드가 있습니다. 이것을 
 
 > "Coefficient for the exponential weighting scheme to apply for temporal ensembling. Defaults to None which means temporal ensembling is not used. `n_action_steps` must be 1 when using this feature, as inference needs to happen at every step to form an ensemble."
 
-`n_action_steps > 1`인 채로 켜면 설정 검증에서 거부됩니다. 앙상블을 만들려면 매 스텝 추론해야 하니 논리적으로 강제되는 제약이고, 그것이 지연 예산과 정면으로 부딪힙니다. 기본 설정은 청크당 추론 1회인데 앙상블은 **스텝당 추론 1회** — 30 Hz면 추론 호출이 100배가 되고 33 ms 안에 약 80M 파라미터 forward를 끝내야 합니다. §3.6이 이 계산이고 §7의 세 번째 오해가 이 지점입니다.
+`n_action_steps > 1`인 채로 켜면 설정 검증에서 거부됩니다. 앙상블을 만들려면 매 스텝 추론해야 하니 논리적으로 강제되는 제약이고, 그것이 지연 예산과 정면으로 부딪힙니다. 기본 설정은 청크당 추론 1회인데 앙상블은 **스텝당 추론 1회** — 30 Hz면 추론 호출이 100배가 되고 33 ms 안에 약 52M 파라미터 forward를 끝내야 합니다. §3.6이 이 계산이고 §7의 세 번째 오해가 이 지점입니다.
 
 ### 2.7 ACT의 CVAE — latent $z$가 흡수하는 것
 
@@ -304,7 +304,7 @@ ACT에서는 좌변의 $H_{\text{chunk}}$ 자리에 **실제로 실행하는 길
 
 $$T_{\text{replan}} + \tau_{\text{infer}} + \tau_{\text{comm}} \;\le\; \frac{\texttt{n\_action\_steps}}{f_2}$$
 
-이제 숫자를 넣습니다. ACT 원 데이터의 기록 FPS는 확인하지 않았으므로 30 Hz와 50 Hz를 병기합니다.
+이제 숫자를 넣습니다. **ACT/ALOHA 공개 데이터의 기록 FPS는 50 Hz로 확인됐습니다**(2026-08-09 실측). 그래도 두 열을 병기하는 이유가 있습니다 — 50 Hz 열은 *ALOHA 자신*의 개방루프 창이고, 30 Hz 열은 *우리 로봇의 $f_2$를 30 Hz로 가정*했을 때입니다. 200 ms 문턱과 맞대는 것은 뒤쪽이라 아래 결론은 30 Hz 열로 읽습니다.
 
 | 설정 | `chunk_size` | `n_action_steps` | 허용 지연 예산 @30 Hz | @50 Hz | 추론 호출 빈도 @30 Hz | 최악 반응 지연 @30 Hz |
 |---|---|---|---|---|---|---|
@@ -315,7 +315,7 @@ $$T_{\text{replan}} + \tau_{\text{infer}} + \tau_{\text{comm}} \;\le\; \frac{\te
 
 세 가지가 한 번에 보입니다.
 
-**첫째, ACT 기본 설정에서 지연은 제약이 아닙니다.** 3.3초의 예산은 약 80M 파라미터 모델의 단일 forward에 터무니없이 넉넉합니다. ACT는 확산 모델처럼 반복 샘플링을 하지 않아 NFE가 1이니 더 그렇습니다([W1-M4 §8](../../w1-generative-core/04-flow-matching/lesson.md)의 NFE 예산 표와 대조하면 차이가 분명합니다). **그러므로 `chunk_size=100`은 지연 논거로 정해진 값이 아닙니다.** §1.3에서 예고한 결론이 여기서 수치로 확인됩니다.
+**첫째, ACT 기본 설정에서 지연은 제약이 아닙니다.** 3.3초의 예산은 약 52M 파라미터 모델의 단일 forward에 터무니없이 넉넉합니다. 실제로 재보면 그렇습니다 — RTX 3080에서 청크 1회 생성이 **한 자릿수~십수 ms**라 예산의 **수백 분의 1**입니다. CPU(데스크톱 x86)에서도 **100 ms 언저리**라 여전히 30배 이상 여유입니다. 절대값은 GPU 클럭 상태와 부하에 따라 크게 흔들리므로(집필 중 6.5~66 ms) **자기 기기에서 직접 재는 것**이 [`labs/`](labs/) Step 6입니다. ACT는 확산 모델처럼 반복 샘플링을 하지 않아 NFE가 1이니 더 그렇습니다([W1-M4 §8](../../w1-generative-core/04-flow-matching/lesson.md)의 NFE 예산 표와 대조하면 차이가 분명합니다). **그러므로 `chunk_size=100`은 지연 논거로 정해진 값이 아닙니다.** §1.3에서 예고한 결론이 여기서 수치로 확인됩니다.
 
 **둘째, 기본 설정의 최악 반응 지연이 3.3초입니다.** [W1-M1 §3.3](../../w1-generative-core/01-physical-ai-landscape/lesson.md)이 잡아둔 "발이 미끄러져 자세가 무너지기까지 200 ms" 문턱과 비교하면 **16배 밖**입니다. 이 대비가 이 모듈에서 가장 중요한 숫자 하나입니다.
 
@@ -331,7 +331,7 @@ $$T_{\text{replan}} + \tau_{\text{infer}} + \tau_{\text{comm}} \;\le\; \frac{\te
 sequenceDiagram
     autonumber
     participant R as 로봇 · f2 = 30 Hz
-    participant P as ACT 정책 · 약 80M · NFE 1
+    participant P as ACT 정책 · 약 52M · NFE 1
     participant B as 청크 버퍼
     Note over R,B: 모드 A · LeRobot 기본값 · n_action_steps = chunk_size = 100
     R->>P: 관측 1프레임 · 이미지 + 관절 상태
@@ -349,7 +349,7 @@ sequenceDiagram
         Note over B: 겹치는 예측들의 지수 가중 평균 · w_i = exp of minus m i
         B->>R: 액션 1개
     end
-    Note over R,B: 지연 예산 33 ms — 80M forward가 그 안에 끝나야 한다. 추론 호출 100배
+    Note over R,B: 지연 예산 33 ms — 52M forward가 그 안에 끝나야 한다. 추론 호출 100배
 ```
 
 ---
@@ -633,9 +633,9 @@ ALOHA와 HOMIE는 같은 발상의 두 변형입니다. **사람이 로봇을 �
 
 | 오해 | 교정 |
 |---|---|
-| **"논문에 적힌 하이퍼파라미터가 곧 돌아간 코드다"** | LeRobot `configuration_act.py`의 `n_decoder_layers` 주석이 이렇습니다 — *"Although the original ACT implementation has 7 for `n_decoder_layers`, there is a bug in the code that only the first layer is used. Here we match the original implementation by setting this to 1."* 논문·원 구현의 선언값은 디코더 7층인데 코드가 첫 층만 쓰고 있었고, LeRobot은 **재현성을 위해 그 버그를 의도적으로 따라가** 1층으로 맞췄습니다. 세 가지가 따라나옵니다. ① 보고된 성능은 7층이 아니라 **1층 모델의 성능**입니다. ② 7층으로 "고치면" 논문 결과 재현이 깨질 수 있습니다. ③ 하이퍼파라미터를 논문 표에서 베끼면 실제로 돌아간 것과 다른 모델을 만들 수 있습니다. **리포 투어 규약이 "파일 경로:라인을 인용할 것"을 요구하는 이유의 실물 사례**입니다(CLAUDE.md `repos/` 항목). 정독 6편도 같은 태도로 읽어야 합니다. |
-| **"action chunking은 느린 모델을 감추는 지연 대응 트릭이다"** | 순서가 거꾸로입니다. ACT의 원 논거는 **compounding error 축소**로, 결정 횟수를 $T$에서 $T/k$로 줄여 상한을 $O(\epsilon T^2)$에서 $O(\epsilon_k T^2/k)$로 내리는 것입니다(§3.3). 지연 흡수는 따라오는 부수 효과입니다. 근거는 숫자에 있습니다 — LeRobot 기본값의 허용 지연 예산이 30 Hz에서 **3,333 ms**인데, 약 80M 파라미터·NFE 1 모델에 그런 예산이 필요할 이유가 없습니다(§3.6). **즉 `chunk_size=100`은 지연 때문에 정해진 값이 아닙니다.** [W1-M1 §4](../../w1-generative-core/01-physical-ai-landscape/lesson.md)는 지연 관점만 다뤘고 이 모듈이 나머지 절반을 채웁니다. 실무 함의: 상위 모델을 빠르게 만들어도 청크를 짧게 줄일 수 있는 것은 아닙니다. 두 논거가 다른 하한을 주기 때문입니다. |
-| **"temporal ensembling을 켜면 공짜로 매끄러워진다"** | docstring이 대가를 명시합니다 — *"`n_action_steps` must be 1 when using this feature, as inference needs to happen at every step to form an ensemble."* `n_action_steps > 1`인 채로 켜면 설정 검증에서 거부됩니다. 즉 **추론 호출이 청크당 1회에서 스텝당 1회로 100배**가 되고, 30 Hz면 허용 지연 예산이 3,333 ms에서 **33 ms**로 조여집니다(§3.6). 온보드 추론이면 이 33 ms 안에 약 80M forward가 끝나야 합니다. 계수 자체도 함정입니다 — $m=0.1$은 작아 보이지만 $n=100$에서 최고령 대 최신 가중비가 $2\times10^4$이라 **새 관측이 거의 반영되지 않습니다**(§6.4). 권장값 0.01이어야 비로소 거의 균등 평균입니다. 매끄러움의 값은 추론 비용 100배와 계수 오설정 위험입니다. |
+| **"논문에 적힌 하이퍼파라미터가 곧 돌아간 코드다"** | LeRobot `configuration_act.py`의 `n_decoder_layers` 주석이 이렇습니다 — *"Although the original ACT implementation has 7 for `n_decoder_layers`, there is a bug in the code that means only the first layer is used. Here we match the original implementation by setting this to 1."*(`configuration_act.py:108-109`, LeRobot 0.6.1 실물 대조) 논문·원 구현의 선언값은 디코더 7층인데 코드가 첫 층만 쓰고 있었고, LeRobot은 **재현성을 위해 그 버그를 의도적으로 따라가** 1층으로 맞췄습니다. 세 가지가 따라나옵니다. ① 보고된 성능은 7층이 아니라 **1층 모델의 성능**입니다. ② 7층으로 "고치면" 논문 결과 재현이 깨질 수 있습니다. ③ 하이퍼파라미터를 논문 표에서 베끼면 실제로 돌아간 것과 다른 모델을 만들 수 있습니다. **리포 투어 규약이 "파일 경로:라인을 인용할 것"을 요구하는 이유의 실물 사례**입니다(CLAUDE.md `repos/` 항목). 정독 6편도 같은 태도로 읽어야 합니다. |
+| **"action chunking은 느린 모델을 감추는 지연 대응 트릭이다"** | 순서가 거꾸로입니다. ACT의 원 논거는 **compounding error 축소**로, 결정 횟수를 $T$에서 $T/k$로 줄여 상한을 $O(\epsilon T^2)$에서 $O(\epsilon_k T^2/k)$로 내리는 것입니다(§3.3). 지연 흡수는 따라오는 부수 효과입니다. 근거는 숫자에 있습니다 — LeRobot 기본값의 허용 지연 예산이 30 Hz에서 **3,333 ms**인데, 약 52M 파라미터·NFE 1 모델에 그런 예산이 필요할 이유가 없습니다(§3.6). **즉 `chunk_size=100`은 지연 때문에 정해진 값이 아닙니다.** [W1-M1 §4](../../w1-generative-core/01-physical-ai-landscape/lesson.md)는 지연 관점만 다뤘고 이 모듈이 나머지 절반을 채웁니다. 실무 함의: 상위 모델을 빠르게 만들어도 청크를 짧게 줄일 수 있는 것은 아닙니다. 두 논거가 다른 하한을 주기 때문입니다. |
+| **"temporal ensembling을 켜면 공짜로 매끄러워진다"** | docstring이 대가를 명시합니다 — *"`n_action_steps` must be 1 when using this feature, as inference needs to happen at every step to form an ensemble."* `n_action_steps > 1`인 채로 켜면 설정 검증에서 거부됩니다. 즉 **추론 호출이 청크당 1회에서 스텝당 1회로 100배**가 되고, 30 Hz면 허용 지연 예산이 3,333 ms에서 **33 ms**로 조여집니다(§3.6). 온보드 추론이면 이 33 ms 안에 약 52M forward가 끝나야 합니다. **여기서 하드웨어가 답을 가릅니다** — RTX 3080은 앙상블 모드에서 스텝당 **십수 ms**라 통과하지만 **여유가 2~3배뿐이라 부하가 걸리면 넘어갑니다**(같은 기기에서 66 ms를 관측했습니다). **CPU는 100 ms 언저리라 아예 초과**합니다(실측은 [`labs/`](labs/)). 즉 `chunk_size`·`n_action_steps`·앙상블 계수라는 L3 설계 3변수(§5.3)에 **연산 하드웨어가 네 번째 변수로 결합**됩니다. 다만 Jetson급 온보드 장치는 측정하지 않았습니다. 계수 자체도 함정입니다 — $m=0.1$은 작아 보이지만 $n=100$에서 최고령 대 최신 가중비가 $2\times10^4$이라 **새 관측이 거의 반영되지 않습니다**(§6.4). 권장값 0.01이어야 비로소 거의 균등 평균입니다. 매끄러움의 값은 추론 비용 100배와 계수 오설정 위험입니다. |
 
 **번외**: "ACT의 latent $z$가 실행 시 여러 행동 모드 중 하나를 골라준다"도 흔한 오해입니다. 추론에서 LeRobot은 $z$를 `torch.zeros(...)`로 고정하므로(§2.7) **배포 모델은 결정론적이고, 같은 관측에는 항상 같은 청크가 나옵니다.** $z$는 학습 시 시연자 변동을 흡수해 $\ell_1$ 회귀가 평균으로 뭉개지는 것을 막는 정규화 장치이며, $\beta=10.0$이라는 큰 KL 가중도 $z$의 정보량을 눌러 학습·배포 괴리를 줄이는 방향입니다. 다봉 행동 분포를 **실행 시점에** 고르는 문제는 추론 자체가 샘플링인 Diffusion Policy가 맡습니다(W2-M2). 이 구분을 놓치면 "ACT도 생성모델이니 다봉성이 해결됐다"는 잘못된 결론에 도달합니다.
 
@@ -672,7 +672,7 @@ ALOHA와 HOMIE는 같은 발상의 두 변형입니다. **사람이 로봇을 �
 lerobot-dataset-viz --repo-id lerobot/aloha_mobile_cabinet
 
 # 로컬 캐시 위치
-#   ~/.cache/huggingface/lerobot/{repo-id}
+#   ~/.cache/huggingface/lerobot/hub/datasets--lerobot--{name}   (HF Hub 표준 캐시 레이아웃)
 
 # ACT 학습 시작
 lerobot-train \
@@ -690,15 +690,17 @@ lerobot-train \
 ```
 
 - `--policy.device`는 `cuda` / `cpu` / `mps` 중 하나입니다. 로컬 RTX 3080이면 `cuda`.
-- 공개 데이터셋으로 확인된 것은 `lerobot/aloha_mobile_cabinet`입니다. **PushT의 정확한 `repo_id`는 미확인**이니 Hub에서 `lerobot/` 네임스페이스로 검색해 쓰세요(W2-M2에서 다시 다룹니다).
+- 공개 데이터셋 3종을 받아 확인했습니다(2026-08-09) — `aloha_mobile_cabinet` 1.74 GB, **`aloha_sim_transfer_cube_human` 69.9 MB · 50 에피소드 · 6.7분**, **`lerobot/pusht`** 7.7 MB(W2-M2가 쓸 것, 이제 `repo_id` 확정). 두 번째가 **ACT 초록의 "10분 분량·50 시연"과 같은 자릿수**라 이 모듈에 가장 맞습니다. 스펙 표는 [`labs/`](labs/)에.
 - 실물 로봇 롤아웃은 `lerobot-rollout --strategy.type=base|sentry|highlight|dagger|episodic --policy.path=...`입니다. **`dagger` 전략이 목록에 있는 것에 주목하세요**(§2.3). 이 4주에는 실기 접근이 없으니 개념 확인만 합니다.
-- ACT는 **약 80M 파라미터**·**50 시연**으로도 높은 성공률이 보고되는 **입문 1순위 정책**입니다. 로봇 학습에서 "적은 데이터"가 어느 정도인지의 기준점을 잡아두세요(수치 출처는 §10).
+- ACT는 **50 시연**으로도 높은 성공률이 보고되는 **입문 1순위 정책**입니다. 파라미터 수는 HF 문서가 약 80M로 적지만 **LeRobot 0.6.1이 실제로 만드는 모델은 51,613,582개(약 52M)** 이고 카메라 대수와 무관합니다(백본 공유, `modeling_act.py:334`·`475`). 이 문서는 실측값을 씁니다. **두 값이 왜 다른지는 확인하지 못했습니다**(§10 각주). 로봇 학습에서 "적은 데이터"가 어느 정도인지의 기준점을 잡아두세요(수치 출처는 §10).
 
-> ⚠️ **미검증(GPU 필요)** — 위 `lerobot-train` 절차는 집필 시점에 실행 검증되지 않았습니다.
-> 학습 소요는 공식 문서 기준 **100k 스텝에 단일 GPU 수 시간**이고 권장 batch size는 8부터입니다. 이 모듈은 완주가 목표가 아니므로 **먼저 수백 스텝 스모크로 손실이 내려가는 것만 확인**하고 멈추세요. 실행 후 결과를 `docs/progress.md`에 기록하고 이 배지를 제거하세요.
+> ✅ **실행 검증됨 (2026-08-09 · WSL2 + RTX 3080 12GB · lerobot 0.6.1 · torch 2.11.0+cu130)**
+> 설치 **42초**, `dataset-viz` **8.8초**, **학습 스모크 200스텝 31초**(손실 24.43 → 3.76), 재개 정상. 100k 외삽은 **약 2.1시간**이라 공식 문서의 "단일 GPU 수 시간"과 맞습니다.
+> `--policy.repo_id` 대신 **`--policy.push_to_hub=false`** 면 HF 계정 없이 돕니다. 체크포인트가 **1개당 592 MB**니 `--save_freq`를 크게 잡으세요.
+> **GPU는 강권이지 필수가 아닙니다** — CPU도 같은 스모크가 약 10분입니다(1스텝 39배 느림). 100k 본학습만 GPU 전용입니다. **완주가 목표가 아니니** 손실이 내려가는 것까지만 보고 멈추세요. 판정 기준과 흔한 에러는 [`labs/`](labs/).
 
-- 실습 코드: [`practice/`](practice/) — 별도 턴에서 작성 예정
-- 랩 가이드: [`labs/`](labs/) — 별도 턴에서 작성 예정
+- 실습 코드: [`practice/`](practice/README.md) — 4종. `01`·`02`가 이 문서 §3.6·§6.4 표를 **자동 대조해 PASS/FAIL을 찍습니다**(16/16 · 20/20).
+- 랩 가이드: [`labs/`](labs/README.md) — LeRobot 설치 → 데이터셋 → `lerobot-train` 개시. `labs/verify_act_install.py`가 §6.4 기본값 21개를 설치본과 대조합니다.
 
 ---
 
@@ -757,17 +759,21 @@ lerobot-train \
 **LeRobot 코드·문서** (전부 확인: 2026-08-05, main 브랜치)
 
 - `github.com/huggingface/lerobot` — `src/lerobot/policies/act/configuration_act.py` (§6.4 하이퍼파라미터 표 전부, `n_decoder_layers` 주석, `n_action_steps`·`temporal_ensemble_coeff` docstring), `src/lerobot/policies/act/modeling_act.py` (`loss = l1_loss + mean_kld * kl_weight`, 추론 시 `latent_sample = torch.zeros(...)`, `ACTTemporalEnsembler`의 지수 가중 규약, 1×1 conv 특징 투영)
-- ACT 정책 문서 — `huggingface.co/docs/lerobot/act` (약 80M 파라미터, 50 시연, 입문 1순위 추천)
+- ACT 정책 문서 — `huggingface.co/docs/lerobot/act` (약 80M 파라미터, 50 시연, 입문 1순위 추천). **파라미터 수는 2026-08-09 실측(51.6M)과 어긋납니다** — 아래 각주.
 - 설치 — `huggingface.co/docs/lerobot/installation` (Python 3.12, PyTorch ≥ 2.10, extras 구성)
 - 실기 모방학습 — `huggingface.co/docs/lerobot/il_robots` (`lerobot-train` / `lerobot-rollout` 커맨드, 100k 스텝 소요, 권장 batch size)
 
 **신뢰도 각주** (2026-08-05 기준)
 
-- 📎 **이 문서의 모든 수치 하이퍼파라미터는 LeRobot 구현 기본값입니다.** ACT 논문 원본 설정과 다를 수 있고, §7 첫 오해가 실제로 다른 사례입니다(디코더 층수 7 vs 1). chunk size·파라미터 수·temporal ensembling 계수는 **초록에서 확인되지 않았습니다.**
-- 📎 **ACT/ALOHA 원 데이터의 기록 FPS를 확인하지 않았습니다.** §3.6·§6.2의 시간 환산은 30 Hz와 50 Hz를 병기했습니다. 실습에서 실제 데이터셋의 FPS를 확인해 이 표를 채우세요.
-- 📎 **PushT 데이터셋의 정확한 `repo_id` 미확인.** 공개 확인된 것은 `lerobot/aloha_mobile_cabinet`입니다.
-- 📎 `temporal_ensemble_coeff`를 `n_action_steps > 1`과 함께 쓸 때 발생하는 **예외의 정확한 클래스는 확인하지 않았습니다.** 설정 검증 메시지(`n_action_steps` must be 1 when using temporal ensembling)만 확인했습니다.
-- 📎 **§5의 회사 데이터 수집 파이프라인은 전부 미확인 추정입니다.** HOMIE 논문 구조에 근거한 설명이며 회사 실제 구성이 아닙니다.
+> 📌 **2026-08-09 갱신** — LeRobot **0.6.1**을 실제로 설치해(WSL2 + RTX 3080) 아래 각주를 다시 검증했습니다. 절차와 원시 출력은 [`labs/`](labs/), 자동 대조는 `labs/verify_act_install.py`입니다.
+
+- ✅ **§6.4 하이퍼파라미터 21개가 설치본과 전부 일치합니다**(21/21). 다만 **이 값들은 여전히 LeRobot 구현 기본값이지 ACT 논문 원본 설정이 아닙니다** — §7 첫 오해가 실제로 다른 사례입니다(디코더 층수 7 vs 1). chunk size와 앙상블 계수는 **초록에서 확인되지 않았습니다.**
+- ✅ **ACT/ALOHA 공개 데이터의 기록 FPS = 50 Hz**(`aloha_sim_transfer_cube_human`·`aloha_mobile_cabinet` 둘 다). §3.6이 30 Hz를 병기하는 것은 이제 미확인 때문이 아니라 **우리 로봇의 $f_2$ 가정**이기 때문입니다.
+- ✅ **PushT `repo_id` = `lerobot/pusht`** (7.7 MB · fps 10 · 206 에피소드 · action 차원 2). W2-M2가 이것을 씁니다.
+- ✅ `temporal_ensemble_coeff`를 `n_action_steps > 1`과 함께 쓰면 **`NotImplementedError`** 가 납니다. 메시지는 "`n_action_steps` must be 1 when using temporal ensembling. This is because the policy needs to be queried every step to compute the ensembled action." — **§7이 인용한 docstring 문장과 다른 문장**이니 둘을 섞지 마세요.
+- 🔴 **파라미터 수가 어긋납니다.** HF 문서는 약 80M인데 **`ACTPolicy`가 실제로 만드는 것은 51,613,582개(약 52M)** 이고 카메라를 1→4대로 늘려도 불변입니다(백본 공유, `modeling_act.py:334`·`475`). `use_vae=False`면 34,232,142개라 VAE posterior 인코더가 약 17.4M입니다. **왜 다른지는 확인하지 못했습니다** — 원 ACT 구현을 읽어야 알 수 있고 이번에 읽지 않았습니다. 추측 없이 확인 대상으로 남깁니다.
+- 📎 **§5의 회사 데이터 수집 파이프라인은 전부 미확인 추정입니다.** HOMIE 논문 구조에 근거한 설명이며 회사 실제 구성이 아닙니다. 이 항목은 실행검증으로 닫을 수 없습니다.
+- 📎 **Jetson급 온보드 장치의 추론 지연은 측정하지 않았습니다.** §7 세 번째 오해의 실측은 데스크톱 GPU와 데스크톱 CPU 두 경우뿐입니다.
 
 ---
 

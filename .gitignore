@@ -222,6 +222,7 @@ artifacts/**/*.gif
 artifacts/**/*.pt
 artifacts/**/*.ckpt
 artifacts/**/*.onnx
+artifacts/**/*.rrd
 artifacts/**/*.npz
 artifacts/**/*.hdf5
 
@@ -244,3 +245,6 @@ artifacts/**/*_ascii.png
 
 # humanize-korean 작업 폴더 (윤문 중간 산출물 — 커밋하지 않음)
 _workspace/
+
+# LeRobot 전용 가상환경 (W2-M1 labs 검증용, 기존 .venv와 분리)
+.venv-lerobot/
