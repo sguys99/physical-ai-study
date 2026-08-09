@@ -40,7 +40,7 @@
 #
 # > ⚠️ **여기 나오는 헤드 구조는 lesson §6.3·§7.2의 교육용 재현이지 회사 구현이 아닙니다.**
 # > 회사 L4에 액션 헤드가 있는지, DiT 계열인지, 조건을 어떻게 주입하는지는 전부 **미확인**입니다
-# > (lesson §8.4 ①②⑤ · §10의 팀 질문 1·3번).
+# > (lesson §8.4 ①②⑤ · 「팀에 물어볼 것」 1·3번).
 #
 # **GPU 불필요.** `--smoke`는 1분 이내.
 
@@ -754,7 +754,7 @@ def main(argv: list[str] | None = None) -> None:
                 rows, ["left", "right", "right", "right", "left"])
     print(f"  측정: 배치 1, 토큰 {n_tok}개, {dev.type}, {args.bench_reps}회 평균")
     print("  → **'3 ms/NFE'는 모델 크기·하드웨어·토큰 수가 정해져야 나오는 숫자입니다.** 위 표의 어느")
-    print("     행이 우리 헤드인지가 §8.3 표의 NFE 상한을 통째로 바꿉니다. 실측값은 §10 팀 질문 2번.")
+    print("     행이 우리 헤드인지가 §8.3 표의 NFE 상한을 통째로 바꿉니다. 실측값은 「팀에 물어볼 것」 2번.")
     if dev.type == "cpu":
         print("  ⚠️ CPU 측정값입니다. 실제 배치는 GPU이므로 이 숫자를 그대로 예산에 넣지 마세요.")
     with open(out_dir / "03_forward_bench.csv", "w", newline="") as f:

@@ -241,7 +241,7 @@ SNR을 맞춰 대응시키면 이렇습니다. DDPM 열은 [W1-M3 §3.3](../03-d
 
 표를 세로로 읽으면 재미있는 것이 나옵니다. **DDPM 격자의 앞 25%($t{=}1{\sim}250$)가 RF 시간의 48%를 덮고 뒤 50%($t{=}500{\sim}1000$)가 RF 시간의 22%만 덮습니다.** $t$를 똑같이 균등 샘플링해도 **스케줄에 따라 SNR 구간별 학습 예산 배분이 완전히 달라집니다.**
 
-그래서 같은 가족이라고 해서 같은 모델이 나오지는 않습니다. **바뀌는 것은 암묵적 손실 가중입니다.** W1-M3 §9의 첫 오해($\epsilon$-pred vs $x_0$-pred)가 같은 논리였고 FM에서는 이 자유도가 **$t$ 샘플링 분포**라는 눈에 보이는 노브로 올라옵니다. SD3(2403.03206)가 $t\sim\mathcal{U}[0,1]$ 대신 **logit-normal**($t=\text{sigmoid}(z),\ z\sim\mathcal{N}(m,s^2)$)을 쓴 것이 그 예이고 근거는 지각적으로 유의미한 노이즈 스케일 쪽으로 학습을 편향시키는 것입니다. **DDPM이 ELBO의 $\lambda_t$를 버린 자리에 FM은 $t$ 분포를 놓았습니다.**
+그래서 같은 가족이라고 해서 같은 모델이 나오지는 않습니다. **바뀌는 것은 암묵적 손실 가중입니다.** W1-M3 「흔한 오해」의 첫 오해($\epsilon$-pred vs $x_0$-pred)가 같은 논리였고 FM에서는 이 자유도가 **$t$ 샘플링 분포**라는 눈에 보이는 노브로 올라옵니다. SD3(2403.03206)가 $t\sim\mathcal{U}[0,1]$ 대신 **logit-normal**($t=\text{sigmoid}(z),\ z\sim\mathcal{N}(m,s^2)$)을 쓴 것이 그 예이고 근거는 지각적으로 유의미한 노이즈 스케일 쪽으로 학습을 편향시키는 것입니다. **DDPM이 ELBO의 $\lambda_t$를 버린 자리에 FM은 $t$ 분포를 놓았습니다.**
 
 ---
 
@@ -514,7 +514,7 @@ flowchart TB
 
 | 오해 | 교정 |
 |---|---|
-| **"FM은 diffusion과 다른 종류의 모델이다"** | 같은 가족의 다른 스케줄입니다(§5.4). $x_t=\alpha_tx_1+\sigma_tx_0$ 꼴에서 DDPM은 $\alpha^2+\sigma^2=1$($\ell_2$ 정규화, 사분원 호), RF는 $\alpha+\sigma=1$($\ell_1$ 정규화, 현)일 뿐이고 스케일 재조정 + 시간 재매개화로 옮겨집니다. 학습 대상도 가역 아핀 변환 관계라 $\epsilon$-pred·$x_0$-pred·$v$-pred·속도 예측이 같은 회귀의 좌표계이고, 갈리는 것은 **암묵적 $t$-가중**입니다([W1-M3 §9](../03-diffusion-ddpm-dit/lesson.md)의 첫 오해와 같은 논리). 그래서 "FM으로 바꾼다"는 백본 교체가 아니라 **세 줄 교체**입니다(§7.1). 다만 가중이 달라지면 결과도 달라지므로 "같은 가족"이 "같은 모델"은 아닙니다. |
+| **"FM은 diffusion과 다른 종류의 모델이다"** | 같은 가족의 다른 스케줄입니다(§5.4). $x_t=\alpha_tx_1+\sigma_tx_0$ 꼴에서 DDPM은 $\alpha^2+\sigma^2=1$($\ell_2$ 정규화, 사분원 호), RF는 $\alpha+\sigma=1$($\ell_1$ 정규화, 현)일 뿐이고 스케일 재조정 + 시간 재매개화로 옮겨집니다. 학습 대상도 가역 아핀 변환 관계라 $\epsilon$-pred·$x_0$-pred·$v$-pred·속도 예측이 같은 회귀의 좌표계이고, 갈리는 것은 **암묵적 $t$-가중**입니다([W1-M3 「흔한 오해」](../03-diffusion-ddpm-dit/lesson.md)의 첫 오해와 같은 논리). 그래서 "FM으로 바꾼다"는 백본 교체가 아니라 **세 줄 교체**입니다(§7.1). 다만 가중이 달라지면 결과도 달라지므로 "같은 가족"이 "같은 모델"은 아닙니다. |
 | **"Rectified Flow면 1스텝이 공짜다"** | 직선인 것은 **조건부 경로**이고 학습되는 **주변 속도장의 궤적은 여전히 휩니다**(§6.2). 1~2 스텝을 실제로 얻으려면 **reflow 또는 증류**가 필요한데, reflow는 모델 자신의 출력을 target으로 삼아 오차를 상속하고 샘플 생성 + 재학습 비용이 들며 큰 NFE의 품질을 내줍니다. 논문 headline(CIFAR-10 1-step FID 4.85 / recall 0.51)도 재학습을 거친 결과이고, 무증류 FM의 실용권은 NFE 4~20입니다. |
 | **"스텝이 적으니 무조건 로봇에 유리하다"** | 지연은 $\tau_{\text{VLM}}+K\times\tau_{\text{head}}$이고 FM이 줄이는 것은 $K$ 하나입니다. §8.2에서 673.7M 헤드는 13.2 ms/NFE라 5 Hz 자리에 10 NFE뿐이고, 백본이 루프 안으로 들어가면 예산이 10배로 뜁니다. 더 중요한 것은 [W1-M1 §4](../01-physical-ai-landscape/lesson.md)의 부등식이 **$H_{\text{chunk}}$와 홀드 전략에 더 민감**하다는 점입니다 — $\tau_{\text{infer}}$를 100 ms에서 200 ms로 늘려도 $H$는 16에서 21로만 가는 반면, 청크를 길게 잡으면 **최악 반응 지연이 $H/f_2$까지 늘어납니다.** 1스텝 증류가 다봉 분포를 뭉갤 수 있다는 점도([W1-M3 §7.3](../03-diffusion-ddpm-dit/lesson.md)) 함께 재야 합니다. **NFE는 예산 항목 하나일 뿐 예산 전체가 아닙니다.** |
 
@@ -588,7 +588,7 @@ flowchart TB
 | **GR00T N1** (§7.2·§8·§9.3) | arXiv:2503.14734 — System 1 = FM 기반 **DiT** head, **K=4**. 2차 출처라 "논문/기술보고서 기준" 표기 |
 | **기타 로봇 정책** (§9.3) | FlowPolicy arXiv:2412.04987 (AAAI 2025) · AdaFlow arXiv:2402.04292 (NeurIPS 2024) · Diffusion Policy arXiv:2303.04137 |
 | **보충** (마스터플랜 §5 지정) | "Flow Matching Guide and Code" arXiv:2412.06264 + `github.com/facebookresearch/flow_matching`(실존·활성) · **MIT 6.S184** diffusion.csail.mit.edu ("2026 Version" 갱신 중, `/docs/lecture-notes.pdf` + 랩 3개 + 유튜브) |
-| **저장소 내부 재사용** | [W1-M3 §3.3·§5.2·§12](../03-diffusion-ddpm-dit/lesson.md) → §5.4 SNR 열·§8.1 산수 · 실습 [`03_dit_action_head.py`](../03-diffusion-ddpm-dit/practice/03_dit_action_head.py) RTX 3080 실측 → §8.2의 13.2 ms/NFE · Score SDE arXiv:2011.13456 |
+| **저장소 내부 재사용** | [W1-M3 §3.3·§5.2·「출처」](../03-diffusion-ddpm-dit/lesson.md) → §5.4 SNR 열·§8.1 산수 · 실습 [`03_dit_action_head.py`](../03-diffusion-ddpm-dit/practice/03_dit_action_head.py) RTX 3080 실측 → §8.2의 13.2 ms/NFE · Score SDE arXiv:2011.13456 |
 
 **⚠️ 미검증으로 남긴 것 셋.** 하나는 Rectified Flow의 $k$별 1-step FID 표(6.18 / 12.21 / 8.15 등)입니다. 2차 출처 간 값이 충돌해 **정성 서술로만 처리**했고 쓸 수 있는 수치는 "CIFAR-10 1-step FID 4.85 / recall 0.51" 하나뿐입니다. 또 **GR00T N1.5 이후는 arXiv 논문이 없고** 모델 카드와 `github.com/NVIDIA/Isaac-GR00T`만 있습니다. 마지막으로 Neural ODE(Chen et al., NeurIPS 2018)·CNF/FFJORD는 **arXiv ID를 재확인하지 않아 표기하지 않았습니다.**
 

@@ -60,7 +60,7 @@ from matplotlib.ft2font import FT2Font  # noqa: E402
 
 MODULE_ID = "W1-M3"
 
-# lesson §13이 명시한 NFE 집합. 1000 = 학습 격자 전체.
+# lesson 「실습으로 가기」가 명시한 NFE 집합. 1000 = 학습 격자 전체.
 NFE_GRID = [1, 2, 4, 10, 20, 50, 250, 1000]
 NFE_GRID_SMOKE = [1, 4, 20, 250]
 
