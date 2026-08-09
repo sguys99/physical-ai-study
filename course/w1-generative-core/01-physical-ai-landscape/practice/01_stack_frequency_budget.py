@@ -16,12 +16,12 @@
 # %% [markdown]
 # # W1-M1 실습 1 — 주파수 예산과 action chunking
 #
-# lesson.md `§2.3`(5계층 블록도) · `§2.4`(대역폭 분리) · `§3`(지연 예산 부등식)을 손으로 돌려보는 스크립트입니다.
+# lesson.md `§3.3`(5계층 블록도) · `§3.4`(대역폭 분리) · `§4`(지연 예산 부등식)을 손으로 돌려보는 스크립트입니다.
 #
 # 이 실습에서 확인할 것:
 #
 # 1. 5계층의 동작 주파수를 표로 찍고, 인접 계층 사이 **대역폭 분리비**가 실제로 얼마나 벌어지는지
-# 2. lesson §3의 부등식 $H_{chunk} \ge f_2 (T_{replan} + \tau_{infer} + \tau_{comm})$ 을 함수로 구현하고
+# 2. lesson §4.1의 부등식 $H_{chunk} \ge f_2 (T_{replan} + \tau_{infer} + \tau_{comm})$ 을 함수로 구현하고
 #    lesson의 수치 예(→ 16 스텝)와 퀴즈 5번(→ 41 스텝)을 `assert`로 검증
 # 3. 청크가 짧을 때 생기는 **명령 공백(command gap)** 을 타임라인으로 시뮬레이션
 # 4. $\tau_{infer}$ 스윕 / $H_{chunk}$ 스윕 2-panel 그림 저장
@@ -177,16 +177,16 @@ def print_table(headers: list[str], rows: list[list[str]], aligns: list[str] | N
 
 
 # %% [markdown]
-# ## 1. 5계층 주파수 예산 — lesson §2.3
+# ## 1. 5계층 주파수 예산 — lesson §3.3
 #
-# 계층 정의는 lesson §2.3 블록도를 그대로 옮긴 것입니다.
+# 계층 정의는 lesson §3.3 블록도를 그대로 옮긴 것입니다.
 # L3(액션 인터페이스)만 고정 주파수가 없습니다 — **L4 호출당 1회** 동작하는 이벤트 구동 계층이라서
 # 아래 대역폭 분리 계산에서는 제외합니다.
 
 # %%
 @dataclass(frozen=True)
 class Layer:
-    """스택 한 계층. 주파수는 lesson §2.3 블록도 값."""
+    """스택 한 계층. 주파수는 lesson §3.3 블록도 값."""
 
     tag: str  # L1 ~ L5
     name_ko: str
@@ -209,7 +209,7 @@ class Layer:
         return f"{self.f_lo:g} ~ {self.f_hi:g} Hz"
 
 
-# lesson §2.3 — 위(느림·똑똑함)에서 아래(빠름·반사적)로
+# lesson §3.3 — 위(느림·똑똑함)에서 아래(빠름·반사적)로
 LAYERS: list[Layer] = [
     Layer("L5", "인지·매핑", "Perception / Mapping", 0.5, 5.0,
           "RGB-D·LiDAR·언어목표 → 시맨틱 맵·목표 3D 좌표", "DualMap"),
@@ -226,14 +226,14 @@ LAYERS: list[Layer] = [
 # 대역폭 분리를 볼 때는 주파수가 정의된 계층만, 빠른 쪽 → 느린 쪽 순서로 본다.
 FREQ_ORDER = ["L1", "L2", "L4", "L5"]
 
-# 캐스케이드 제어의 경험칙: inner loop 대역폭을 outer의 5~10배 (lesson §2.4)
+# 캐스케이드 제어의 경험칙: inner loop 대역폭을 outer의 5~10배 (lesson §3.4)
 CASCADE_MIN_RATIO = 5.0
 
 
 # %%
 def print_frequency_budget() -> None:
-    """lesson §2.3의 5계층 주파수 예산 표를 stdout에 출력."""
-    print("\n=== [1] 5계층 주파수 예산 (lesson §2.3) ===")
+    """lesson §3.3의 5계층 주파수 예산 표를 stdout에 출력."""
+    print("\n=== [1] 5계층 주파수 예산 (lesson §3.3) ===")
     rows = []
     for lyr in LAYERS:
         nominal = lyr.f_nominal
@@ -256,7 +256,7 @@ def separation_ratios() -> list[tuple[str, float, float, float]]:
     """인접 계층(주파수가 정의된 것만)의 대역폭 분리비를 계산.
 
     반환: (경계 라벨, 빠른 쪽 대표주파수, 느린 쪽 대표주파수, 비율)
-    lesson §2.4:  w_L1 >> w_L2 >> w_L4 >> w_L5
+    lesson §3.4:  w_L1 >> w_L2 >> w_L4 >> w_L5
     """
     by_tag = {lyr.tag: lyr for lyr in LAYERS}
     out = []
@@ -269,8 +269,8 @@ def separation_ratios() -> list[tuple[str, float, float, float]]:
 
 
 def print_separation_ratios() -> None:
-    """lesson §2.4의 w_L1 >> w_L2 >> w_L4 >> w_L5가 수치로 성립하는지 확인."""
-    print("\n=== [2] 대역폭 분리비 (lesson §2.4) ===")
+    """lesson §3.4의 w_L1 >> w_L2 >> w_L4 >> w_L5가 수치로 성립하는지 확인."""
+    print("\n=== [2] 대역폭 분리비 (lesson §3.4) ===")
     by_tag = {lyr.tag: lyr for lyr in LAYERS}
     rows = []
     for label, f_fast, f_slow, ratio in separation_ratios():
@@ -298,11 +298,11 @@ def print_separation_ratios() -> None:
     print("   - L1/L2, L2/L4는 캐스케이드 경험칙(x5~10)을 넉넉히 만족한다 → 계층 분리가 물리적으로 정당하다.")
     print("   - L4/L5는 대표 비율이 x2.0 수준이고 최악에서는 밴드가 역전(x1 미만)한다.")
     print("     둘 다 '느린 계층'이라 대역폭 분리보다 기능 분리(인지 vs 행동 의도) 성격이 강하다는 뜻이다.")
-    print("     lesson §2.4의 '대략 한 자릿수'는 L1~L4 구간에서 성립하고 L4~L5는 그 예외라고 읽으면 된다.")
+    print("     lesson §3.4의 '대략 한 자릿수'는 L1~L4 구간에서 성립하고 L4~L5는 그 예외라고 읽으면 된다.")
 
 
 # %% [markdown]
-# ## 2. 최소 청크 길이 — lesson §3 eq.(1)
+# ## 2. 최소 청크 길이 — lesson §4.1 eq.(1)
 #
 # $$\frac{H_{chunk}}{f_2} \ge T_{replan} + \tau_{infer} + \tau_{comm}
 #   \quad\Longleftrightarrow\quad
@@ -316,7 +316,7 @@ def print_separation_ratios() -> None:
 def min_chunk_length(f2: float, f4: float, tau_infer: float, tau_comm: float) -> int:
     """최소 청크 길이 H_chunk [스텝].
 
-    lesson §3 eq.(1):  H_chunk >= f2 * (T_replan + tau_infer + tau_comm),  T_replan = 1/f4
+    lesson §4.1 eq.(1):  H_chunk >= f2 * (T_replan + tau_infer + tau_comm),  T_replan = 1/f4
 
     Args:
         f2: L2(WBC) 제어 주파수 [Hz]
@@ -327,9 +327,9 @@ def min_chunk_length(f2: float, f4: float, tau_infer: float, tau_comm: float) ->
     Returns:
         부등식을 만족하는 최소 정수 스텝 수.
     """
-    t_replan = 1.0 / f4                                  # lesson §3 eq.(1)
-    horizon_s = t_replan + tau_infer + tau_comm          # lesson §3 eq.(1) 우변 괄호
-    raw = f2 * horizon_s                                 # lesson §3 eq.(1)
+    t_replan = 1.0 / f4                                  # lesson §4.1 eq.(1)
+    horizon_s = t_replan + tau_infer + tau_comm          # lesson §4.1 eq.(1) 우변 괄호
+    raw = f2 * horizon_s                                 # lesson §4.1 eq.(1)
     # 부동소수 오차로 16.000000000000004 같은 값이 나와 17로 올림되는 것을 막는다.
     return int(math.ceil(raw - 1e-9))
 
@@ -337,7 +337,7 @@ def min_chunk_length(f2: float, f4: float, tau_infer: float, tau_comm: float) ->
 def worst_case_reaction_latency(h_chunk: int, f2: float) -> float:
     """최악 반응 지연 [s] = H_chunk / f2.
 
-    청크 실행 중에는 새 관측을 반영하지 못한다(lesson §3 트레이드오프).
+    청크 실행 중에는 새 관측을 반영하지 못한다(lesson §4.3 트레이드오프).
     MPC에서 예측 지평 N을 늘릴 때 모델 오차가 누적되는 것과 같은 구조.
     """
     return h_chunk / f2
@@ -346,23 +346,23 @@ def worst_case_reaction_latency(h_chunk: int, f2: float) -> float:
 # %%
 def check_lesson_numbers() -> None:
     """lesson의 수치 예를 assert로 검증한다. 여기가 깨지면 코드가 틀린 것."""
-    # lesson §3 수치 예: f2=50Hz, f4=5Hz(T_replan=200ms), tau_infer=100ms, tau_comm=20ms -> H >= 16
+    # lesson §4.1 수치 예: f2=50Hz, f4=5Hz(T_replan=200ms), tau_infer=100ms, tau_comm=20ms -> H >= 16
     h = min_chunk_length(f2=50.0, f4=5.0, tau_infer=0.100, tau_comm=0.020)
-    assert h == 16, f"lesson §3 수치 예 불일치: {h} != 16"
+    assert h == 16, f"lesson §4.1 수치 예 불일치: {h} != 16"
 
-    # lesson §8 퀴즈 5번: f2=100Hz, f4=4Hz, tau_infer=150ms, tau_comm=10ms -> H >= 41
+    # lesson 셀프 체크 퀴즈 5번: f2=100Hz, f4=4Hz, tau_infer=150ms, tau_comm=10ms -> H >= 41
     h_quiz = min_chunk_length(f2=100.0, f4=4.0, tau_infer=0.150, tau_comm=0.010)
-    assert h_quiz == 41, f"lesson §8 퀴즈 5번 불일치: {h_quiz} != 41"
+    assert h_quiz == 41, f"lesson 셀프 체크 퀴즈 5번 불일치: {h_quiz} != 41"
 
     print("\n=== [3] lesson 수치 검증 ===")
-    print(f"  lesson §3 예시   f2=50Hz,  f4=5Hz, tau_infer=100ms, tau_comm=20ms -> H >= {h:>3d}  (기대 16) OK")
-    print(f"  lesson §8 퀴즈5  f2=100Hz, f4=4Hz, tau_infer=150ms, tau_comm=10ms -> H >= {h_quiz:>3d}  (기대 41) OK")
+    print(f"  lesson §4.1 예시 f2=50Hz,  f4=5Hz, tau_infer=100ms, tau_comm=20ms -> H >= {h:>3d}  (기대 16) OK")
+    print(f"  lesson 퀴즈 5번  f2=100Hz, f4=4Hz, tau_infer=150ms, tau_comm=10ms -> H >= {h_quiz:>3d}  (기대 41) OK")
 
 
 # %% [markdown]
 # ## 3. 명령 공백(command gap) 시뮬레이션
 #
-# 타이밍 모델은 lesson §3의 부등식을 그대로 재현하도록 잡습니다.
+# 타이밍 모델은 lesson §4.1의 부등식을 그대로 재현하도록 잡습니다.
 #
 # - L4는 $t_k = k \cdot T_{replan}$ 에 관측을 찍어 재계획을 건다.
 # - 그 청크의 액션들은 **관측 시각 $t_k$ 기준으로 시간 인덱싱**되어 있다 (ACT/Diffusion Policy와 동일).
@@ -438,12 +438,12 @@ def print_gap_report(res: dict, label: str = "", ascii_steps: int = 60) -> None:
         f"  설정: f2={f2:g}Hz, f4={res['f4']:g}Hz, tau={res['tau'] * 1e3:g}ms, "
         f"T_replan={res['t_replan'] * 1e3:g}ms, H_chunk={h}"
     )
-    print(f"  필요 최소 청크 길이 H_required = {res['h_required']} 스텝  (lesson §3 eq.(1))")
+    print(f"  필요 최소 청크 길이 H_required = {res['h_required']} 스텝  (lesson §4.1 eq.(1))")
     print(f"  청크 도착 시 이미 만료된 앞부분 = {res['stale_head']} 스텝  <- tau가 부등식에 들어가는 이유")
     print(f"  명령 공백률 = {res['gap_ratio'] * 100:6.2f} %  ({'정상' if res['gap_ratio'] < 1e-9 else '공백 발생'})")
     print(
         f"  최악 반응 지연 = H_chunk/f2 = {h}/{f2:g} = {res['reaction_latency'] * 1e3:.1f} ms"
-        "   <- 청크를 늘린 대가 (lesson §3 트레이드오프)"
+        "   <- 청크를 늘린 대가 (lesson §4.3 트레이드오프)"
     )
 
     n = min(ascii_steps, len(res["steps"]))
@@ -504,8 +504,8 @@ def plot_budget(
     ax1.plot(taus * 1e3, hs_req, lw=2.2, color="#1f4e79")
     ax1.scatter([tau_infer * 1e3], [h_req], s=140, marker="*", color="#c0392b", zorder=5)
     ax1.annotate(
-        t(f"lesson §3 예시\n({tau_infer * 1e3:g} ms, H={h_req})",
-          f"lesson §3 example\n({tau_infer * 1e3:g} ms, H={h_req})"),
+        t(f"lesson §4.1 예시\n({tau_infer * 1e3:g} ms, H={h_req})",
+          f"lesson §4.1 example\n({tau_infer * 1e3:g} ms, H={h_req})"),
         xy=(tau_infer * 1e3, h_req),
         xytext=(tau_infer * 1e3 + 150, h_req - 2.0),
         fontsize=9,
@@ -550,8 +550,8 @@ def plot_budget(
     ax2.grid(alpha=0.3)
 
     fig.suptitle(
-        t("W1-M1 · 주파수 예산과 action chunking  (lesson §3 eq.(1))",
-          "W1-M1 · Frequency budget and action chunking  (lesson §3 eq.(1))"),
+        t("W1-M1 · 주파수 예산과 action chunking  (lesson §4.1 eq.(1))",
+          "W1-M1 · Frequency budget and action chunking  (lesson §4.1 eq.(1))"),
         fontsize=13,
     )
     fig.tight_layout(rect=(0, 0, 1, 0.95))
@@ -581,7 +581,7 @@ def _in_notebook() -> bool:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="W1-M1: 주파수 예산과 action chunking (lesson §2.3/§2.4/§3)")
+    p = argparse.ArgumentParser(description="W1-M1: 주파수 예산과 action chunking (lesson §3.3/§3.4/§4)")
     p.add_argument("--smoke", action="store_true", help="스윕 포인트를 줄여 수 초 안에 완주")
     p.add_argument("--f2", type=float, default=50.0, help="L2 제어 주파수 [Hz] (기본 50)")
     p.add_argument("--f4", type=float, default=5.0, help="L4 재계획 주파수 [Hz] (기본 5)")
@@ -642,7 +642,7 @@ def main(argv: list[str] | None = None) -> None:
         rows,
         aligns=["right", "left", "right", "right"],
     )
-    print("  MPC 대응: H_chunk는 receding horizon의 예측 지평 N이다 (lesson §3).")
+    print("  MPC 대응: H_chunk는 receding horizon의 예측 지평 N이다 (lesson §4.3).")
     print("  지평을 늘리면 지연에는 강해지지만 그 구간 동안 새 관측을 반영하지 못한다.")
 
     # 영문 폴백 렌더는 한글본을 덮어쓰지 않고 따로 저장한다 (02·03과 동일 규약)

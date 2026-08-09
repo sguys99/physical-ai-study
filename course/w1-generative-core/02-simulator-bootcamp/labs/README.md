@@ -670,7 +670,7 @@ MUJOCO_GL=egl python 03_g1_sin_wave.py --joints legs        # ③ 넘어집니�
 ```
 
 `1e-13` 수준이면 통과입니다. **이 한 줄이 lesson §5.5의 $f = k_p(\texttt{ctrl} - q) - k_v\dot q$ 를 코드로 확인한 것**이고,
-그 식은 [W1-M1 §2.3](../../01-physical-ai-landscape/lesson.md)의 L1 계층 PD 서보와 글자 그대로 같은 식입니다.
+그 식은 [W1-M1 §3.3](../../01-physical-ai-landscape/lesson.md)의 L1 계층 PD 서보와 글자 그대로 같은 식입니다.
 
 **③ `--joints arms` — 넘어지지 않습니다.**
 
@@ -1016,7 +1016,7 @@ python -c "import jax; print(jax.devices())"
 
 ### 5.4 확인 질문 (워크시트 ⑥에 기록)
 
-1. **`n_substeps = 10`이 뜻하는 것은?** 정책이 명령을 갱신하지 않는 10 스텝(20 ms) 동안에도 물리는 계속 돕니다. [W1-M1 §3](../../01-physical-ai-landscape/lesson.md)의 action chunking과 같은 구조 — 느린 상위가 빠른 하위를 어떻게 끊김 없이 먹여 살리는가.
+1. **`n_substeps = 10`이 뜻하는 것은?** 정책이 명령을 갱신하지 않는 10 스텝(20 ms) 동안에도 물리는 계속 돕니다. [W1-M1 §4](../../01-physical-ai-landscape/lesson.md)의 action chunking과 같은 구조 — 느린 상위가 빠른 하위를 어떻게 끊김 없이 먹여 살리는가.
 2. **`state (103,)`와 `privileged_state (216,)`는 왜 나뉘어 있는가? 배포되는 것은 어느 쪽인가?**
 3. **보상 24개 중 `feet_air_time`·`feet_phase`가 특별한 이유는?** 접촉 이벤트에 걸려 **미분 불가능**합니다. 매끄러운 비용함수라면 MPC로 풀면 되지 그레이디언트 추정에 수백만 샘플을 쓸 이유가 없습니다. **그게 RL을 쓰는 진짜 이유**입니다 (lesson §7.5).
 
