@@ -2,7 +2,7 @@
 # lint-lesson.sh — lesson.md 집필 규약 검사
 #
 # SSOT: docs/course-plan.md §3.1 frontmatter · §3.2 시각자료 · §3.7 문서 구조
-#       §3.8 용어 도입 · §3.9 이해 사다리 · §4 분량
+#       §3.8 용어 도입 · §3.9 이해 사다리 · §3.10 문장부호 · §4 분량
 # 근거: docs/course-plan.md §9.11 (2026-08-09 규약 개정)
 #
 # 사용법:
@@ -213,6 +213,35 @@ lint_one() {
     fi
   fi
   c_info "총 ${total}자 · 보호 구간 ${protect}% (35% 이상이면 윤문은 산문 라인 판정 — course-plan §1)"
+
+  # ── G. 문장부호 §3.10 ──────────────────────────────────────
+  printf '\n  \033[1mG. 문장부호 (§3.10)\033[0m\n'
+  # 산문 라인만 대상: frontmatter · 코드펜스 내부 · 표 행(| 시작) 제외
+  local dash_n dot_n dash_hits dot_hits
+  read -r dash_n dot_n < <(python3 - "$f" <<'PY'
+import re, sys
+s = open(sys.argv[1], encoding='utf-8').read()
+s = re.sub(r'^---\n.*?\n---\n', '', s, flags=re.S)
+s = re.sub(r'```.*?```', '', s, flags=re.S)
+lines = [l for l in s.split('\n') if not l.strip().startswith('|')]
+prose = '\n'.join(lines)
+print(prose.count('—'), prose.count('·'))
+PY
+)
+  if [[ "$dash_n" -lt 3 ]]; then
+    c_pass "산문 줄표(—) ${dash_n}회"
+  else
+    c_fail "산문 줄표(—) ${dash_n}회. 쉼표, 괄호, 문장 분리로 바꾸세요 (헤딩은 한 구절로)"
+    dash_hits=$(grep -n '—' "$f" | grep -v '^\s*[0-9]*:\s*|' | head -3)
+    [[ -n "$dash_hits" ]] && printf '        %s\n' "$dash_hits"
+  fi
+  if [[ "$dot_n" -lt 3 ]]; then
+    c_pass "산문 가운뎃점(·) ${dot_n}회"
+  else
+    c_fail "산문 가운뎃점(·) ${dot_n}회. 쉼표나 '와/과'로 바꾸세요"
+    dot_hits=$(grep -n '·' "$f" | grep -v '^\s*[0-9]*:\s*|' | head -3)
+    [[ -n "$dot_hits" ]] && printf '        %s\n' "$dot_hits"
+  fi
 
   # deep-dive 링크가 있으면 파일이 실제로 있는지
   if grep -q 'deep-dive\.md' "$f"; then
