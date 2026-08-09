@@ -200,7 +200,7 @@ def write_mp4(path: Path, frames: list[np.ndarray], fps: int) -> Path:
 # ```
 #
 # **`ctrl` 인덱스는 관절 이름으로 찾습니다.** 손으로 세지 않습니다 (lesson §5.4).
-# HOMIE가 "하체 RL + 상체 텔레옵"으로 상·하체를 나누는 것도 결국 이 인덱스 분할입니다(lesson §8.2).
+# HOMIE가 "하체 RL + 상체 텔레옵"으로 상·하체를 나누는 것도 결국 이 인덱스 분할입니다(lesson 「회사 스택 연결」).
 
 # %%
 GROUP_KEYS = {

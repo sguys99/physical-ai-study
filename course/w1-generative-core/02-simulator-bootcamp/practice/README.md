@@ -178,7 +178,7 @@ import mujoco                      # ← 그 다음
 - **(c) 패널의 log-log 기울기가 수렴 차수**입니다. 집필 환경 실측으로 `Euler` ≈ 0.9(1차),
   `RK4` ≈ 3.4. RK4는 오차가 훨씬 작지만 **스텝당 벽시계 비용이 약 2배**입니다 — 표의 "벽시계" 열로 확인하세요.
 - 세로 점선 두 개가 **G1 classic(0.002)과 MJX(0.004)** 의 위치입니다. MJX가 어느 방향으로 이동했는지 보세요.
-  `timestep`을 줄이는 것이 항상 정답이 아니라는 것이 lesson §9의 두 번째 오해입니다.
+  `timestep`을 줄이는 것이 항상 정답이 아니라는 것이 lesson 「흔한 오해」의 두 번째 오해입니다.
 
 ### `02` — 인덱스와 게인
 
@@ -256,7 +256,7 @@ menagerie는 갱신되고 회사 MJCF는 또 다를 수 있습니다.
 # 01: G1 MJX가 쓰는 적분기로 바꿔서 비교
 python 01_mujoco_basics.py --integrator implicitfast
 
-# 02: 손 포함 43 DoF 모델을 해부 (lesson §12 퀴즈 2번의 답을 직접 확인)
+# 02: 손 포함 43 DoF 모델을 해부 (lesson 「셀프 체크 퀴즈」 2번의 답을 직접 확인)
 #     ← 여기서 "ctrl id + 7 = qpos adr" 규칙이 손가락 4개에서 깨지는 것을 보게 됩니다.
 #        MJCF의 <actuator> 선언 순서와 관절 트리 순서가 달라서입니다. 산술 규칙을 믿으면 안 되는 실물 증거.
 python 02_g1_inspect.py --variant scene_with_hands.xml --csv
