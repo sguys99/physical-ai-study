@@ -11,9 +11,9 @@
 
   [1] 환경 리포트 — python · lerobot · torch · cuda · 디코더 백엔드
   [2] lesson §6.4 하이퍼파라미터 21개 ↔ `ACTConfig()` 기본값
-  [3] lesson §2.5 · §2.6 · §7의 영문 축자 인용 3건 ↔ 설치본 소스 원문
-  [4] lesson §10 신뢰도 각주 — temporal ensembling 오설정 시의 예외 클래스
-  [5] 파라미터 수 — 카메라 1~4대 · `use_vae` on/off  (lesson §8.2의 "약 80M" 대조)
+  [3] lesson §2.5 · §2.6 · 「흔한 오해」의 영문 축자 인용 3건 ↔ 설치본 소스 원문
+  [4] lesson 「출처」 신뢰도 각주 — temporal ensembling 오설정 시의 예외 클래스
+  [5] 파라미터 수 — 카메라 1~4대 · `use_vae` on/off  (lesson 「실습으로 가기」의 "약 80M" 대조)
   [6] 추론 경로 실측 — τ_infer · 큐 소비 · z=0 결정론성 · 앙상블 스텝당  (lesson §3.6 · §2.7)
   [7] 데이터셋 메타 — `--with-datasets` 를 줄 때만. **네트워크를 씁니다**
 
@@ -90,7 +90,7 @@ QUOTES: list[dict[str, str]] = [
     },
     {
         "id": "Q2",
-        "where": "lesson §2.6 · §7 · configuration_act.py `temporal_ensemble_coeff` docstring",
+        "where": "lesson §2.6 · 「흔한 오해」 · configuration_act.py `temporal_ensemble_coeff` docstring",
         "file": "configuration_act.py",
         "needle": (
             "`n_action_steps` must be 1 when using this feature, as inference needs to "
@@ -101,7 +101,7 @@ QUOTES: list[dict[str, str]] = [
     },
     {
         "id": "Q3",
-        "where": "lesson §7 첫 오해 · configuration_act.py `n_decoder_layers` 주석",
+        "where": "lesson 「흔한 오해」 첫 오해 · configuration_act.py `n_decoder_layers` 주석",
         "file": "configuration_act.py",
         "needle": (
             "Although the original ACT implementation has 7 for `n_decoder_layers`, "
@@ -112,7 +112,7 @@ QUOTES: list[dict[str, str]] = [
     },
 ]
 
-# lesson §10 신뢰도 각주 — 예외 클래스와 메시지
+# lesson 「출처」 신뢰도 각주 — 예외 클래스와 메시지
 EXPECTED_EXC = "NotImplementedError"
 EXPECTED_EXC_MSG = "`n_action_steps` must be 1 when using temporal ensembling."
 
@@ -252,7 +252,7 @@ def section_env(led: Ledger) -> None:
 
     rows = [
         ["python", platform.python_version(), sys.executable],
-        ["lerobot", ver("lerobot"), "lesson §8.2 기준"],
+        ["lerobot", ver("lerobot"), "lesson 「실습으로 가기」 기준"],
         ["torch", torch.__version__, f"cuda_available={torch.cuda.is_available()}"],
         ["torchvision", ver("torchvision"), "ResNet-18 사전학습 가중치의 출처"],
         ["torchcodec", ver("torchcodec"), "로드 실패해도 무해 — 에러 표 E1"],
@@ -376,12 +376,12 @@ def section_quotes(led: Ledger) -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# [4] temporal ensembling 오설정 — lesson §10 신뢰도 각주
+# [4] temporal ensembling 오설정 — lesson 「출처」 신뢰도 각주
 # ══════════════════════════════════════════════════════════════════════════════
 def section_exception(led: Ledger) -> None:
     from lerobot.policies.act.configuration_act import ACTConfig
 
-    print("\n=== [4] temporal ensembling 오설정 — 예외 클래스 (lesson §10 각주) ===\n")
+    print("\n=== [4] temporal ensembling 오설정 — 예외 클래스 (lesson 「출처」 각주) ===\n")
     print("  ACTConfig(temporal_ensemble_coeff=0.01, n_action_steps=100)  ← §2.6이 금지한 조합")
 
     exc_name, exc_msg = "(예외 없음)", ""
@@ -502,10 +502,10 @@ def section_params(led: Ledger, device: str) -> int:
     print(f"    HF 문서 주장         : 약 {hf_m:g}M   ❌ 실측과 불일치")
     led.add("[5] 파라미터", "lesson 본문 파라미터 수", f"약 {lesson_m:g}M", f"{got_m:.1f}M",
             "PASS" if ok_lesson else "FAIL", f"출처: {src_label}")
-    led.add("[5] 파라미터", "HF 문서 주장(lesson §10이 불일치로 기록)", f"약 {hf_m:g}M",
+    led.add("[5] 파라미터", "HF 문서 주장(lesson 「출처」가 불일치로 기록)", f"약 {hf_m:g}M",
             f"{got_m:.1f}M", "INFO", "원인 미확인 — 추측 금지. 후속 확인 항목")
 
-    print(f"\n  🔴 **HF 문서의 약 {hf_m:g}M과 실측 {got_m:.1f}M이 다릅니다.** lesson §10이 이미 이 불일치를")
+    print(f"\n  🔴 **HF 문서의 약 {hf_m:g}M과 실측 {got_m:.1f}M이 다릅니다.** lesson 「출처」가 이미 이 불일치를")
     print("     🔴 항목으로 기록해뒀고, **원인은 확인되지 않았습니다.**")
     print("     확인된 사실은 둘뿐입니다 — ① 이 설치본이 51.6M을 만든다 ② 카메라 수와 무관하다")
     print("     (백본 공유, modeling_act.py:334 생성 · :475 반복 호출).")
@@ -590,9 +590,9 @@ def section_device_compare(led: Ledger, tau_gpu: float, reps: int) -> None:
     print()
     print(render_table(["실행 모드", "f2", "예산[ms]", "GPU", "CPU"], rows, aligns="lrrll"))
     print("\n  🔴 **표의 아래 두 행이 갈립니다.** 같은 코드·같은 가중치인데 CPU에서는 temporal")
-    print("     ensembling이 원리적으로 불가능합니다. lesson §5.3이 L3 설계 변수로 든 셋")
+    print("     ensembling이 원리적으로 불가능합니다. lesson §7.2이 L3 설계 변수로 든 셋")
     print("     (chunk_size · n_action_steps · 앙상블 여부)에 **연산 하드웨어가 네 번째로**")
-    print("     결합합니다. §7 세 번째 오해가 '온보드면 33 ms 안에 끝나야 한다'고 조건부로")
+    print("     결합합니다. 「흔한 오해」 세 번째 오해가 '온보드면 33 ms 안에 끝나야 한다'고 조건부로")
     print("     남긴 자리의 실제 답입니다.")
     print("  ⚠️ 다만 이것은 **데스크톱 x86 CPU**입니다. Jetson급 온보드 SoC는 측정하지 않았고,")
     print("     여기서 일반화하면 안 됩니다 — worksheet ⑧의 '미측정' 칸으로.")
@@ -663,7 +663,7 @@ def section_inference(led: Ledger, device: str, reps: int) -> float:
     else:
         print(f"\n      → **{n_fit}/{len(specs)}행만 들어갑니다.** 못 들어가는 것은 예산이 가장")
         print("         빡빡한 앙상블 행일 것입니다 — 기본 설정 행들은 여전히 여유입니다.")
-        print("         **이것이 lesson §7 세 번째 오해의 실물입니다**(앙상블은 공짜가 아니다).")
+        print("         **이것이 lesson 「흔한 오해」 세 번째 오해의 실물입니다**(앙상블은 공짜가 아니다).")
     print("         worksheet ⑥ 6.1로 옮기세요.")
 
     # ── (c) 큐 소비 — §2.5의 두 숫자가 왜 별개 필드인가 ─────────────────────
@@ -693,7 +693,7 @@ def section_inference(led: Ledger, device: str, reps: int) -> float:
     maxdiff = (c1 - c2).abs().max().item()
     print(f"\n  (d) z=0 결정론성 — 같은 관측 2회의 최대차 = **{maxdiff:.3e}**"
           f"   [{'PASS' if maxdiff == 0.0 else 'WARN'}] 기대 정확히 0")
-    print("      → 추론에서 latent_sample = torch.zeros(...)로 고정되기 때문입니다 (§2.7·§7 번외).")
+    print("      → 추론에서 latent_sample = torch.zeros(...)로 고정되기 때문입니다 (§2.7·「흔한 오해」 번외).")
     led.add("[6] 추론", "z=0 결정론성 최대차", "0.0", f"{maxdiff:.3e}",
             "PASS" if maxdiff == 0.0 else "WARN", "lesson §2.7")
 
@@ -705,7 +705,7 @@ def section_inference(led: Ledger, device: str, reps: int) -> float:
     if device == "cuda":
         torch.cuda.empty_cache()
 
-    # ── (f) 앙상블 모드 — §7 세 번째 오해의 "추론 100배" ────────────────────
+    # ── (f) 앙상블 모드 — 「흔한 오해」 세 번째 오해의 "추론 100배" ────────────────────
     ens = build_policy(1, use_vae=True, device=device,
                        temporal_ensemble_coeff=0.01, n_action_steps=1)
     ens.eval()
@@ -724,7 +724,7 @@ def section_inference(led: Ledger, device: str, reps: int) -> float:
               + (f"✅ 충족 ({per_step / ens_ms:.1f}배 여유)" if ok_f2
                  else f"❌ 초과 ({ens_ms / per_step:.1f}배 부족)"))
     led.add("[6] 추론", "앙상블 스텝당 [ms]", "(측정값)", f"{ens_ms:.2f}", "INFO",
-            "lesson §7 세 번째 오해 — 이 기기에서는 33 ms 예산을 통과")
+            "lesson 「흔한 오해」 세 번째 오해 — 이 기기에서는 33 ms 예산을 통과")
     print("\n      🔴 **이 결과를 '앙상블은 공짜다'로 읽으면 안 됩니다.** 통과한 것은 이 GPU의")
     print("         지연뿐이고, 온보드(Jetson급) 지연은 **이번에 측정하지 않았습니다.**")
     del ens, obs2
@@ -737,7 +737,7 @@ def section_inference(led: Ledger, device: str, reps: int) -> float:
 # [7] 데이터셋 메타 (선택)
 # ══════════════════════════════════════════════════════════════════════════════
 def section_datasets(led: Ledger) -> None:
-    print("\n=== [7] 데이터셋 메타 — 기록 FPS·repo_id를 자기 손으로 재확인한다 (lesson §10) ===\n")
+    print("\n=== [7] 데이터셋 메타 — 기록 FPS·repo_id를 자기 손으로 재확인한다 (lesson 「출처」) ===\n")
     print("  ⓘ 네트워크를 씁니다. 여기서는 **메타데이터만** 읽으므로 붉은 torchcodec")
     print("     traceback이 안 뜹니다. 그 traceback은 실제 프레임을 디코딩하는 쪽")
     print("     (`LeRobotDataset` 생성 · `lerobot-dataset-viz` · `lerobot-train`)에서 뜨고,")
@@ -765,7 +765,7 @@ def section_datasets(led: Ledger) -> None:
     print(render_table(["repo_id", "fps", "에피소드", "프레임", "총 시간", "구성"],
                        rows, aligns="lrrrrl"))
     print("\n  🔴 **fps 열을 자기 눈으로 확인하는 것이 이 절의 목적입니다.**")
-    print("     ALOHA 2종이 50 Hz라는 사실은 lesson §10에 이미 ✅로 적혀 있습니다. 여기서는")
+    print("     ALOHA 2종이 50 Hz라는 사실은 lesson 「출처」에 이미 ✅로 적혀 있습니다. 여기서는")
     print("     그것을 **자기 손으로 재확인**하고, §3.6 표의 두 열이 왜 함께 있는지를 읽습니다 —")
     print("     **@50 Hz 열은 ALOHA 자신의 개방루프 창**이고, **@30 Hz 열은 우리 로봇의 f2를")
     print("     30 Hz로 가정**했을 때입니다. **두 열은 서로 다른 로봇의 이야기입니다.**")
