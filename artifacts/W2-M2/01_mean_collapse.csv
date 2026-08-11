@@ -1,0 +1,4 @@
+p_left,n,sigma,pop_mean,sample_mean,sample_median,grid_mse_argmin,grid_mse_min,grid_mad_argmin,grid_mad_min,mse_gap_to_mean,mad_gap_to_median,mse_dist_sigma,mad_dist_sigma,mse_snapped_to_mode,mad_snapped_to_mode,valley_depth,valley_depth_l1,valley_count,peak_count,amplitude_keep
+0.5,4000,0.15,0,-0.000124448,0.609253,0,1.01267,0.607,0.992346,0.000124448,0.0022526,6.66667,2.62,False,False,0,0.0780952,0,525,0
+0.7,4000,0.15,-0.4,-0.397893,-0.916669,-0.398,0.858674,-0.917,0.671529,0.000106924,0.000330816,4.01333,0.553333,False,True,0,1,0,736,0.398
+0.9,4000,0.15,-0.8,-0.80381,-0.980576,-0.804,0.386485,-0.981,0.306607,0.000189695,0.000424373,1.30667,0.126667,True,True,0.637472,0.988914,575,902,0.804
