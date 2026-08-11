@@ -1,0 +1,37 @@
+section,item,expected,actual,verdict,note
+[1] 환경,인터프리터가 .venv-lerobot,True,True,PASS,
+[1] 환경,diffusers 설치,설치됨,0.39.0,PASS,
+[1] 환경,gym-pusht 설치,설치됨,0.1.6,PASS,
+[2] 드리프트,horizon 기본값,64,64,PASS,"DiffusionConfig, 출처 lesson.md §6.1"
+[2] 드리프트,horizon 논문 레시피와 다른가,다름,다름,PASS,lesson이 적은 논문 레시피 값 16
+[2] 드리프트,n_action_steps 기본값,32,32,PASS,"DiffusionConfig, 출처 lesson.md §6.1"
+[2] 드리프트,n_action_steps 논문 레시피와 다른가,다름,다름,PASS,lesson이 적은 논문 레시피 값 8
+[2] 드리프트,crop_shape 기본값,None,None,PASS,"DiffusionConfig, 출처 lesson.md §6.1"
+[2] 드리프트,crop_shape 논문 레시피와 다른가,다름,다름,PASS,"lesson이 적은 논문 레시피 값 '[84, 84]'"
+[2] 드리프트,use_group_norm 기본값,False,False,PASS,"DiffusionConfig, 출처 lesson.md §6.1"
+[2] 드리프트,use_group_norm 논문 레시피와 다른가,다름,다름,PASS,lesson이 적은 논문 레시피 값 True
+[2] 드리프트,pretrained_backbone_weights 기본값,ImageNet 가중치,'ResNet18_Weights.IMAGENET1K_V1',PASS,"DiffusionConfig, 출처 lesson.md §6.1"
+[2] 드리프트,pretrained_backbone_weights 논문 레시피와 다른가,다름,다름,PASS,lesson이 적은 논문 레시피 값 None
+[2] 드리프트,use_separate_rgb_encoder_per_camera 기본값,True,True,PASS,"DiffusionConfig, 출처 lesson.md §6.1"
+[2] 드리프트,use_separate_rgb_encoder_per_camera 논문 레시피와 다른가,다름,다름,PASS,lesson이 적은 논문 레시피 값 False
+[2] 드리프트,batch_size 기본값,8,8,PASS,"TrainPipelineConfig, 출처 lesson.md §6.1"
+[2] 드리프트,batch_size 논문 레시피와 다른가,다름,다름,PASS,lesson이 적은 논문 레시피 값 64
+[3] drop_n_last,소스 주석의 공식,horizon - n_action_steps - n_obs_steps + 1,line 118,PASS,lesson §6.2가 수식으로 옮긴 그 문장
+[3] drop_n_last,논문 레시피 공식 계산,7,7,PASS,출처 lesson.md §6.2
+[3] drop_n_last,라이브러리 기본값 공식 계산,31,31,PASS,출처 lesson.md §6.2
+[3] drop_n_last,기본값이 자기 주석과 어긋난다,어긋남 1건(기본값),어긋남 1건,PASS,lesson §6.2가 기록한 불일치의 재현. 원인은 확인되지 않았습니다
+[4] 제약,라이브러리 기본값 n_action_steps 상한,<= 63,32,PASS,modeling_diffusion.py select_action docstring
+[4] 제약,논문 PushT 레시피 n_action_steps 상한,<= 15,8,PASS,modeling_diffusion.py select_action docstring
+[4] 제약,docstring이 상한을 명시,n_action_steps <= horizon - n_obs_steps + 1,있음,PASS,설치본이 근거. 이 제약은 예외로 강제되지 않고 문서로만 있습니다
+[4] 제약,라이브러리 기본값 horizon 배수,8의 배수,64,PASS,"down_dims=(512, 1024, 2048)"
+[4] 제약,논문 PushT 레시피 horizon 배수,8의 배수,16,PASS,"down_dims=(512, 1024, 2048)"
+[4] 제약,horizon=9이면 예외,ValueError,ValueError: The horizon should be an integer multiple of the downsamplin,PASS,배수 제약은 __post_init__이 실제로 막습니다
+[4] 제약,num_inference_steps 기본값이 None,None,None,PASS,None이면 학습 스텝 수로 해소됩니다
+[4] 제약,해소 목표값 num_train_timesteps,100,100,PASS,곧 정책 한 번 호출에 몸통 forward 100회
+[5] 파라미터,총 학습가능 파라미터,"262,709,026","262,709,026",PASS,출처 lesson.md §5.3
+[5] 파라미터,U-Net 파라미터,"251,511,938","251,511,938",PASS,출처 lesson.md §5.3
+[5] 파라미터,num_inference_steps 실물 해소,100,100,PASS,[4] ③의 실물 확인. 정책 한 번 호출에 몸통 forward 이 횟수
+[6] 환경설정,fps,10,10,PASS,출처 lesson.md §4.2. 한 스텝 100 ms
+[6] 환경설정,episode_length,300,300,PASS,롤아웃 mp4의 프레임 수가 됩니다
+[6] 환경설정,gym_id,gym_pusht/PushT-v0,gym_pusht/PushT-v0,PASS,이 이름을 못 찾는 것이 에러 표 E1
+[6] 환경설정,observation_height/width가 gym_kwargs에 없다,없음,없음,PASS,lesson §6.2. 384는 롤아웃 mp4 해상도일 뿐 관측 해상도가 아닙니다
