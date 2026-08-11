@@ -14,27 +14,27 @@
 # ---
 
 # %% [markdown]
-# # W2-M1 실습 1 — 지연 예산 계산기: lesson §3.6 표를 코드가 검산한다
+# # W2-M1 실습 1, 지연 예산 계산기가 lesson §3.6 표를 검산한다
 #
 # [`../lesson.md`](../lesson.md) `§3.6`의 표를 **재현**하고, 임의 파라미터로 **다시 계산**합니다.
 #
 # 이 스크립트의 성격은 계산기가 아니라 **검산기**입니다. lesson 본문에 박혀 있는 숫자
-# (3,333 ms · 1,667 ms · 333 ms · 33 ms · 0.3 Hz · 30 Hz …)를 코드가 다시 계산해
+# (3,333 ms, 1,667 ms, 333 ms, 33 ms, 0.3 Hz, 30 Hz 같은 값)를 코드가 다시 계산해
 # **자동 대조하고 PASS/FAIL을 찍습니다.** 문서의 숫자와 코드의 숫자가 갈리면 여기서 걸립니다.
 #
 # 확인할 것:
 #
-# 1. **허용 지연 예산** — 좌변에 들어가는 것은 `chunk_size`가 아니라 `n_action_steps`다
+# 1. **허용 지연 예산.** 좌변에 들어가는 것은 `chunk_size`가 아니라 `n_action_steps`다
 #    $$T_{\text{replan}} + \tau_{\text{infer}} + \tau_{\text{comm}} \;\le\; \frac{\texttt{n\_action\_steps}}{f_2} \tag{§3.6}$$
 # 2. **최악 반응 지연**과 **추론 호출 빈도**
 #    $$\tau_{\text{react}}^{\max} = \frac{\texttt{n\_action\_steps}}{f_2}, \qquad
 #      f_{\text{infer}} = \frac{f_2}{\texttt{n\_action\_steps}} \tag{§3.6}$$
-# 3. **200 ms 문턱**([W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md) —
+# 3. **200 ms 문턱**([W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md),
 #    "발이 미끄러져 자세가 무너지기까지 200 ms")과의 대조. **각 설정이 전신 균형 태스크에서 안전한가.**
-# 4. `--sweep` — `n_action_steps`를 1~100으로 훑어 200 ms 문턱을 넘는 **경계값**을 찾는다
+# 4. `--sweep`은 `n_action_steps`를 1~100으로 훑어 200 ms 문턱을 넘는 **경계값**을 찾는다
 #
 # 출력:
-# - stdout — §3.6 표 재현(30 Hz · 50 Hz 병기) + PASS/FAIL
+# - stdout에 §3.6 표 재현(30 Hz와 50 Hz 병기)과 PASS/FAIL
 # - `artifacts/W2-M1/01_latency_budget.csv`
 #
 # **의존성 0. 표준 라이브러리만 씁니다.** `python3 01_latency_budget.py` 로 즉시 돌아갑니다.
@@ -49,7 +49,7 @@ from pathlib import Path
 
 MODULE_ID = "W2-M1"
 
-# W1-M1 §3.3 — "발이 미끄러져 자세가 무너지기까지 200 ms". 전신 균형 태스크의 개방루프 창 상한.
+# W1-M1 §3.3의 "발이 미끄러져 자세가 무너지기까지 200 ms". 전신 균형 태스크의 개방루프 창 상한.
 BALANCE_THRESHOLD_MS = 200.0
 
 # lesson §3.6 표의 ground truth. 여기가 어긋나면 구현이 아니라 문서(또는 이 상수)가 틀린 것이다.
@@ -61,12 +61,12 @@ LESSON_S36_ROWS: list[tuple[str, int, int, int, int, float, int]] = [
     ("temporal ensembling(강제)", 100, 1, 33, 20, 30.0, 33),
 ]
 
-# lesson §3.6 둘째 문단 · 퀴즈 8번 — "200 ms 문턱과 비교하면 약 16배 밖"
+# lesson §3.6 둘째 문단과 퀴즈 8번의 "200 ms 문턱과 비교하면 약 16배 밖"
 LESSON_BALANCE_RATIO_FLOOR = 16.0
 
 
 # %% [markdown]
-# ## 0. 경로·표 유틸 (W1-M5 practice와 동일 규약)
+# ## 0. 경로와 표 유틸 (W1-M5 practice와 동일 규약)
 
 # %%
 _ROOT_MARKERS = ("course", "docs", "CLAUDE.md")
@@ -121,10 +121,10 @@ def render_table(headers: list[str], rows: list[list[str]], aligns: str | None =
 
 
 # %% [markdown]
-# ## 1. 핵심 산술 — 세 줄이면 끝난다
+# ## 1. 핵심 산술은 세 줄이면 끝난다
 #
 # lesson §3.6이 강조하는 것은 이 식이 어렵다는 게 아니라 **좌변에 무엇이 들어가느냐**입니다.
-# `chunk_size`가 아니라 `n_action_steps`입니다 — 예측만 하고 버리는 뒷부분은 지연을 버텨주지 않으니까요.
+# `chunk_size`가 아니라 `n_action_steps`입니다. 예측만 하고 버리는 뒷부분은 지연을 버텨주지 않으니까요.
 #
 # `허용 지연 예산`과 `최악 반응 지연`은 **같은 식**인데 뜻이 다릅니다.
 # 앞은 "버퍼에 쌓인 명령이 몇 ms를 버티나"(공급), 뒤는 "새 관측이 명령에 반영되기까지 몇 ms"(신선도)입니다.
@@ -154,7 +154,7 @@ def balance_verdict(worst_ms: float, threshold_ms: float = BALANCE_THRESHOLD_MS)
 # %% [markdown]
 # ## 2. lesson §3.6 표 재현 + 자동 대조
 #
-# 4행을 30 Hz·50 Hz 양쪽으로 계산하고, `LESSON_S36_ROWS`에 박아둔 lesson의 값과 대조합니다.
+# 4행을 30 Hz와 50 Hz 양쪽으로 계산하고, `LESSON_S36_ROWS`에 박아둔 lesson의 값과 대조합니다.
 # **반올림 규칙은 lesson 표기와 같은 정수 ms 반올림**입니다.
 
 # %%
@@ -199,7 +199,7 @@ def verify_lesson_table(threshold_ms: float = BALANCE_THRESHOLD_MS) -> tuple[lis
 # %% [markdown]
 # ## 3. 임의 파라미터 재계산
 #
-# `--f2` · `--chunk-size` · `--n-action-steps`로 아무 설정이나 넣어봅니다.
+# `--f2`와 `--chunk-size`와 `--n-action-steps`로 아무 설정이나 넣어봅니다.
 # `n_action_steps ≤ chunk_size`는 LeRobot 설정 검증이 강제하는 유일한 제약입니다(lesson §2.5).
 
 # %%
@@ -241,7 +241,7 @@ def describe_config(chunk_size: int, n_action_steps: int, f2_hz: float,
 # ## 4. 문턱 경계 스윕
 #
 # `n_action_steps`를 1부터 `chunk_size`까지 훑어 **200 ms 문턱을 만족하는 최대값**을 찾습니다.
-# 30 Hz에서 답은 손으로도 나옵니다 — $n/30 \le 0.2\,\mathrm{s} \Rightarrow n \le 6$.
+# 30 Hz에서 답은 손으로도 나옵니다. $n/30 \le 0.2\,\mathrm{s} \Rightarrow n \le 6$.
 # 코드가 그 6을 찾아내는지 보는 것이 이 절의 목적입니다.
 
 # %%
@@ -329,7 +329,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  대조 결과: {n_pass}/{n_check} PASS"
           f"{'  ← lesson §3.6과 완전 일치' if n_pass == n_check else '  ← ❌ 불일치 발생'}")
 
-    # 200 ms 문턱 대비 배수 — lesson이 '약 16배 밖'이라고 쓴 값
+    # 200 ms 문턱 대비 배수. lesson이 '약 16배 밖'이라고 쓴 값
     react_default = worst_reaction_ms(100, 30.0)
     ratio = react_default / args.threshold_ms
     ok_ratio = LESSON_BALANCE_RATIO_FLOOR <= ratio < LESSON_BALANCE_RATIO_FLOOR + 1
@@ -377,7 +377,7 @@ def main(argv: list[str] | None = None) -> int:
     print("\n" + "=" * 96)
     print("  요점: 부등식의 좌변은 chunk_size가 아니라 n_action_steps다.")
     print("        기본값(100/100)의 3,333 ms는 지연이 제약이 아니라는 뜻이고,")
-    print("        따라서 chunk_size=100은 지연 논거로 정해진 값이 아니다(lesson §1.3·§7).")
+    print("        따라서 chunk_size=100은 지연 논거로 정해진 값이 아니다(lesson §1과 「흔한 오해」).")
     print("        다음 → 02_ensemble_weights.py")
     print("=" * 96)
     return 0 if n_pass == n_check else 1

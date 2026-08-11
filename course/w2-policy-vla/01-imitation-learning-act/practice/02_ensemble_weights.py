@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# # W2-M1 실습 2 — temporal ensembling 가중과 $n_{\text{eff}}$ 검산
+# # W2-M1 실습 2, temporal ensembling 가중과 $n_{\text{eff}}$ 검산
 #
 # [`../lesson.md`](../lesson.md) `§3.5`(지수 가중의 정의)와 `§6.4`(계수별 표 5행)를 재현합니다.
 #
@@ -22,23 +22,23 @@
 # (`docs/course-plan.md` §9.7의 "검증이 잡아낸 것" 표 첫 행). §3.5가 **가중 총합 $S$의 닫힌형**만
 # 주는데 §6.4 표의 마지막 열은 실제로 **$S \div \max_i w_i$** 였습니다.
 # $m>0$이면 최대 가중이 $w_0=1$이라 두 값이 우연히 같아 문제가 숨어 있었고,
-# $m<0$에서 갈립니다 — $m=-0.01$에서 $S=171.0$인데 $n_{\text{eff}}=63.5$입니다.
+# $m<0$에서 갈립니다. $m=-0.01$에서 $S=171.0$인데 $n_{\text{eff}}=63.5$입니다.
 # **이 스크립트는 그 구분을 매번 눈앞에 찍습니다.**
 #
 # 확인할 것:
 #
-# 1. **가중 규약** — $w_i = e^{-mi}$, 그리고 **$w_0$가 가장 오래된 예측**
+# 1. **가중 규약.** $w_i = e^{-mi}$이고 **$w_0$가 가장 오래된 예측**
 #    (LeRobot `ACTTemporalEnsembler` docstring: *"where w₀ is the oldest action"*)
 #    $$a_t^{\text{exec}} = \frac{\sum_{i=0}^{n-1} w_i \hat a_t^{(i)}}{\sum_{i=0}^{n-1} w_i},
 #      \qquad w_i = \exp(-m i) \tag{§3.5}$$
 # 2. **닫힌형과 직접 합산의 일치**
 #    $$S = \sum_{i=0}^{n-1} e^{-mi} = \frac{1 - e^{-mn}}{1 - e^{-m}} \tag{§3.5}$$
-# 3. **유효 기여 수** — $S$가 아니다
+# 3. **유효 기여 수**는 $S$가 아니다
 #    $$n_{\text{eff}} = \frac{S}{\max_i w_i} \tag{§3.5}$$
 # 4. **§6.4 표 5행**($m = -0.1, -0.01, 0, 0.01, 0.1$, $n=100$)을 재현해 자동 대조
 #
 # 출력:
-# - stdout — §6.4 표 재현 + PASS/FAIL + ASCII 가중 분포
+# - stdout에 §6.4 표 재현과 PASS/FAIL과 ASCII 가중 분포
 # - `artifacts/W2-M1/02_ensemble_weights.csv`
 #
 # **의존성 0. 표준 라이브러리만 씁니다.**
@@ -71,7 +71,7 @@ REL_TOL = 0.01  # lesson 표기가 3자리 유효숫자라 1% 상대오차면 �
 
 
 # %% [markdown]
-# ## 0. 경로·표 유틸 (01과 동일 규약)
+# ## 0. 경로와 표 유틸 (01과 동일 규약)
 
 # %%
 _ROOT_MARKERS = ("course", "docs", "CLAUDE.md")
@@ -118,7 +118,7 @@ def render_table(headers: list[str], rows: list[list[str]], aligns: str | None =
 
 
 # %% [markdown]
-# ## 1. 가중·총합·유효 기여 수
+# ## 1. 가중과 총합과 유효 기여 수
 #
 # 세 함수가 전부입니다. 어려운 것은 산술이 아니라 **$w_0$가 어느 쪽인가**와
 # **$S$와 $n_{\text{eff}}$가 다른 양이라는 것**입니다.
@@ -195,7 +195,7 @@ def verify_lesson_table(n: int = 100) -> tuple[list[list[str]], int, int, list[s
         n_check += len(checks)
         n_pass += sum(checks)
 
-        # m < 0 이면 S 와 n_eff 가 갈린다 — 이 표의 존재 이유
+        # m < 0 이면 S 와 n_eff 가 갈린다. 이 표의 존재 이유
         split = "" if m >= 0 else f"S={got_S:,.1f} ≠ n_eff"
         rows.append([
             f"{m:+.2f}" if m else " 0.00",
@@ -216,7 +216,7 @@ def verify_lesson_table(n: int = 100) -> tuple[list[list[str]], int, int, list[s
 # ## 3. 닫힌형 vs 직접 합산
 #
 # 두 경로가 같은 값을 내는지 확인합니다. 부동소수 오차만 허용합니다.
-# $m=0$은 닫힌형이 $0/0$이므로 극한값 $n$으로 분기합니다 — 코드에서 자주 터지는 자리입니다.
+# $m=0$은 닫힌형이 $0/0$이므로 극한값 $n$으로 분기합니다. 코드에서 자주 터지는 자리입니다.
 
 # %%
 def verify_closed_form(m_list: list[float], n_list: list[int]) -> tuple[list[list[str]], int, int]:

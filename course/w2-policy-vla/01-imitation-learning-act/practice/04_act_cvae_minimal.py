@@ -14,19 +14,19 @@
 # ---
 
 # %% [markdown]
-# # W2-M1 실습 4 — ACT형 CVAE 최소 구현 (torch)
+# # W2-M1 실습 4, ACT형 CVAE 최소 구현 (torch)
 #
-# > ✅ **실행 검증됨 (CPU)** — macOS 26 · Python 3.14.6 · torch 2.13.0 · 2026-08-06.
+# > ✅ **실행 검증됨 (CPU).** macOS 26, Python 3.14.6, torch 2.13.0, 2026-08-06.
 # > 실측 소요: `--smoke` **16.5초** / 기본 실행 **2분 7초** (Apple Silicon CPU, GPU 불필요).
 # > 아래 출력 예시는 전부 이 실행의 실측값입니다.
 # >
 # > ⚠️ **다만 검증 범위는 CPU 경로뿐입니다.** `--device cuda` / `--device mps` 경로와
-# > LeRobot 실물 파이프라인은 검증되지 않았습니다 — 후자는 `../labs/`(별도 턴 작성 예정)의 몫입니다.
+# > LeRobot 실물 파이프라인은 검증되지 않았습니다. 그쪽은 `../labs/`의 몫입니다.
 # > torch가 없으면 이 스크립트는 **크래시하지 않고 설치 안내를 낸 뒤 정상 종료**합니다.
 #
 # [`../lesson.md`](../lesson.md) `§3.4`(ELBO → ACT loss)와 `§4.1`(CVAE 세 스택)을 **최소 규모로** 구현합니다.
 #
-# **범위를 좁힌 곳** — 이미지와 ResNet-18을 뺐습니다. §4.1 블록도에서 이미지 토큰 600개가
+# **범위를 좁힌 곳.** 이미지와 ResNet-18을 뺐습니다. §4.1 블록도에서 이미지 토큰 600개가
 # 어텐션 비용의 거의 전부인데, 그 부분은 이 실습의 학습 대상이 아닙니다.
 # 여기서 볼 것은 **CVAE loss 조립과 $z=0$ 추론**뿐입니다. 관측은 관절 상태 벡터 하나로 단순화합니다.
 #
@@ -36,25 +36,25 @@
 #
 # ## 확인할 것 세 가지
 #
-# 1. **`l1_loss`와 `kld_loss`의 상대 크기** — lesson §3.4 '읽는 순서 주의'가 지목한 지점입니다.
+# 1. **`l1_loss`와 `kld_loss`의 상대 크기.** lesson §3.4 '읽는 순서 주의'가 지목한 지점입니다.
 #    `kl_weight=10.0`을 보고 "KL이 10배 중요하다"로 읽으면 안 됩니다. 두 항은 **스케일이 전혀 다른 양**이라
 #    가중을 곱한 뒤의 실제 기여도를 봐야 합니다. 학습 로그에 세 값을 따로 찍습니다.
-# 2. **추론 시 $z=0$ 고정 vs $z\sim\mathcal{N}(0,I)$ 샘플링** — lesson §2.7의 "배포 모델은 결정론적"을
+# 2. **추론 시 $z=0$ 고정 vs $z\sim\mathcal{N}(0,I)$ 샘플링.** lesson §2.7의 "배포 모델은 결정론적"을
 #    출력 분산으로 확인합니다. $z=0$이면 같은 관측에 같은 청크가 **항상** 나옵니다.
-# 3. **`--no-vae`** — `use_vae=False`, 즉 순수 $\ell_1$ 회귀와의 비교.
+# 3. **`--no-vae`**는 `use_vae=False`, 즉 순수 $\ell_1$ 회귀와의 비교.
 #    lesson §2.7이 "실습에서 직접 볼 대상"으로 남겨둔 항목입니다.
 #
-# ## 데이터 — 같은 상태에서 두 갈래
+# ## 데이터는 같은 상태에서 두 갈래
 #
 # 같은 관절 상태 $s$에서 **위로 도는 청크**와 **아래로 도는 청크**가 5:5로 나오는 합성 시연을 만듭니다.
 # 사람 시연이 매번 조금씩 다르다는 §2.7의 상황을 극단으로 밀어놓은 것입니다.
 # $\ell_1$ 회귀의 최적 점추정은 **중앙값**이라 두 갈래의 가운데(= 거의 평평한 청크)로 뭉갭니다.
-# 이 뭉개짐을 **중간점 진폭**으로 측정합니다 — W2-M2 Diffusion Policy 예고와 그대로 이어집니다.
+# 이 뭉개짐을 **중간점 진폭**으로 측정합니다. W2-M2 Diffusion Policy 예고와 그대로 이어집니다.
 #
 # 출력:
-# - stdout — 학습 로그(세 항 분리) + 세 실험의 요약표
-# - `artifacts/W2-M1/04_act_cvae_log.csv` — 스텝별 손실
-# - `artifacts/W2-M1/04_act_cvae_summary.csv` — 실험 요약
+# - stdout에 학습 로그(세 항 분리)와 세 실험의 요약표
+# - `artifacts/W2-M1/04_act_cvae_log.csv`에 스텝별 손실
+# - `artifacts/W2-M1/04_act_cvae_summary.csv`에 실험 요약
 
 # %%
 from __future__ import annotations
@@ -100,7 +100,7 @@ INSTALL_HELP = """
 
 
 # %% [markdown]
-# ## 0. 경로·표 유틸 (01~03과 동일 규약)
+# ## 0. 경로와 표 유틸 (01~03과 동일 규약)
 
 # %%
 _ROOT_MARKERS = ("course", "docs", "CLAUDE.md")
@@ -153,7 +153,7 @@ def sparkline(values: list[float]) -> str:
 
 
 # %% [markdown]
-# ## 1. 데이터 — 같은 상태에서 두 갈래 액션 청크
+# ## 1. 데이터는 같은 상태에서 두 갈래 액션 청크
 #
 # ```
 # s [B, D_state]  ──┬──  b = 0  →  a [B, K, D_action]  중간이 위로 볼록
@@ -172,7 +172,7 @@ def make_dataset(n: int, chunk_size: int, d_state: int, d_action: int,
     branch = (torch.rand(n, 1, 1, generator=generator) < 0.5).float() * 2.0 - 1.0  # ±1
 
     t = torch.linspace(0.0, 1.0, chunk_size).view(1, chunk_size, 1)     # [1, K, 1]
-    # 시작·끝이 같고 중간만 갈리는 반원 모양. sin(pi t) 는 t=0, 1 에서 0.
+    # 시작과 끝이 같고 중간만 갈리는 반원 모양. sin(pi t) 는 t=0, 1 에서 0.
     bump = torch.sin(math.pi * t)                                       # [1, K, 1]
 
     base = s[:, :d_action].unsqueeze(1) if d_state >= d_action else \
@@ -196,7 +196,7 @@ def mid_amplitude(actions: "torch.Tensor", states: "torch.Tensor", d_action: int
 
 
 # %% [markdown]
-# ## 2. 모델 — §4.1 블록도의 세 스택을 축소
+# ## 2. 모델은 §4.1 블록도의 세 스택을 축소
 #
 # ```
 # ━━━━━━━━━━ 학습 경로 (use_vae=True) ━━━━━━━━━━
@@ -220,7 +220,7 @@ def mid_amplitude(actions: "torch.Tensor", states: "torch.Tensor", d_action: int
 #            │
 # ③ 디코더
 #    학습된 쿼리 [K, D] → [B, K, D]      ★ 쿼리 개수 = chunk_size
-#    self-attn + cross-attn(메모리) x 1  ← LeRobot 기본값 1층 (lesson §7 첫 오해)
+#    self-attn + cross-attn(메모리) x 1  ← LeRobot 기본값 1층 (lesson 「흔한 오해」 첫째)
 #    Linear(D → D_action)
 #            │
 #    â [B, K, D_action]
@@ -249,7 +249,7 @@ if TORCH_OK:
                     batch_first=True, norm_first=False,   # ACT 기본값 pre_norm=False
                 )
 
-            # --- ① VAE 인코더 (posterior) — 추론에서는 쓰지 않는다 ---------------
+            # --- ① VAE 인코더 (posterior), 추론에서는 쓰지 않는다 ---------------
             if use_vae:
                 self.cls_token = nn.Parameter(torch.zeros(1, 1, dim_model))
                 self.vae_state_proj = nn.Linear(d_state, dim_model)
@@ -319,7 +319,7 @@ if TORCH_OK:
 
 
 # %% [markdown]
-# ## 3. loss 조립 — lesson §3.4와 문자 그대로 대응
+# ## 3. loss 조립은 lesson §3.4와 문자 그대로 대응
 #
 # LeRobot `modeling_act.py` 의 한 줄이 이것입니다.
 #
@@ -333,7 +333,7 @@ def act_losses(pred, target, mu, logvar, kl_weight: float):
     l1 = F.l1_loss(pred, target)                                    # Laplace 재구성 항  # eq.(§3.4 ②)
     if mu is None:
         return l1, l1, torch.zeros((), device=pred.device)
-    # KL( N(mu, sigma^2) || N(0, I) ) — latent 차원으로 합, 배치로 평균 (LeRobot mean_kld 와 동일)
+    # KL( N(mu, sigma^2) || N(0, I) ), latent 차원으로 합, 배치로 평균 (LeRobot mean_kld 와 동일)
     mean_kld = (-0.5 * (1 + logvar - mu.pow(2) - logvar.exp())).sum(-1).mean()   # eq.(§3.4 ①)
     total = l1 + mean_kld * kl_weight                                            # eq.(§3.4 ③)
     return total, l1, mean_kld
@@ -389,9 +389,9 @@ def train_one(tag: str, use_vae: bool, args, data, log_rows: list[list]) -> dict
 
 
 # %% [markdown]
-# ## 5. 평가 — 세 가지 관찰
+# ## 5. 평가의 세 가지 관찰
 #
-# ① 두 항의 상대 크기 · ② $z=0$ vs $z\sim\mathcal{N}(0,I)$ · ③ CVAE vs 순수 $\ell_1$
+# ① 두 항의 상대 크기, ② $z=0$ vs $z\sim\mathcal{N}(0,I)$, ③ CVAE vs 순수 $\ell_1$
 
 # %%
 def evaluate_model(model, s_te, a_te, branch, args, n_z_samples: int = 8) -> dict:
@@ -409,7 +409,7 @@ def evaluate_model(model, s_te, a_te, branch, args, n_z_samples: int = 8) -> dic
         spread = float(samples.std(dim=0).mean()) if model.use_vae else float("nan")
         l1_sampled = float(F.l1_loss(samples.mean(dim=0), a_te)) if model.use_vae else float("nan")
 
-        # 뭉개짐 — 중간점 진폭
+        # 뭉개짐은 중간점 진폭
         amp_true = float(mid_amplitude(a_te, s_te, args.d_action).mean())
         amp_pred = float(mid_amplitude(pred0, s_te, args.d_action).mean())
 
@@ -541,7 +541,7 @@ def main(argv: list[str] | None = None) -> int:
                         "l1 (위 갈래)", "l1 (아래 갈래)"], rows, aligns="lrrrrr"))
     print("\n  → 진폭 보존율이 0%에 가까우면 모델이 두 모드의 가운데(= 평평한 청크)를 뱉은 것입니다.")
     print("     **CVAE 를 켜도 배포 경로(z=0)는 점추정이라 이 뭉개짐이 원리적으로 남습니다.**")
-    print("     lesson §2.7·§7 번외의 요점입니다 — z 는 학습 시 변동을 흡수하는 정규화 장치이지")
+    print("     lesson §2.7과 「흔한 오해」 번외의 요점입니다 — z 는 학습 시 변동을 흡수하는 정규화 장치이지")
     print("     실행 시 모드를 골라주는 장치가 아닙니다. 실행 시점의 다봉성은 추론 자체가")
     print("     샘플링인 Diffusion Policy 의 몫입니다(W2-M2).")
 
