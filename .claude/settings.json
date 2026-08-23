@@ -1,4 +1,7 @@
 {
+  "env": {
+    "ENABLE_TOOL_SEARCH": "auto"
+  },
   "permissions": {
     "allow": [
       "Read",
@@ -25,9 +28,15 @@
     "supabase@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "feature-dev@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true
+    "hookify@claude-plugins-official": true,
+    "eli5@claude-community": true
   },
-  "env":{
-		"ENABLE_TOOL_SEARCH": "auto"
+  "extraKnownMarketplaces": {
+    "claude-community": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-community"
+      }
+    }
   }
 }
