@@ -283,12 +283,17 @@ frontmatter는 `est_reading_min: 39`인데 본문 L64는 "이론 3h"이고, 표 
   - [x] *(추가)* 시각자료 표에 SVG 행과 「그림 규약」 6개 추가, 이미지 경로 `.png` → `.svg`
   - [x] *(추가)* `est_reading_min` 초독 시간 재정의와 추정 기준 7종 반영
   - [x] *(방식 변경)* 밴드는 **포인터 + 정본 표시**로 실었습니다. 표는 편의용 사본이고 정본은 `scripts/lint-lesson.sh`와 §4 두 곳이며 어긋나면 lint가 이긴다고 명시했습니다. 숫자 중복이 3중 불일치를 두 번 재발시킨 원인이라 §4 박스의 선언을 따랐습니다
-- [ ] `.claude/skills/pai-course-author/SKILL.md`
-  - [ ] Phase 1 컨텍스트 로드에 §3.11 추가
-  - [ ] Phase 2.5 재집필 블록에 **2차 피드백 실패 목록** 추가 (§9.11 목록과 병기)
-  - [ ] Phase 3 페이로드의 학습자 프로필 줄과 밴드 주석 정정, `eli5.md` 산출물 추가
-  - [ ] Phase 3에 **SVG 생성 단계** 추가 (`diagram-design` 스킬 호출 지점)
-  - [ ] Phase 7 롤업 소스를 절 시작 용어표에서 절 끝 되짚기 표로 변경
+- [x] `.claude/skills/pai-course-author/SKILL.md` (2026-08-26 완료, 288줄 → 349줄)
+  - [x] Phase 1 컨텍스트 로드에 §3.11 추가. §2.1과 `eli5-template.md`도 함께, 「§3.9 이해 사다리」 명칭을 「학습자 전제와 비유」로 정정
+  - [x] Phase 2.5 재집필 블록에 **2차 피드백 실패 목록 9개** 추가 (§9.11 목록 8개와 병기)
+  - [x] Phase 3 페이로드의 학습자 프로필 줄과 밴드 주석 정정, `eli5.md` 산출물 추가. 「강조해 전달할 것」 목록 11개로 전면 교체
+  - [x] Phase 3에 **SVG 생성 단계** 추가 (`Phase 3-1` 신설, `diagram-design` 호출 지점과 검수 절차)
+  - [x] Phase 7 롤업 소스를 절 시작 용어표에서 절 끝 되짚기 표로 변경. `notes/glossary.md`가 4열이라 `비유 / 메모` 열은 빈 칸 표시로 채우게 규정
+  - [x] *(추가)* frontmatter `description`에 `eli5.md` 반영, 트리거에 "eli5만 다시" 추가
+  - [x] *(추가)* Phase 4 육안 목록에서 폐기된 두 항목(절 안 순서, 앵커 재진술) 교체. `eli5.md`, 워크드 예제, 문체, `est_reading_min` 정합 검사 추가
+  - [x] *(추가)* Phase 2.5 부수 갱신의 `est_reading_min`을 초독 시간 정의로 교체
+  - [x] *(추가)* Phase 2.5 「기준 사례」(W1-M1 커밋 `1b76a65`)에 경고. **1차 개정 결과물이고 그것이 2차 불만을 받았으므로 절 구조와 용어 도입 방식은 따라 하지 말 것**. Phase 5 산출물로 교체 예정
+  - [x] *(추가)* 「부분 재실행」 표에 "eli5만 다시", "그림만 다시" 행 추가
 - [ ] `.claude/skills/pai-course-author/references/lesson-template.md` **골격 전면 개정**
 - [ ] `.claude/skills/pai-course-author/references/eli5-template.md` **신규 작성**
 - [ ] `.claude/skills/pai-course-author/references/authoring-checklist.md` C4 재작성과 신규 항목 추가와 밴드 정정
