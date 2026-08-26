@@ -294,7 +294,15 @@ frontmatter는 `est_reading_min: 39`인데 본문 L64는 "이론 3h"이고, 표 
   - [x] *(추가)* Phase 2.5 부수 갱신의 `est_reading_min`을 초독 시간 정의로 교체
   - [x] *(추가)* Phase 2.5 「기준 사례」(W1-M1 커밋 `1b76a65`)에 경고. **1차 개정 결과물이고 그것이 2차 불만을 받았으므로 절 구조와 용어 도입 방식은 따라 하지 말 것**. Phase 5 산출물로 교체 예정
   - [x] *(추가)* 「부분 재실행」 표에 "eli5만 다시", "그림만 다시" 행 추가
-- [ ] `.claude/skills/pai-course-author/references/lesson-template.md` **골격 전면 개정**
+- [x] `.claude/skills/pai-course-author/references/lesson-template.md` **골격 전면 개정** (2026-08-26 완료, 293줄 → 451줄)
+  - [x] 절 골격을 3부에서 **4부 구조**로 교체. 절 시작 용어표 자리에 도입 산문, 절 끝에 되짚기 표 2열
+  - [x] 본문 순서를 개념, 그림, 예시와 숫자, 수식과 손계산, 비유 박스로. `- **제어 대응**:` 줄 삭제
+  - [x] 워크드 예제 자리, `<details>` 비유 박스 자리, 헷갈림 박스 자리, 자기 설명 프롬프트 자리 신설
+  - [x] 퀴즈를 3단 난이도 골격으로 재편, 모든 그림에 「읽는 법」 캡션 자리
+  - [x] 「난이도」 소절을 「학습자 전제」로 교체하고 「비유는 보조입니다」와 「독자를 데려가는 장치」 신설
+  - [x] 밴드는 포인터 + 정본 표시, 이미지 경로 `.svg`, `est_reading_min` 초독 시간 주석
+  - [x] *(추가)* 한 줄 요약 아래 `eli5.md` 되돌이 링크 한 줄. §2.1의 읽는 순서를 본문 쪽에서도 안내
+  - [x] *(정정)* **부록성 절(「흔한 오해」 이후)의 번호를 걷어냈습니다.** `lint-lesson.sh`가 `^## N.`로 본문 절과 부록 절을 가르고 번호 붙은 절마다 `📌`를 요구하는데, 구 템플릿은 출처까지 번호를 붙여 `📌` 6개 부족으로 FAIL이 났을 구조였습니다. §3.7 골격과 W1-M1 실물이 둘 다 무번호입니다
 - [ ] `.claude/skills/pai-course-author/references/eli5-template.md` **신규 작성**
 - [ ] `.claude/skills/pai-course-author/references/authoring-checklist.md` C4 재작성과 신규 항목 추가와 밴드 정정
 
