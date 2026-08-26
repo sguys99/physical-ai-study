@@ -303,7 +303,13 @@ frontmatter는 `est_reading_min: 39`인데 본문 L64는 "이론 3h"이고, 표 
   - [x] 밴드는 포인터 + 정본 표시, 이미지 경로 `.svg`, `est_reading_min` 초독 시간 주석
   - [x] *(추가)* 한 줄 요약 아래 `eli5.md` 되돌이 링크 한 줄. §2.1의 읽는 순서를 본문 쪽에서도 안내
   - [x] *(정정)* **부록성 절(「흔한 오해」 이후)의 번호를 걷어냈습니다.** `lint-lesson.sh`가 `^## N.`로 본문 절과 부록 절을 가르고 번호 붙은 절마다 `📌`를 요구하는데, 구 템플릿은 출처까지 번호를 붙여 `📌` 6개 부족으로 FAIL이 났을 구조였습니다. §3.7 골격과 W1-M1 실물이 둘 다 무번호입니다
-- [ ] `.claude/skills/pai-course-author/references/eli5-template.md` **신규 작성**
+- [x] `.claude/skills/pai-course-author/references/eli5-template.md` **신규 작성** (2026-08-26 완료, 216줄)
+  - [x] §2.1 골격 다섯 절을 그대로 쓰고 절마다 채워 넣을 자리와 지시 주석을 붙임
+  - [x] 규격 명시: 산문 3,000~5,000자 독립 밴드, 수식 0, arXiv 0, 영문 약어 최소, frontmatter 없음
+  - [x] 「요약이면 실패」를 머리말과 「작성 시 반드시」 양쪽에 못박고, **단순화한 자리마다 "정확히는 lesson.md §N에서" 링크**를 의무화
+  - [x] 표를 쓰지 않는 것을 기본으로 규정. 표를 쓰고 싶어지면 요약을 하고 있다는 신호
+  - [x] 비유 규정을 eli5용으로 분기. **전문 개념 앵커 비유는 금지, 일상 사물 비유는 본문에 허용**
+  - [x] *(추가)* `lesson.md` 참조에 **절 번호와 절 제목 병기**를 의무화. 재집필로 번호가 밀려도 하류 참조가 조용히 깨지지 않게 하는 장치입니다
 - [ ] `.claude/skills/pai-course-author/references/authoring-checklist.md` C4 재작성과 신규 항목 추가와 밴드 정정
 
 ### Phase 4. 검사 스크립트 개정 (`scripts/lint-lesson.sh`)
