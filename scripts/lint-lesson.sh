@@ -407,6 +407,164 @@ for it in items:
 PY
 }
 
+# ── 초독 시간 추정 (§4 추정 기준 7종) ─────────────────────────────
+# '총분 산문분 표분 그림분 수식분 퀴즈분 표행수 Mermaid수 ASCII수 SVG수 수식수'를
+# 공백으로 이어 한 줄로 출력합니다. 인자는 파일과 prose_metrics()가 이미 계산한 산문 문자입니다.
+#
+# 2026-08-25에 `est_reading_min`이 **초독 시간**으로 재정의됐습니다(§4). 회귀식
+# `분 = 19.5 + 0.001186 × 산문`은 산문만 세므로 표와 그림과 수식과 퀴즈를 읽는 시간이
+# 빠져 있고, W1-M1에서 4.6배 불일치를 냈습니다(§9.19). 기준 7종은 §4가 정한 값입니다.
+#   산문 550자/분 · 표 1행 25초 · Mermaid 1개 90초 · ASCII 블록 1개 120초
+#   SVG 1장 45초 · display 수식 1개 90초 · 퀴즈 10문항 15분
+#
+# 산문 문자는 **prose_metrics()가 계산한 값을 그대로 받습니다.** 여기서 다시 세면
+# §9.6의 정의와 갈라져 회귀식과 밴드가 서 있는 바닥이 무너집니다.
+# 표 행은 구분행(`|---|---|`)을 빼고 셉니다. 구분행은 마크다운 문법이지 읽는 행이 아닙니다.
+# 그림은 Mermaid와 ASCII 블록과 SVG 세 종을 합쳐 한 줄로 보고합니다.
+# SVG는 원격 URL도 셉니다. 읽는 시간의 문제이지 파일 존재의 문제가 아니라서,
+# 로컬 경로만 보는 figure_scan()과 여기서 갈립니다.
+reading_estimate() {
+  python3 - "$1" "$2" <<'PY'
+import re, sys
+path, prose = sys.argv[1], int(sys.argv[2])
+src = open(path, encoding='utf-8').read()
+lines = src.split('\n')
+
+SEP = re.compile(r'^\|(\s*:?-+:?\s*\|)+$')
+IMG = re.compile(r'!\[[^\]]*\]\(\s*([^)\s]+)')
+
+rows = merm = asc = svg = 0
+fence = fm = False
+tag = ''
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True; continue
+    if fm:
+        if s == '---': fm = False
+        continue
+    if s.startswith('```'):
+        if not fence:
+            fence, tag = True, s[3:].strip().lower()
+        else:
+            fence = False
+            if tag == 'mermaid':                 merm += 1
+            elif tag in ('', 'text', 'plain'):   asc += 1
+        continue
+    if fence:
+        continue
+    if s.startswith('|') and not SEP.match(s):
+        rows += 1
+    for m in IMG.finditer(l):
+        p = m.group(1).split('#')[0].split('?')[0].lower()
+        if p.endswith('.svg'):
+            svg += 1
+
+body = re.sub(r'```.*?```', '', src, flags=re.S)
+disp = len(re.findall(r'\$\$.*?\$\$', body, re.S))
+quiz = 15 if re.search(r'^## .*(셀프 체크|퀴즈)', src, re.M) else 0
+
+m_prose = round(prose / 550.0)
+m_table = round(rows * 25 / 60.0)
+m_fig   = round((merm * 90 + asc * 120 + svg * 45) / 60.0)
+m_math  = round(disp * 90 / 60.0)
+# 합계는 반올림한 부분의 합입니다. 정보줄의 덧셈이 눈으로 맞아떨어져야 하기 때문입니다
+tot = m_prose + m_table + m_fig + m_math + quiz
+print("%d %d %d %d %d %d %d %d %d %d %d" % (
+    tot, m_prose, m_table, m_fig, m_math, quiz, rows, merm, asc, svg, disp))
+PY
+}
+
+# ── §0 「소요」의 이론 시간 ───────────────────────────────────────
+# '줄번호<TAB>이론분'을 출력합니다. 「소요」는 있는데 「이론」 값을 읽지 못하면 이론분 -1,
+# 「소요」 자체가 없으면 아무것도 출력하지 않습니다. 인자는 파일과 §0 구간(시작줄, 끝줄)입니다.
+#
+# **§0 안에서만, 그리고 `**소요**` 굵은 표기만** 찾습니다. 본문 다른 곳의 「소요 시간을
+# 기록」(W1-M2 §0 완료 기준)과 「예상 소요: 약 4.4시간」(W2-M2 미검증 배지)이 오탐입니다.
+#
+# 표기 형식이 파일마다 다릅니다. 넷 다 받습니다.
+#   `**소요**: 이론 3h / 실습 2h`      `**소요** 이론 2h, 실습 2~3h`
+#   `**소요**는 이론 2h, 실습 2~3h입니다.`  `**소요** 이론 2~2.5h, 실습 1~2h`
+# 「이론」 뒤의 값만 씁니다. h와 시간과 분을 받고 `2~2.5` 같은 범위는 중앙값으로 환산합니다.
+sec0_duration() {
+  python3 - "$1" "$2" "$3" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+s, e = int(sys.argv[2]), min(int(sys.argv[3]), len(lines))
+
+NUM  = r'\d+(?:\.\d+)?'
+MARK = re.compile(r'\*\*\s*소요\s*\*\*')
+VAL  = re.compile(r'이론[^0-9]{0,6}(' + NUM + r')\s*(?:[~∼\-]\s*(' + NUM + r'))?\s*(h|시간|분)')
+
+found = 0
+for i in range(s, e + 1):
+    m = MARK.search(lines[i - 1])
+    if not m:
+        continue
+    if not found:
+        found = i
+    v = VAL.search(lines[i - 1][m.end():])
+    if not v:
+        continue
+    a = float(v.group(1))
+    b = float(v.group(2)) if v.group(2) else a
+    mid = (a + b) / 2.0
+    print("%d\t%d" % (i, round(mid if v.group(3) == '분' else mid * 60)))
+    sys.exit(0)
+if found:
+    print("%d\t-1" % found)
+PY
+}
+
+# ── §0 목차 표 「읽는 시간」 열 합계 ──────────────────────────────
+# '머리행줄번호<TAB>합계분<TAB>합산행수'를 출력합니다. 열이 없으면 아무것도 출력하지 않습니다.
+# 인자는 파일과 §0 구간(시작줄, 끝줄)입니다.
+#
+# 대상은 `| 절 | 무엇을 | 끝나면 할 수 있는 것 | 읽는 시간 |` 머리행을 가진 표뿐입니다.
+# §0에는 「선수 지식」 표도 있어서 아무 표나 세면 안 됩니다. 값은 `4분` 형태이고
+# 범위(`3~4분`)는 중앙값으로 봅니다.
+toc_reading_min() {
+  python3 - "$1" "$2" "$3" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+s, e = int(sys.argv[2]), min(int(sys.argv[3]), len(lines))
+
+SEP = re.compile(r'^\|(\s*:?-+:?\s*\|)+$')
+NUM = r'\d+(?:\.\d+)?'
+VAL = re.compile(r'(' + NUM + r')\s*(?:[~∼\-]\s*(' + NUM + r'))?\s*분')
+
+def cells(t):
+    c = re.split(r'(?<!\\)\|', t)
+    if c and not c[0].strip():  c = c[1:]
+    if c and not c[-1].strip(): c = c[:-1]
+    return [x.strip() for x in c]
+
+for i in range(s, e + 1):
+    t = lines[i - 1].strip()
+    if not t.startswith('|'):
+        continue
+    head = cells(t)
+    idx = next((k for k, c in enumerate(head) if '읽는 시간' in c), -1)
+    if idx < 0:
+        continue
+    total, n, j = 0.0, 0, i + 1
+    while j <= e and lines[j - 1].strip().startswith('|'):
+        r = lines[j - 1].strip()
+        if not SEP.match(r):
+            rc = cells(r)
+            if idx < len(rc):
+                m = VAL.search(rc[idx])
+                if m:
+                    a = float(m.group(1))
+                    b = float(m.group(2)) if m.group(2) else a
+                    total += (a + b) / 2.0
+                    n += 1
+        j += 1
+    print("%d\t%d\t%d" % (i, round(total), n))
+    sys.exit(0)
+PY
+}
+
 lint_one() {
   local f="$1"
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
@@ -424,6 +582,79 @@ lint_one() {
     grep -qE "^${k}:" "$f" || missing="$missing $k"
   done
   [[ -z "$missing" ]] && c_pass "필수 12필드 완비" || c_fail "누락 필드:$missing"
+
+  # 초독 시간 (2026-08-25 신설, §4)
+  # `est_reading_min`은 이제 **초독 시간**입니다. 산문에 표와 그림과 수식과 퀴즈 풀이를
+  # 더한 값이고, 회귀식 값이 아닙니다. F군이 찍는 회귀식 값은 밴드 비교용 지표일 뿐입니다.
+  # 검사는 셋입니다. 추정값과의 편차(WARN), §0 「소요」와의 정합(FAIL), 목차 합계(WARN).
+  local rd_tot rd_pr rd_tb rd_fg rd_mt rd_qz rd_rows rd_mm rd_as rd_sv rd_ds
+  read -r rd_tot rd_pr rd_tb rd_fg rd_mt rd_qz rd_rows rd_mm rd_as rd_sv rd_ds \
+    < <(reading_estimate "$f" "$prose")
+  : "${rd_tot:=0}" "${rd_pr:=0}" "${rd_tb:=0}" "${rd_fg:=0}" "${rd_mt:=0}" "${rd_qz:=0}"
+  : "${rd_rows:=0}" "${rd_mm:=0}" "${rd_as:=0}" "${rd_sv:=0}" "${rd_ds:=0}"
+  c_info "초독 시간 추정 ${rd_tot}분 (산문 ${rd_pr} + 표 ${rd_tb} + 그림 ${rd_fg} + 수식 ${rd_mt} + 퀴즈 ${rd_qz}) — §4 추정 기준 7종"
+  c_info "추정 입력: 산문 ${prose}자 · 표 ${rd_rows}행 · Mermaid ${rd_mm} · ASCII ${rd_as} · SVG ${rd_sv} · display 수식 ${rd_ds}"
+
+  local erm
+  erm=$(awk 'NR<=20 && /^est_reading_min:/ {print $2; exit}' "$f" | tr -cd '0-9')
+
+  if [[ -n "$erm" && "$rd_tot" -gt 0 ]]; then
+    local rd_dev
+    rd_dev=$(awk -v a="$erm" -v b="$rd_tot" 'BEGIN{printf "%.0f", 100*(a>b?a-b:b-a)/b}')
+    if [[ "$rd_dev" -gt 30 ]]; then
+      c_warn "est_reading_min ${erm}분이 초독 추정 ${rd_tot}분과 ${rd_dev}% 어긋납니다 — §4: 2026-08-25부터 이 값은 초독 시간(산문+표+그림+수식+퀴즈)입니다. 회귀식 값을 그대로 옮겨 적지 마세요"
+    else
+      c_pass "est_reading_min ${erm}분 ≈ 초독 추정 ${rd_tot}분 (편차 ${rd_dev}%)"
+    fi
+  fi
+
+  # §0 「소요」·목차 합계와의 정합 — §0 구간을 먼저 잡습니다
+  local s0_s="" s0_e=""
+  local ahs ahe ahtitle
+  while IFS=$'\t' read -r ahs ahe ahtitle; do
+    case "$ahtitle" in
+      0.*) [[ -z "$s0_s" ]] && { s0_s="$ahs"; s0_e="$ahe"; } ;;
+    esac
+  done < <(h2_blocks "$f")
+
+  if [[ -n "$s0_s" ]]; then
+    # 「소요」 대 est_reading_min (FAIL) — §4: 둘 중 하나가 학습자 기대를 배신합니다
+    local dur_ln="" dur_min=""
+    read -r dur_ln dur_min < <(sec0_duration "$f" "$s0_s" "$s0_e")
+    if [[ -z "$dur_ln" ]]; then
+      c_warn "§0에 「소요」 표기가 없습니다 — §4: est_reading_min과 §0 「소요」가 반드시 정합해야 합니다"
+    elif [[ "$dur_min" -lt 0 ]]; then
+      c_warn "§0 「소요」(L${dur_ln})에서 「이론」 시간을 읽지 못했습니다 — '**소요**: 이론 3h / 실습 2h' 형태로 쓰세요"
+    elif [[ -z "$erm" ]]; then
+      c_info "§0 「소요」 이론 ${dur_min}분 (L${dur_ln}) — est_reading_min이 없어 대조를 건너뜁니다"
+    else
+      local dur_tol dur_gap
+      dur_tol=$(awk -v e="$erm" 'BEGIN{t=0.25*e; printf "%.0f", (t>15?t:15)}')
+      dur_gap=$(( dur_min > erm ? dur_min - erm : erm - dur_min ))
+      if [[ "$dur_gap" -gt "$dur_tol" ]]; then
+        c_fail "§0 「소요」 이론 ${dur_min}분(L${dur_ln}) 대 est_reading_min ${erm}분 — 차이 ${dur_gap}분이 허용 ${dur_tol}분을 넘습니다. §4: 둘 중 하나가 학습자 기대를 배신합니다"
+      else
+        c_pass "§0 「소요」 이론 ${dur_min}분 ≈ est_reading_min ${erm}분 (차이 ${dur_gap}분 ≤ ${dur_tol}분)"
+      fi
+    fi
+
+    # 목차 표 「읽는 시간」 합계 대 est_reading_min (WARN)
+    local toc_ln="" toc_sum="" toc_n=""
+    read -r toc_ln toc_sum toc_n < <(toc_reading_min "$f" "$s0_s" "$s0_e")
+    if [[ -z "$toc_ln" ]]; then
+      c_info "§0 목차 표에 「읽는 시간」 열이 없어 합계 검사를 건너뜁니다"
+    elif [[ -z "$erm" || "$erm" -eq 0 ]]; then
+      c_info "§0 목차 「읽는 시간」 합계 ${toc_sum}분 (${toc_n}행, L${toc_ln})"
+    else
+      local toc_dev
+      toc_dev=$(awk -v a="$toc_sum" -v b="$erm" 'BEGIN{printf "%.0f", 100*(a>b?a-b:b-a)/b}')
+      if [[ "$toc_dev" -gt 20 ]]; then
+        c_warn "§0 목차 「읽는 시간」 합계 ${toc_sum}분(${toc_n}행, L${toc_ln})이 est_reading_min ${erm}분과 ${toc_dev}% 어긋납니다 — 절별 값과 총합 중 하나가 틀렸습니다"
+      else
+        c_pass "§0 목차 「읽는 시간」 합계 ${toc_sum}분 ≈ est_reading_min ${erm}분 (편차 ${toc_dev}%)"
+      fi
+    fi
+  fi
 
   # ── B. 문서 구조 §3.7 ───────────────────────────────────────
   printf '\n  \033[1mB. 문서 구조 (§3.7)\033[0m\n'
@@ -857,6 +1088,16 @@ lint_one() {
   # ── F. 분량 §4 ─────────────────────────────────────────────
   printf '\n  \033[1mF. 분량 (§4)\033[0m\n'
   local lo hi
+  # 📍 **밴드의 정본은 이 스크립트와 docs/course-plan.md §4 두 곳뿐입니다.**
+  #    집필 도구(SKILL.md, lesson-template.md, authoring-checklist.md)는 숫자를 복사하지 않고
+  #    여기를 가리킵니다. 숫자를 여러 곳에 두었다가 3중 불일치가 **두 번 재발**했습니다.
+  #    §9.11이 한 번 해소했는데 2026-08-10 상향이 스크립트에만 반영돼 되살아났습니다(§9.19).
+  #    밴드를 고칠 일이 생기면 여기와 §4 표를 **같은 커밋에서** 함께 고치세요.
+  #
+  # ⚠️ **이 밴드는 잠정입니다.** 2026-08-25 개정으로 문서가 3층(eli5.md, lesson.md,
+  #    deep-dive.md)으로 갈리고(§2.1) 설명이 친절해지면서 산문 구성이 바뀝니다.
+  #    §9.11이 W1-M1 파일럿으로 밴드를 교정한 것과 같은 절차로,
+  #    **이번에도 W1-M1 시범 결과로 1회 교정**합니다(§4 2026-08-25 박스).
   case "$tier" in
     # 2026-08-10: 세 밴드 각 +3,000. 고정 바닥(퀴즈·출처·팀 질문·실습 안내 +
     # §3.7 구조물)을 6,350자로 추정했으나 실측 셋이 8,348~8,711이었다. 근거는 §9.15.
@@ -865,15 +1106,21 @@ lint_one() {
     C) lo=12000; hi=17000 ;;
     *) lo=0; hi=0 ;;
   esac
-  local est
-  est=$(awk -v p="$prose" 'BEGIN{printf "%.0f", 19.5 + 0.001186*p}')
+  # 회귀식 값은 **밴드 비교용 지표**이지 학습자가 볼 시간이 아닙니다. 2026-08-25에
+  # `est_reading_min`이 초독 시간으로 재정의됐고(§4), 이 식은 **산문만** 세므로 표와
+  # 그림과 수식과 퀴즈 풀이가 빠져 있습니다. 초독 시간은 A군이 따로 추정해 찍습니다.
+  # 식 자체(19.5 + 0.001186 × 산문)는 그대로 둡니다. §9.7이 적합한 값이고
+  # §9.2·§9.4·§9.6의 과거 실측값과의 비교 가능성이 이 식 위에 서 있습니다.
+  local reg_min reg_note
+  reg_min=$(awk -v p="$prose" 'BEGIN{printf "%.0f", 19.5 + 0.001186*p}')
+  reg_note="회귀식 ${reg_min}분(산문만 세는 밴드 비교용 지표. 초독 시간은 frontmatter est_reading_min)"
   if [[ "$hi" -eq 0 ]]; then
     c_warn "tier를 읽지 못해 분량 판정을 건너뜁니다 (읽은 값: '${tier:-없음}')"
-    c_info "본문 산문 ${prose}자 · 총 ${total}자 · 독해 약 ${est}분"
+    c_info "본문 산문 ${prose}자 · 총 ${total}자 · ${reg_note}"
   else
-    if   [[ "$prose" -lt "$lo" ]]; then c_warn "본문 산문 ${prose}자 — Tier ${tier} 밴드(${lo}~${hi}) 미달, 독해 약 ${est}분"
-    elif [[ "$prose" -gt "$hi" ]]; then c_fail "본문 산문 ${prose}자 — Tier ${tier} 밴드(${lo}~${hi}) 초과, 독해 약 ${est}분. 자르지 말고 deep-dive.md로 이관"
-    else c_pass "본문 산문 ${prose}자 (Tier ${tier} 밴드 ${lo}~${hi}), 독해 약 ${est}분"
+    if   [[ "$prose" -lt "$lo" ]]; then c_warn "본문 산문 ${prose}자 — Tier ${tier} 밴드(${lo}~${hi}) 미달, ${reg_note}"
+    elif [[ "$prose" -gt "$hi" ]]; then c_fail "본문 산문 ${prose}자 — Tier ${tier} 밴드(${lo}~${hi}) 초과, ${reg_note}. 자르지 말고 deep-dive.md로 이관"
+    else c_pass "본문 산문 ${prose}자 (Tier ${tier} 밴드 ${lo}~${hi}), ${reg_note}"
     fi
   fi
   c_info "총 ${total}자 · 보호 구간 ${protect}% (35% 이상이면 윤문은 산문 라인 판정 — course-plan §1)"
