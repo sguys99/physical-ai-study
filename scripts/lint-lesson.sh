@@ -73,6 +73,85 @@ for k, (start, title) in enumerate(heads):
 PY
 }
 
+# ── 「| 용어 |」 표 헤더 스캔 ──────────────────────────────────────
+# `| 용어 |`로 시작하는 표 머리행을 '줄번호<TAB>열수'로 출력합니다.
+# frontmatter와 코드펜스 안은 제외합니다.
+#
+# 2026-08-25 개정(§3.8)으로 **절 시작 용어표가 폐지**되고 절 끝 되짚기 표
+# `| 용어 | 이 절에서 나온 뜻 |` 2열로 바뀌었습니다. 열 수가 이 둘을 가릅니다.
+# 3열 이상이면 폐지된 `| 용어 | 한 줄 정의 | 제어·LLM 비유 |` 형태입니다.
+term_table_rows() {
+  python3 - "$1" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+fence = fm = False
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True; continue
+    if fm:
+        if s == '---': fm = False
+        continue
+    if s.startswith('```'):
+        fence = not fence; continue
+    if fence or not re.match(r'^\|\s*용어\s*\|', s):
+        continue
+    cells = re.split(r'(?<!\\)\|', s)
+    if cells and not cells[0].strip():  cells = cells[1:]
+    if cells and not cells[-1].strip(): cells = cells[:-1]
+    print(f"{i}\t{len(cells)}")
+PY
+}
+
+# ── 약어 첫 등장 · 첫 전개 위치 ──────────────────────────────────
+# '약어<TAB>첫등장줄<TAB>전개줄<TAB>격차'를 격차 내림차순으로 출력합니다.
+# 전개가 없으면 전개줄 0, 격차 -1입니다.
+#
+# §3.8 「역참조 금지(FAIL)」는 **첫 등장 자리에** 전개를 요구합니다. 파일 어딘가에
+# 전개가 있기만 하면 되던 예전 검사는 W1-M1의 `FSQ`(첫 사용 L101, 전개 L566)를
+# 통과시켰습니다. frontmatter의 `tags:`와 코드펜스 안 변수명은 오탐이라 제외합니다.
+abbr_scan() {
+  python3 - "$1" "$2" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+skip = [True] * (len(lines) + 2)
+fence = fm = False
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True; continue
+    if fm:
+        if s == '---': fm = False
+        continue
+    if s.startswith('```'):
+        fence = not fence; continue
+    skip[i] = fence
+rows = []
+for ab in sys.argv[2].split():
+    # 사용: 앞뒤가 영숫자가 아닌 자리 (한글 조사가 붙어도 잡힙니다)
+    use = re.compile(r'(?<![A-Za-z0-9])' + re.escape(ab) + r'(?![A-Za-z0-9])')
+    # 전개: 구 검사와 같은 판정식 '약어('
+    exp = re.compile(re.escape(ab) + r'\s*\(')
+    first = expand = 0
+    for i, l in enumerate(lines, 1):
+        if skip[i]:
+            continue
+        if not first and use.search(l):
+            first = i
+        if not expand and exp.search(l):
+            expand = i
+        if first and expand:
+            break
+    if first:
+        # 전개가 첫 등장보다 앞서면(구 판정식의 경계 없는 매칭) 격차 0으로 봅니다
+        gap = max(expand - first, 0) if expand else -1
+        rows.append((ab, first, expand, gap))
+rows.sort(key=lambda r: (-r[3], r[0]))
+for r in rows:
+    print("%s\t%d\t%d\t%d" % r)
+PY
+}
+
 lint_one() {
   local f="$1"
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
@@ -183,26 +262,97 @@ lint_one() {
   # ── C. 용어 도입 §3.8 ───────────────────────────────────────
   printf '\n  \033[1mC. 용어 도입 (§3.8)\033[0m\n'
 
-  # 용어표: '| 용어 | ... | 비유 |' 헤더 행
-  local termtbl
-  termtbl=$(grep -cE '^\|[[:space:]]*용어[[:space:]]*\|' "$f")
-  if [[ "$termtbl" -ge 1 ]]; then
-    c_pass "절 시작 용어표 ${termtbl}개"
-  else
-    c_fail "절 시작 용어표 없음 — 대절마다 '| 용어 | 한 줄 정의 | 제어·LLM 비유 |'"
+  # 절 끝 되짚기 표 (2026-08-25 개정, §3.8)
+  # 규격은 '| 용어 | 이 절에서 나온 뜻 |' **2열**, 위치는 그 절의 마지막(📌 직전)이고,
+  # **그 절에서 처음 나온 용어가 있을 때만** 답니다. 절마다 강제하지 않습니다.
+  # 폐지된 절 시작 용어표(3열)는 FAIL입니다. 비유 열이 비유를 문서 골격으로
+  # 승격시킨 것이 2차 불만의 원인이었습니다(§9.19).
+  local recap_n=0 wide_n=0 recap_lines="" wide_msg="" cline
+  local tln tcols
+  while IFS=$'\t' read -r tln tcols; do
+    [[ -z "$tln" ]] && continue
+    if [[ "$tcols" -ge 3 ]]; then
+      wide_n=$((wide_n+1))
+      [[ "$wide_n" -le 3 ]] && wide_msg+="L${tln}  ${tcols}열 용어표"$'\n'
+    else
+      recap_n=$((recap_n+1)); recap_lines="$recap_lines $tln"
+    fi
+  done < <(term_table_rows "$f")
+
+  # 위치 판정 — 번호 붙은 본문 대절 안에서 되짚기 표가 📌보다 앞이어야 하고
+  # 표와 📌 사이에 소제목이 끼면 절 끝이 아닙니다. 📌가 없는 절은 B군이 잡습니다
+  local pos_nw=0 pos_msg="" pin sub
+  while IFS=$'\t' read -r hs he htitle; do
+    [[ "$htitle" =~ ^[0-9]+\. ]] || continue
+    pin=$(awk -v s="$hs" -v e="$he" 'NR>=s && NR<=e && /📌 \*\*여기까지 정리\*\*/ {print NR; exit}' "$f")
+    [[ -z "$pin" ]] && continue
+    for tln in $recap_lines; do
+      if [[ "$tln" -lt "$hs" || "$tln" -gt "$he" ]]; then continue; fi
+      if [[ "$tln" -gt "$pin" ]]; then
+        pos_nw=$((pos_nw+1))
+        [[ "$pos_nw" -le 3 ]] && pos_msg+="L${tln}  「${htitle}」 되짚기 표가 📌(L${pin})보다 뒤"$'\n'
+      else
+        sub=$(awk -v s="$tln" -v e="$pin" 'NR>s && NR<e && /^### / {print NR; exit}' "$f")
+        if [[ -n "$sub" ]]; then
+          pos_nw=$((pos_nw+1))
+          [[ "$pos_nw" -le 3 ]] && pos_msg+="L${tln}  「${htitle}」 되짚기 표와 📌 사이에 소제목(L${sub})"$'\n'
+        fi
+      fi
+    done
+  done < <(h2_blocks "$f")
+
+  if [[ "$recap_n" -eq 0 ]]; then
+    c_fail "절 끝 되짚기 표 없음 — §3.8: 절 끝에 '| 용어 | 이 절에서 나온 뜻 |' 2열로 그 절에서 처음 나온 용어를 정리하세요"
+  elif [[ "$wide_n" -eq 0 && "$pos_nw" -eq 0 ]]; then
+    c_pass "절 끝 되짚기 표 ${recap_n}개 (전부 2열, 절 끝)"
+  fi
+  if [[ "$wide_n" -gt 0 ]]; then
+    c_fail "폐지된 절 시작 용어표 ${wide_n}개 — §3.8: '| 용어 | 한 줄 정의 | 제어·LLM 비유 |' 3열은 2026-08-25에 폐지됐습니다. 비유 열을 걷고 절 끝 2열 되짚기 표로 옮기세요"
+    while IFS= read -r cline; do
+      [[ -n "$cline" ]] && printf '        %s\n' "$cline"
+    done <<< "$wide_msg"
+    [[ "$wide_n" -gt 3 ]] && printf '        %s\n' "... 외 $((wide_n-3))개"
+  fi
+  if [[ "$pos_nw" -gt 0 ]]; then
+    c_warn "절 끝이 아닌 되짚기 표 ${pos_nw}개 — §3.8: 되짚기 표는 그 절의 마지막, 📌 정리 박스 직전입니다"
+    while IFS= read -r cline; do
+      [[ -n "$cline" ]] && printf '        %s\n' "$cline"
+    done <<< "$pos_msg"
+    [[ "$pos_nw" -gt 3 ]] && printf '        %s\n' "... 외 $((pos_nw-3))개"
   fi
 
-  # 약어 최초 전개 — 과거에 한 번도 전개되지 않은 것들
-  local unexpanded=""
-  for ab in MPC WBC VLA NFE RSSM DDS SLAM PPO IDM DoF BPE ELBO; do
-    if grep -q "\b${ab}\b" "$f"; then
-      # 같은 줄에 괄호 전개가 있는지 (영문 풀네임 또는 한글 설명)
-      grep -qE "${ab}[[:space:]]*\(" "$f" || unexpanded="$unexpanded $ab"
+  # 약어 최초 전개 — §3.8 「역참조 금지(FAIL)」. **첫 등장 줄에** 전개가 있어야 합니다.
+  # 파일 어딘가에 전개가 있으면 통과하던 구 검사는 W1-M1의 FSQ(첫 사용 L101,
+  # 전개 L566, 465줄 격차)를 통과시켰습니다
+  local abbr_list="MPC WBC VLA NFE RSSM DDS SLAM PPO IDM DoF BPE ELBO FSQ ACT DiT DCT IMU VQ-VAE"
+  local ab_n=0 late_n=0 none_n=0 late_msg="" none_list=""
+  local ab first expand gap
+  while IFS=$'\t' read -r ab first expand gap; do
+    [[ -z "$ab" ]] && continue
+    ab_n=$((ab_n+1))
+    if [[ "$gap" -lt 0 ]]; then
+      none_n=$((none_n+1)); none_list="$none_list $ab"
+    elif [[ "$gap" -gt 0 ]]; then
+      late_n=$((late_n+1))
+      [[ "$late_n" -le 5 ]] && late_msg+="${ab}(첫 등장 L${first} → 전개 L${expand}, ${gap}줄 격차)"$'\n'
     fi
-  done
-  [[ -z "$unexpanded" ]] \
-    && c_pass "등장 약어가 모두 1회 이상 전개됨" \
-    || c_fail "전개 없이 쓰인 약어:$unexpanded  → 최초 1회 'MPC(Model Predictive Control, 모델 예측 제어)'"
+  done < <(abbr_scan "$f" "$abbr_list")
+
+  if [[ "$ab_n" -eq 0 ]]; then
+    c_info "검사 목록의 약어가 본문에 없습니다"
+  elif [[ "$late_n" -eq 0 && "$none_n" -eq 0 ]]; then
+    c_pass "등장 약어 ${ab_n}개가 모두 첫 등장 줄에서 전개됨"
+  fi
+  if [[ "$late_n" -gt 0 ]]; then
+    c_fail "역참조 약어 ${late_n}/${ab_n}개 — §3.8: 정의보다 먼저 쓰지 않습니다. 전개를 첫 등장 자리로 옮기거나 사용을 미루세요"
+    while IFS= read -r cline; do
+      [[ -n "$cline" ]] && printf '        %s\n' "$cline"
+    done <<< "$late_msg"
+    [[ "$late_n" -gt 5 ]] && printf '        %s\n' "... 외 $((late_n-5))개"
+  fi
+  if [[ "$none_n" -gt 0 ]]; then
+    c_fail "전개 없이 쓰인 약어:${none_list}  → 최초 1회 'MPC(Model Predictive Control, 모델 예측 제어)'"
+  fi
 
   # 한 줄 요약의 용어 밀도 — 영문 대문자 약어가 섞여 있으면 경고
   local summary_line
