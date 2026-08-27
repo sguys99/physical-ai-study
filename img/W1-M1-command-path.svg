@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 940" width="960" height="940" role="img" aria-label="명령 하나가 다섯 층을 내려가는 길">
+  <defs>
+    <marker id="ar2" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#4f5d75"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="940" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">명령 하나가 다섯 층을 내려가는 길</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">같은 뜻이 층마다 다른 자료형으로 바뀝니다</text>
+
+    <!-- 입력 문장 -->
+    <rect x="40" y="96" width="880" height="76" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
+    <text x="64" y="126" font-size="14" fill="#a8532a">사람이 하는 말</text>
+    <text x="64" y="156" font-size="20" font-weight="700" fill="#2d3142">「빨간 컵 있는 곳으로 가」</text>
+    <line x1="138" y1="178" x2="138" y2="202" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+    <!-- L5 -->
+    <rect x="40" y="208" width="196" height="96" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="64" y="238" font-size="15" font-weight="700" fill="#7a8399">L5</text>
+    <text x="64" y="264" font-size="15" font-weight="700" fill="#2d3142">인지와 매핑</text>
+    <text x="64" y="288" font-size="14" fill="#7a8399">0.5 ~ 5 Hz</text>
+    <rect x="260" y="208" width="660" height="96" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="284" y="238" font-size="15" font-weight="700" fill="#2d3142">목표 3D 좌표</text>
+    <text x="284" y="264" font-size="15" font-weight="600" fill="#2e5aa8">[2.3, 1.1, 0.8]</text>
+    <text x="284" y="288" font-size="14" fill="#4f5d75">시맨틱 맵에서 「빨간 컵」을 찾아 좌표 세 개로 바꿉니다</text>
+    <line x1="138" y1="310" x2="138" y2="334" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+    <!-- L4 -->
+    <rect x="40" y="340" width="196" height="96" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="64" y="370" font-size="15" font-weight="700" fill="#7a8399">L4</text>
+    <text x="64" y="396" font-size="15" font-weight="700" fill="#2d3142">상위 지능</text>
+    <text x="64" y="420" font-size="14" fill="#7a8399">1 ~ 10 Hz</text>
+    <rect x="260" y="340" width="660" height="96" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="284" y="370" font-size="15" font-weight="700" fill="#2d3142">액션 청크</text>
+    <text x="284" y="396" font-size="15" font-weight="600" fill="#2e5aa8">16 x 29 행렬 (앞으로 16스텝, 관절 29개)</text>
+    <text x="284" y="420" font-size="14" fill="#4f5d75">지금 할 동작 하나가 아니라 앞으로 할 열여섯 스텝을 한꺼번에 냅니다</text>
+    <line x1="138" y1="442" x2="138" y2="466" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+    <!-- L3 -->
+    <rect x="40" y="472" width="196" height="96" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
+    <text x="64" y="502" font-size="15" font-weight="700" fill="#eb6c36">L3</text>
+    <text x="64" y="528" font-size="15" font-weight="700" fill="#2d3142">액션 인터페이스</text>
+    <text x="64" y="552" font-size="14" fill="#7a8399">L4 호출당 1회</text>
+    <rect x="260" y="472" width="660" height="96" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
+    <text x="284" y="502" font-size="15" font-weight="700" fill="#2d3142">이산 액션 토큰</text>
+    <text x="284" y="528" font-size="15" font-weight="600" fill="#a8532a">유한한 코드북 안의 정수 인덱스 열</text>
+    <text x="284" y="552" font-size="14" fill="#4f5d75">연속값을 정해진 칸으로 반올림해 아래층이 받을 형태로 만듭니다</text>
+    <line x1="138" y1="574" x2="138" y2="598" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+    <!-- L2 -->
+    <rect x="40" y="604" width="196" height="96" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="64" y="634" font-size="15" font-weight="700" fill="#7a8399">L2</text>
+    <text x="64" y="660" font-size="15" font-weight="700" fill="#2d3142">전신 제어</text>
+    <text x="64" y="684" font-size="14" fill="#7a8399">50 ~ 500 Hz</text>
+    <rect x="260" y="604" width="660" height="96" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="284" y="634" font-size="15" font-weight="700" fill="#2d3142">관절 목표각</text>
+    <text x="284" y="660" font-size="15" font-weight="600" fill="#2e5aa8">q_des, 실수 23 ~ 43개</text>
+    <text x="284" y="684" font-size="14" fill="#4f5d75">균형과 접촉을 함께 풀어 이번 스텝에 갈 자세를 정합니다</text>
+    <line x1="138" y1="706" x2="138" y2="730" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+    <!-- L1 -->
+    <rect x="40" y="736" width="196" height="96" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="64" y="766" font-size="15" font-weight="700" fill="#7a8399">L1</text>
+    <text x="64" y="792" font-size="15" font-weight="700" fill="#2d3142">하드웨어</text>
+    <text x="64" y="816" font-size="14" fill="#7a8399">1 ~ 2 kHz</text>
+    <rect x="260" y="736" width="660" height="96" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="284" y="766" font-size="15" font-weight="700" fill="#2d3142">관절 토크</text>
+    <text x="284" y="792" font-size="15" font-weight="600" fill="#2e5aa8">Kp x (목표각 - 현재각) - Kd x 각속도</text>
+    <text x="284" y="816" font-size="14" fill="#4f5d75">목표각과의 차이에 비례해 밀고 각속도에 비례해 브레이크를 겁니다</text>
+
+    <line x1="40" y1="864" x2="920" y2="864" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="888" font-size="14" fill="#4f5d75">내려갈 때마다 정보는 줄고 구체성은 늡니다.</text>
+    <text x="40" y="910" font-size="14" fill="#4f5d75">위층이 아래층 사정을 몰라도 되는 덕분에 한쪽만 갈아끼울 수 있습니다.</text>
+  </g>
+</svg>
