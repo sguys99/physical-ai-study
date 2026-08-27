@@ -565,6 +565,142 @@ for i in range(s, e + 1):
 PY
 }
 
+# ── 산문 라인의 줄표(—)·가운뎃점(·) 개수 ─────────────────────────
+# '줄표수 가운뎃점수'를 한 줄로 출력합니다.
+# 산문 라인 = frontmatter · 코드펜스 내부 · 표 행(| 시작)을 뺀 나머지입니다.
+#
+# G군(lesson.md)과 I군(eli5.md)이 공유합니다. §3.10은 두 층에 똑같이 적용되고,
+# 규정이 하나면 판정도 하나여야 합니다.
+# ⚠️ 2026-08-27 공용화 때 **G군의 판정과 출력이 한 글자도 달라지지 않음**을
+#    7개 lesson의 G군 출력 diff로 확인했습니다. 여기를 고치면 두 군이 함께 움직입니다.
+punct_counts() {
+  python3 - "$1" <<'PY'
+import re, sys
+s = open(sys.argv[1], encoding='utf-8').read()
+s = re.sub(r'^---\n.*?\n---\n', '', s, flags=re.S)
+s = re.sub(r'```.*?```', '', s, flags=re.S)
+lines = [l for l in s.split('\n') if not l.strip().startswith('|')]
+prose = '\n'.join(lines)
+print(prose.count('—'), prose.count('·'))
+PY
+}
+
+# ── eli5.md 단일 훑기 (I군 전용) ─────────────────────────────────
+# 한 번의 훑기로 일곱 가지를 뽑습니다. 레코드는 종류로 시작합니다.
+#   FIRST<TAB>줄번호<TAB>줄내용            첫 비어있지 않은 줄
+#   MATH<TAB>줄번호<TAB>종류<TAB>줄내용     $$ 블록과 인라인 수식
+#   ARXIV<TAB>줄번호<TAB>매치<TAB>줄내용    arXiv 문자열과 arXiv 번호(\d{4}\.\d{4,5})
+#   TABLE<TAB>시작줄<TAB>끝줄<TAB>행수      표 블록 (구분행 |---|는 세지 않습니다)
+#   BACKLINK<TAB>줄번호                    lesson.md와 § 절 참조가 함께 있는 줄
+#   SECREF<TAB>줄번호<TAB>매치             「절 제목」이 뒤따르지 않는 §N
+#   ABBR<TAB>약어                          서로 다른 영문 대문자 약어 (정렬)
+#
+# §2.1과 eli5-template.md가 정한 규격입니다. 수식 0, arXiv 인용 0, 영문 약어 최소,
+# 표는 쓰지 않는 것이 기본, 단순화한 자리에는 「정확히는 lesson.md §N 「절 제목」에서」 링크.
+#
+# 판정을 여기서 정해둡니다.
+#  - **코드펜스 안은 전부 제외합니다.** 수식도 arXiv 번호도 약어도 마찬가지입니다.
+#    Mermaid 라벨과 코드 예시까지 잡으면 오탐이 규격보다 커집니다
+#  - **약어는 한글 조사가 붙어도 잡습니다**(`MPC는`). abbr_scan()과 같은 경계식을 씁니다.
+#    대신 링크 대상 `](...)`과 URL은 지웁니다. `../../img/DDPM-flow.svg`는 본문 약어가 아닙니다
+#  - **표 행 수는 구분행을 뺍니다.** 구분행은 마크다운 문법이지 읽는 행이 아닙니다
+#    (reading_estimate()와 같은 판정)
+eli5_scan() {
+  python3 - "$1" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+
+SEP  = re.compile(r'^\|(\s*:?-+:?\s*\|)+$')
+INL  = re.compile(r'(?<!\$)\$[^$\n]+\$(?!\$)')
+AXNM = re.compile(r'arxiv', re.I)
+AXID = re.compile(r'(?<!\d)\d{4}\.\d{4,5}(?!\d)')
+SECT = re.compile(r'§\s*\d+(?:\.\d+)*')
+ABBR = re.compile(r'(?<![A-Za-z0-9])([A-Z]{2,}[0-9]*)(?![A-Za-z0-9])')
+LINK = re.compile(r'\]\([^)]*\)|https?://\S+')
+
+out = []
+for i, l in enumerate(lines, 1):
+    if l.strip():
+        out.append("FIRST\t%d\t%s" % (i, l.strip()))
+        break
+
+abbrs = set()
+fence = fm = disp = False
+tbl_s = tbl_rows = 0
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True; continue
+    if fm:
+        if s == '---': fm = False
+        continue
+    if s.startswith('```'):
+        fence = not fence
+        if tbl_s:
+            out.append("TABLE\t%d\t%d\t%d" % (tbl_s, i - 1, tbl_rows)); tbl_s = tbl_rows = 0
+        continue
+    if fence:
+        continue
+
+    if s.startswith('|'):
+        if not tbl_s:
+            tbl_s, tbl_rows = i, 0
+        if not SEP.match(s):
+            tbl_rows += 1
+    elif tbl_s:
+        out.append("TABLE\t%d\t%d\t%d" % (tbl_s, i - 1, tbl_rows)); tbl_s = tbl_rows = 0
+
+    if '$$' in l:
+        # 여는 줄에서만 한 번 셉니다. 닫는 줄까지 세면 수식 하나가 두 곳으로 보입니다
+        if l.count('$$') % 2 == 0 or not disp:
+            out.append("MATH\t%d\t$$ 블록\t%s" % (i, s))
+        if l.count('$$') % 2 == 1:
+            disp = not disp
+    elif not disp:
+        m = INL.search(l)
+        if m:
+            out.append("MATH\t%d\t인라인 %s\t%s" % (i, m.group(0), s))
+
+    m = AXNM.search(l) or AXID.search(l)
+    if m:
+        out.append("ARXIV\t%d\t%s\t%s" % (i, m.group(0), s))
+
+    if 'lesson.md' in l and '§' in l:
+        out.append("BACKLINK\t%d" % i)
+
+    for m in SECT.finditer(l):
+        rest = l[m.end():].lstrip()
+        if rest.startswith('절'):
+            rest = rest[1:].lstrip()
+        if not rest.startswith('「'):
+            out.append("SECREF\t%d\t%s" % (i, m.group(0)))
+
+    for m in ABBR.finditer(LINK.sub(' ', l)):
+        abbrs.add(m.group(1))
+
+if tbl_s:
+    out.append("TABLE\t%d\t%d\t%d" % (tbl_s, len(lines), tbl_rows))
+for a in sorted(abbrs):
+    out.append("ABBR\t%s" % a)
+print('\n'.join(out))
+PY
+}
+
+# ── 검사 상세를 최대 N줄까지 들여쓰기 출력 ───────────────────────
+# 인자는 상한과 전체 건수입니다. 상한을 넘으면 '... 외 N개'를 덧붙입니다.
+# I군이 씁니다. 기존 검사군은 각자의 출력 형식을 그대로 둡니다.
+show_hits() {
+  local n="$1" total="$2" line i=0
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    printf '        %s\n' "$line"
+    i=$((i+1))
+    [[ "$i" -ge "$n" ]] && break
+  done
+  [[ "$total" -gt "$n" ]] && printf '        %s\n' "... 외 $((total-n))개"
+  return 0
+}
+
 lint_one() {
   local f="$1"
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
@@ -1129,16 +1265,7 @@ lint_one() {
   printf '\n  \033[1mG. 문장부호 (§3.10)\033[0m\n'
   # 산문 라인만 대상: frontmatter · 코드펜스 내부 · 표 행(| 시작) 제외
   local dash_n dot_n dash_hits dot_hits
-  read -r dash_n dot_n < <(python3 - "$f" <<'PY'
-import re, sys
-s = open(sys.argv[1], encoding='utf-8').read()
-s = re.sub(r'^---\n.*?\n---\n', '', s, flags=re.S)
-s = re.sub(r'```.*?```', '', s, flags=re.S)
-lines = [l for l in s.split('\n') if not l.strip().startswith('|')]
-prose = '\n'.join(lines)
-print(prose.count('—'), prose.count('·'))
-PY
-)
+  read -r dash_n dot_n < <(punct_counts "$f")
   if [[ "$dash_n" -lt 3 ]]; then
     c_pass "산문 줄표(—) ${dash_n}회"
   else
@@ -1159,6 +1286,209 @@ PY
     [[ -f "$(dirname "$f")/deep-dive.md" ]] \
       && c_pass "deep-dive.md 링크와 파일이 모두 존재" \
       || c_fail "deep-dive.md를 링크했으나 파일이 없습니다"
+  fi
+
+  # ── I. 3층 문서 §2.1 ───────────────────────────────────────
+  # 검사 대상은 lesson.md와 같은 디렉토리의 eli5.md입니다.
+  #
+  # 2026-08-25 개정으로 한 모듈의 읽을거리가 세 층이 됐습니다(§2.1).
+  # eli5.md(먼저 읽는 그림 중심 입문) → lesson.md(본문) → deep-dive.md(심화)이고,
+  # eli5.md는 §2 산출물 6번에서 **필수**로 규정됐습니다.
+  #
+  # **수식 0, arXiv 인용 0, 영문 약어 최소, frontmatter 없음.** 이 넷이 층을 가릅니다.
+  # 산문 밴드 3,000~5,000자는 **lesson.md의 티어 밴드와 무관한 독립 밴드**라
+  # 그 모듈이 Tier A든 C든 같은 숫자를 씁니다. 그래서 여기서는 tier를 보지 않습니다.
+  printf '\n  \033[1mI. 3층 문서 (§2.1)\033[0m\n'
+  local eli5 e_scan e_prose e_total e_protect
+  eli5="$(dirname "$f")/eli5.md"
+
+  if [[ ! -f "$eli5" ]]; then
+    # TODO(Phase 8): eli5.md가 전 모듈로 확산되면 이 WARN을 FAIL로 올립니다.
+    #   2026-08-27 현재 7개 모듈 전부 eli5.md가 없고, 생성은 Phase 5(W1-M1 시범)와
+    #   Phase 8(확산)에서 일어납니다. 전환기 동안의 부재까지 FAIL로 잡으면
+    #   lint가 상시 빨간불이 되어 신호가 죽습니다.
+    #   확산이 끝나면 이 분기를 c_fail로 바꾸고 이 주석을 지우세요.
+    c_warn "eli5.md 없음 — §2가 필수 산출물로 규정한 문서입니다(2026-08-25 신설). 지금은 확산 전 전환기라 WARN이고, Phase 8 확산이 끝나면 FAIL로 올립니다"
+  else
+    e_scan=$(eli5_scan "$eli5")
+    # 빈 파일에는 prose_metrics()를 부르지 않습니다. 보호 구간 백분율이 0으로 나누기가 됩니다.
+    # prose_metrics()는 §9.6 실측값과의 비교 가능성 때문에 한 글자도 고치지 않습니다
+    e_prose=0; e_total=0; e_protect=0
+    if [[ -s "$eli5" ]]; then
+      read -r e_prose e_total e_protect < <(prose_metrics "$eli5")
+      : "${e_prose:=0}" "${e_total:=0}" "${e_protect:=0}"
+    fi
+
+    # 1. 산문 3,000~5,000자 (§2.1). 미달과 초과 둘 다 FAIL입니다.
+    #    미달은 대개 lesson.md의 요약을 짧게 쓴 것이고(그러면 층이 성립하지 않습니다),
+    #    초과는 본문이 eli5로 새어 들어온 것입니다.
+    if   [[ "$e_prose" -lt 3000 ]]; then
+      c_fail "eli5 산문 ${e_prose}자 — §2.1 밴드(3,000~5,000) 미달. 그림과 이야기를 더 붙이세요. 요약을 짧게 쓴 것이면 읽기 부담만 늘어납니다"
+    elif [[ "$e_prose" -gt 5000 ]]; then
+      c_fail "eli5 산문 ${e_prose}자 — §2.1 밴드(3,000~5,000) 초과. 정밀한 설명은 lesson.md의 몫입니다"
+    else
+      c_pass "eli5 산문 ${e_prose}자 (§2.1 독립 밴드 3,000~5,000, 티어 무관)"
+    fi
+
+    # 2. frontmatter 없음 (§2.1). 첫 줄이 --- 이면 frontmatter입니다
+    local e_l1
+    e_l1=$(head -1 "$eli5" | tr -d '\r' | sed 's/[[:space:]]*$//')
+    if [[ "$e_l1" == "---" ]]; then
+      c_fail "eli5에 frontmatter가 있습니다 — §2.1: eli5.md는 frontmatter를 두지 않습니다. 첫 줄은 lesson.md 되돌이 링크입니다"
+    else
+      c_pass "eli5 frontmatter 없음"
+    fi
+
+    # 3. 첫 줄 되돌이 링크 (§2.1)
+    #    문장 끝 표현은 조금 달라도 되게 세 조각의 포함 여부로 판정합니다
+    local e_first_ln="" e_first_txt=""
+    read -r e_first_ln e_first_txt \
+      < <(printf '%s\n' "$e_scan" | awk -F'\t' '$1=="FIRST"{print $2"\t"$3; exit}')
+    if [[ -z "$e_first_ln" ]]; then
+      c_fail "eli5가 비어 있습니다"
+    elif [[ "$e_first_txt" == *"본문은"* && "$e_first_txt" == *"lesson.md"* \
+            && "$e_first_txt" == *"먼저 읽으세요"* ]]; then
+      c_pass "eli5 첫 줄 되돌이 링크 있음 (L${e_first_ln})"
+    else
+      c_fail "eli5 첫 줄(L${e_first_ln})이 되돌이 링크가 아닙니다 — §2.1: '> 본문은 [lesson.md](lesson.md)입니다. 이 문서를 먼저 읽으세요.'"
+      printf '        %s\n' "L${e_first_ln}  ${e_first_txt}"
+    fi
+
+    # 4. 수식 0 (§2.1). $$ 블록도 인라인도 쓰지 않습니다. 코드펜스 안은 제외합니다
+    local e_math_n e_math_msg
+    e_math_msg=$(printf '%s\n' "$e_scan" \
+      | awk -F'\t' '$1=="MATH"{printf "L%s  %s  %s\n", $2, $3, substr($4,1,80)}')
+    e_math_n=$(printf '%s\n' "$e_math_msg" | awk 'NF{n++} END{print n+0}')
+    if [[ "$e_math_n" -eq 0 ]]; then
+      c_pass "eli5 수식 0"
+    else
+      c_fail "eli5 수식 ${e_math_n}곳 — §2.1: eli5는 수식 0입니다. 수식은 lesson.md와 deep-dive.md의 몫입니다"
+      printf '%s\n' "$e_math_msg" | show_hits 3 "$e_math_n"
+    fi
+
+    # 5. arXiv 인용 0 (§2.1). 논문 이름과 번호는 lesson.md의 「출처」가 담당합니다
+    local e_ax_n e_ax_msg
+    e_ax_msg=$(printf '%s\n' "$e_scan" \
+      | awk -F'\t' '$1=="ARXIV"{printf "L%s  %s  %s\n", $2, $3, substr($4,1,80)}')
+    e_ax_n=$(printf '%s\n' "$e_ax_msg" | awk 'NF{n++} END{print n+0}')
+    if [[ "$e_ax_n" -eq 0 ]]; then
+      c_pass "eli5 arXiv 인용 0"
+    else
+      c_fail "eli5 arXiv 인용 ${e_ax_n}곳 — §2.1: eli5는 arXiv 인용 0입니다. 논문 이름과 번호는 lesson.md의 「출처」가 담당합니다"
+      printf '%s\n' "$e_ax_msg" | show_hits 3 "$e_ax_n"
+    fi
+
+    # 6. 골격 5절 (§2.1). 제목 문구가 조금 달라질 수 있어 핵심 구절로 느슨하게 봅니다
+    local e_titles e_skel_missing="" e_skel_n=0 want
+    e_titles=$(h2_blocks "$eli5" | cut -f3)
+    for want in "이 모듈이 답하는 질문" "어떤 문제가 있었나" "그래서 무엇을 하나" \
+                "오늘 만날 개념" "이제 lesson.md로"; do
+      if printf '%s\n' "$e_titles" | grep -qF "$want"; then
+        e_skel_n=$((e_skel_n+1))
+      else
+        e_skel_missing="${e_skel_missing} 「${want}」"
+      fi
+    done
+    if [[ -z "$e_skel_missing" ]]; then
+      c_pass "eli5 골격 5절 완비"
+    else
+      c_fail "eli5 골격 절 $((5-e_skel_n))개 누락:${e_skel_missing} — §2.1 골격"
+    fi
+
+    # 7. 줄표와 가운뎃점 (§3.10). G군과 **같은 산문 라인 판정**을 씁니다
+    local e_dash="" e_dot="" e_punct_msg e_punct_n
+    read -r e_dash e_dot < <(punct_counts "$eli5")
+    : "${e_dash:=0}" "${e_dot:=0}"
+    if [[ "$e_dash" -lt 3 && "$e_dot" -lt 3 ]]; then
+      c_pass "eli5 산문 줄표(—) ${e_dash}회 · 가운뎃점(·) ${e_dot}회"
+    else
+      c_fail "eli5 산문 줄표(—) ${e_dash}회, 가운뎃점(·) ${e_dot}회 — §3.10은 eli5에도 그대로 적용됩니다. 부연은 쉼표나 괄호로, 나열은 쉼표로"
+      e_punct_msg=$(grep -n '[—·]' "$eli5" | grep -v '^[0-9]*:[[:space:]]*|' || true)
+      e_punct_n=$(printf '%s\n' "$e_punct_msg" | awk 'NF{n++} END{print n+0}')
+      printf '%s\n' "$e_punct_msg" | show_hits 3 "$e_punct_n"
+    fi
+
+    # 8. 설명 회피·「이미 안다」 문장 (§3.9). 기존 dodge_scan()을 eli5에 대고 부릅니다
+    local e_dodge_n e_dodge_msg
+    e_dodge_msg=$(dodge_scan "$eli5" | awk -F'\t' '{printf "L%s  %s\n", $1, $2}')
+    e_dodge_n=$(printf '%s\n' "$e_dodge_msg" | awk 'NF{n++} END{print n+0}')
+    if [[ "$e_dodge_n" -eq 0 ]]; then
+      c_pass "eli5에 설명 회피·「이미 안다」 문장 없음"
+    else
+      c_fail "eli5 설명 회피·「이미 안다」 문장 ${e_dodge_n}건 — §3.9: eli5는 아무 용어도 모르는 사람이 읽는 층입니다. 여기서 설명을 건너뛰면 갈 곳이 없습니다"
+      printf '%s\n' "$e_dodge_msg" | show_hits 3 "$e_dodge_n"
+    fi
+
+    # 9. 표 (§2.1, WARN). eli5는 그림과 이야기의 층이고 표는 대조의 도구입니다.
+    #    표를 쓰고 싶어지면 대개 요약을 하고 있다는 신호입니다
+    local e_tbl_n e_tbl_max e_tbl_msg
+    e_tbl_n=$(printf '%s\n' "$e_scan" | awk -F'\t' '$1=="TABLE"{n++} END{print n+0}')
+    e_tbl_max=$(printf '%s\n' "$e_scan" \
+      | awk -F'\t' '$1=="TABLE" && $4+0>mx{mx=$4+0} END{print mx+0}')
+    if [[ "$e_tbl_n" -eq 0 ]]; then
+      c_pass "eli5에 표 없음"
+    elif [[ "$e_tbl_n" -eq 1 && "$e_tbl_max" -le 3 ]]; then
+      c_pass "eli5 표 1개 (${e_tbl_max}행, 3행 이하)"
+    else
+      c_warn "eli5 표 ${e_tbl_n}개, 최대 ${e_tbl_max}행 — §2.1: 표를 쓰지 않는 것이 기본이고 꼭 필요하면 3행 이하로 하나만 둡니다. 그 내용은 대개 lesson.md의 비교표 자리입니다"
+      e_tbl_msg=$(printf '%s\n' "$e_scan" \
+        | awk -F'\t' '$1=="TABLE"{printf "L%s-%s  %s행\n", $2, $3, $4}')
+      printf '%s\n' "$e_tbl_msg" | show_hits 3 "$e_tbl_n"
+    fi
+
+    # 10. 「정확히는 lesson.md §N 「절 제목」에서」 링크 (§2.1, WARN)
+    #     lesson.md와 § 절 참조가 한 줄에 함께 있으면 되돌이 링크로 봅니다.
+    #     첫 줄 안내 인용문에는 §가 없어 여기 세어지지 않습니다
+    local e_back_n
+    e_back_n=$(printf '%s\n' "$e_scan" | awk -F'\t' '$1=="BACKLINK"{n++} END{print n+0}')
+    if [[ "$e_back_n" -gt 0 ]]; then
+      c_pass "lesson.md 절 되돌이 링크 ${e_back_n}개"
+    else
+      c_warn "lesson.md 절 되돌이 링크가 하나도 없습니다 — §2.1: eli5는 정확도를 일부 포기하는 층입니다. 단순화한 자리마다 「정확히는 [lesson.md](lesson.md) §N 「절 제목」에서」를 다세요. 어디서 정확해지는지를 알려주지 않는 단순화는 그냥 틀린 설명입니다"
+    fi
+
+    # 11. 절 참조에 절 제목 병기 (§2.1, WARN)
+    #     lesson.md는 재집필로 절 번호가 밀립니다. 제목을 같이 적어두면
+    #     하류 참조가 조용히 깨지는 것을 막습니다
+    local e_sec_n e_sec_msg
+    e_sec_msg=$(printf '%s\n' "$e_scan" \
+      | awk -F'\t' '$1=="SECREF"{printf "L%s  %s 뒤에 「절 제목」이 없습니다\n", $2, $3}')
+    e_sec_n=$(printf '%s\n' "$e_sec_msg" | awk 'NF{n++} END{print n+0}')
+    if [[ "$e_sec_n" -eq 0 ]]; then
+      c_pass "eli5 절 참조에 절 제목 병기됨"
+    else
+      c_warn "절 제목 없는 절 참조 ${e_sec_n}개 — §2.1: '§3'이 아니라 '§3 「스택 5계층」'입니다. 번호가 밀려도 독자가 찾아갈 수 있게"
+      printf '%s\n' "$e_sec_msg" | show_hits 3 "$e_sec_n"
+    fi
+
+    # 12. 그림 「읽는 법」 캡션 (§3.2, WARN). 기존 figure_scan()을 eli5에 대고 부릅니다
+    local e_vis e_fig_n e_cap_bad e_cap_msg
+    e_vis=$(figure_scan "$eli5")
+    e_fig_n=$(printf '%s\n' "$e_vis" | awk -F'\t' '$1=="FIG"{n++} END{print n+0}')
+    e_cap_bad=$(printf '%s\n' "$e_vis" | awk -F'\t' '$1=="FIG" && $5=="0"{n++} END{print n+0}')
+    if [[ "$e_fig_n" -eq 0 ]]; then
+      c_info "eli5에 캡션을 검사할 그림이 없습니다 (§2.1: eli5는 그림 위주의 층입니다)"
+    elif [[ "$e_cap_bad" -eq 0 ]]; then
+      c_pass "eli5 그림 ${e_fig_n}개 전부 다음 3줄 안에 「읽는 법」 캡션 있음"
+    else
+      c_warn "eli5 캡션 없는 그림 ${e_cap_bad}/${e_fig_n}개 — §3.2: 그림 바로 아래 1~3문장으로 어디를 먼저 보고 무엇을 따라가라고 지시하세요"
+      e_cap_msg=$(printf '%s\n' "$e_vis" | awk -F'\t' '
+        $1=="FIG" && $5=="0" {
+          loc = ($2==$3) ? "L" $2 : "L" $2 "-" $3
+          printf "%s  %s 뒤 3줄에 산문이 없습니다\n", loc, $4
+        }')
+      printf '%s\n' "$e_cap_msg" | show_hits 3 "$e_cap_bad"
+    fi
+
+    # 13. 영문 약어 (§2.1, WARN). 한국어로 풀어 쓰는 것이 1순위입니다
+    local e_abbr_n e_abbr_list
+    e_abbr_n=$(printf '%s\n' "$e_scan" | awk -F'\t' '$1=="ABBR"{n++} END{print n+0}')
+    e_abbr_list=$(printf '%s\n' "$e_scan" | awk -F'\t' '$1=="ABBR"{printf " %s", $2}')
+    if [[ "$e_abbr_n" -le 3 ]]; then
+      c_pass "eli5 영문 약어 ${e_abbr_n}종${e_abbr_list}"
+    else
+      c_warn "eli5 영문 약어 ${e_abbr_n}종:${e_abbr_list} — §2.1: 영문 약어 최소가 규격입니다. 한국어로 풀어 쓰는 것이 1순위이고, 이름이 꼭 필요할 때만 한국어를 앞세우고 영문을 괄호로 답니다"
+    fi
   fi
 }
 
