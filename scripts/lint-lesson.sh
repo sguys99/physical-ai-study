@@ -152,6 +152,135 @@ for r in rows:
 PY
 }
 
+# ── 그림 스캔 (캡션 · gantt · 이미지 참조) ────────────────────────
+# 한 번의 훑기로 세 가지를 뽑습니다. 레코드는 종류로 시작합니다.
+#   FIG<TAB>시작줄<TAB>끝줄<TAB>종류<TAB>캡션여부(1/0)
+#   GANTT<TAB>줄번호
+#   IMG<TAB>줄번호<TAB>경로            (로컬 상대경로만, http는 제외)
+#
+# 「읽는 법」 캡션(§3.2 그림 규약)은 그림이 끝난 **다음 3줄 안의 산문 줄**로 봅니다.
+# 산문 줄은 비어있지 않고 표 행·헤딩·코드펜스·HTML 태그·이미지 단독 줄이 아닌 줄입니다.
+#
+# 판정 두 가지를 여기서 정해둡니다.
+#  - **불릿과 인용은 캡션으로 인정합니다.** 「왼쪽 열은 X, 오른쪽은 Y」식 범례를 불릿으로
+#    다는 것은 정당한 읽는 법이고, 인용 배지(⚠️ 미검증 등)도 대개 그림을 가리킵니다
+#  - **단 📌 정리 박스는 인용이 이어지는 줄까지 통째로 인정하지 않습니다.** §3.7이 정의한
+#    절 마무리 구조물이라 캡션 자리를 대신할 수 없습니다. 그림을 던지고 곧바로 절을 닫는 형태입니다
+figure_scan() {
+  python3 - "$1" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+
+PIN     = re.compile(r'^>\s*📌\s*\*\*여기까지 정리\*\*')
+IMG     = re.compile(r'!\[[^\]]*\]\(\s*([^)\s]+)')
+IMGONLY = re.compile(r'^(!\[[^\]]*\]\([^)]*\)\s*)+$')
+
+# 📌 정리 박스는 머리줄뿐 아니라 인용이 이어지는 동안 전부 캡션이 아닙니다
+pin = set()
+i = 1
+while i <= len(lines):
+    if PIN.match(lines[i - 1].strip()):
+        while i <= len(lines) and lines[i - 1].strip().startswith('>'):
+            pin.add(i); i += 1
+    else:
+        i += 1
+
+def is_prose(idx):
+    s = lines[idx - 1].strip()
+    if not s:                    return False   # 빈 줄
+    if s.startswith('|'):        return False   # 표 행
+    if s.startswith('#'):        return False   # 헤딩
+    if s.startswith('```'):      return False   # 코드펜스
+    if s.startswith('<'):        return False   # <details> 같은 HTML 구조물
+    if IMGONLY.match(s):         return False   # 이미지만 있는 줄
+    if idx in pin:               return False   # 절 마무리 📌 박스
+    return True
+
+def captioned(end):
+    """end = 그림이 끝난 줄(1-indexed). 다음 3줄 안에 산문이 있으면 1"""
+    for j in range(end + 1, min(end + 3, len(lines)) + 1):
+        if is_prose(j):
+            return 1
+    return 0
+
+out, fence, tag, start = [], False, '', 0
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if s.startswith('```'):
+        if not fence:
+            fence, tag, start = True, s[3:].strip().lower(), i
+        else:
+            fence = False
+            if tag == 'mermaid':
+                out.append("FIG\t%d\t%d\tMermaid\t%d" % (start, i, captioned(i)))
+        continue
+    if fence:
+        if tag == 'mermaid' and re.match(r'^gantt\b', s):
+            out.append("GANTT\t%d" % i)
+        continue
+    if not IMG.search(l):
+        continue
+    for m in IMG.finditer(l):
+        p = m.group(1)
+        if not re.match(r'^(https?:)?//|^data:', p):
+            out.append("IMG\t%d\t%s" % (i, p))
+    # 문장 안에 끼워 넣은 이미지는 그 줄에서 이미 설명되므로 캡션 검사 대상이 아닙니다
+    rest = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', l).strip()
+    if len(rest) < 2:
+        out.append("FIG\t%d\t%d\t이미지\t%d" % (i, i, captioned(i)))
+print('\n'.join(out))
+PY
+}
+
+# ── ASCII 블록도 길이 ────────────────────────────────────────────
+# '시작줄<TAB>끝줄<TAB>내용줄수'를 상한 초과분만 출력합니다.
+#
+# 대상은 **언어 태그가 없거나 text/plain인 코드펜스**입니다. python·bash·mermaid처럼
+# 태그가 붙은 펜스는 코드나 다이어그램이지 ASCII 블록도가 아닙니다(§3.2).
+# 근거는 W1-M1의 48줄 무호흡 블록도(L211-258)입니다.
+ascii_blocks() {
+  python3 - "$1" "$2" <<'PY'
+import sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+limit = int(sys.argv[2])
+fence, tag, start = False, '', 0
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if not s.startswith('```'):
+        continue
+    if not fence:
+        fence, tag, start = True, s[3:].strip().lower(), i
+    else:
+        fence = False
+        if tag in ('', 'text', 'plain') and i - start - 1 > limit:
+            print("%d\t%d\t%d" % (start, i, i - start - 1))
+PY
+}
+
+# ── 지정 구간의 첫 Mermaid 펜스 내용 ─────────────────────────────
+# 줄별 앞뒤 공백을 벗기고 빈 줄을 버려 정규화합니다. Mermaid는 들여쓰기를
+# 무시하므로 이렇게 같으면 렌더 결과가 완전히 같은 그림입니다.
+# §3.2: 「한 장 정리」의 모듈 지도 재게시는 §0과 완전 동일 복제를 금지합니다.
+first_mermaid_body() {
+  python3 - "$1" "$2" "$3" <<'PY'
+import sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+s, e = int(sys.argv[2]), min(int(sys.argv[3]), len(lines))
+body, started = [], False
+for i in range(s, e + 1):
+    t = lines[i - 1].strip()
+    if not started:
+        if t == '```mermaid':
+            started = True
+        continue
+    if t.startswith('```'):
+        break
+    if t:
+        body.append(t)
+print('\n'.join(body))
+PY
+}
+
 lint_one() {
   local f="$1"
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
@@ -410,6 +539,101 @@ lint_one() {
   [[ "$over_cells" -eq 0 ]] \
     && c_pass "모든 셀이 120자 이하" \
     || c_fail "120자 초과 셀 ${over_cells}개 — 표에 들어갈 내용이 아닙니다 (산문 + 소제목으로)"
+
+  # 그림 「읽는 법」 캡션 (2026-08-25 신설, §3.2 그림 규약)
+  # 근거: W1-M1의 41줄짜리 계보도(§6.1, L486-526)가 산문 해설 0자로 지나가고
+  #       해설이 44줄 뒤에 나옵니다. 그림을 던지고 넘어가지 않게 하는 장치입니다
+  local vis fig_n cap_bad cap_msg dline
+  vis=$(figure_scan "$f")
+  fig_n=$(printf '%s\n' "$vis" | awk -F'\t' '$1=="FIG"{n++} END{print n+0}')
+  cap_bad=$(printf '%s\n' "$vis" | awk -F'\t' '$1=="FIG" && $5=="0"{n++} END{print n+0}')
+  if [[ "$fig_n" -eq 0 ]]; then
+    c_info "캡션을 검사할 그림(Mermaid·이미지)이 없습니다"
+  elif [[ "$cap_bad" -eq 0 ]]; then
+    c_pass "그림 ${fig_n}개 전부 다음 3줄 안에 캡션 있음"
+  else
+    c_warn "캡션 없는 그림 ${cap_bad}/${fig_n}개 — §3.2: 그림 바로 아래 1~3문장으로 어디를 보라고 지시하세요"
+    cap_msg=$(printf '%s\n' "$vis" | awk -F'\t' '
+      $1=="FIG" && $5=="0" {
+        loc = ($2==$3) ? "L" $2 : "L" $2 "-" $3
+        printf "%s  %s 뒤 3줄에 산문이 없습니다\n", loc, $4
+      }' | head -5)
+    while IFS= read -r dline; do
+      [[ -n "$dline" ]] && printf '        %s\n' "$dline"
+    done <<< "$cap_msg"
+    [[ "$cap_bad" -gt 5 ]] && printf '        %s\n' "... 외 $((cap_bad-5))개"
+  fi
+
+  # ASCII 블록도 20줄 상한 (2026-08-25 신설, §3.2)
+  local ascii_out ascii_n a1 a2 a3
+  ascii_out=$(ascii_blocks "$f" 20)
+  ascii_n=$(printf '%s\n' "$ascii_out" | awk 'NF{n++} END{print n+0}')
+  if [[ "$ascii_n" -eq 0 ]]; then
+    c_pass "ASCII 블록도가 모두 20줄 이하"
+  else
+    c_warn "20줄 초과 ASCII 블록도 ${ascii_n}개 — §3.2: 한 블록 20줄 상한. 조각내 산문 사이에 배치하거나 SVG로 옮기세요"
+    while IFS=$'\t' read -r a1 a2 a3; do
+      [[ -n "$a1" ]] && printf '        L%s-%s  내용 %s줄\n' "$a1" "$a2" "$a3"
+    done < <(printf '%s\n' "$ascii_out" | head -5)
+    [[ "$ascii_n" -gt 5 ]] && printf '        %s\n' "... 외 $((ascii_n-5))개"
+  fi
+
+  # Mermaid gantt 오용 (2026-08-25 신설, §3.2)
+  # 근거: W1-M1의 청크 커버리지 다이어그램(L356-379)이 gantt이고 색 설명이 실제 렌더와 다릅니다
+  local gantt_n gantt_at
+  gantt_n=$(printf '%s\n' "$vis" | awk -F'\t' '$1=="GANTT"{n++} END{print n+0}')
+  if [[ "$gantt_n" -eq 0 ]]; then
+    c_pass "Mermaid gantt 오용 없음"
+  else
+    gantt_at=$(printf '%s\n' "$vis" | awk -F'\t' '$1=="GANTT"{printf " L%s", $2}')
+    c_fail "Mermaid gantt ${gantt_n}개(${gantt_at} ) — §3.2: gantt는 프로젝트 일정용이라 색과 축이 의도대로 렌더되지 않습니다. 타이밍은 sequenceDiagram이나 SVG로 바꾸세요"
+  fi
+
+  # 모듈 지도 완전 동일 복제 (2026-08-25 신설, §3.2)
+  local map0_s="" map0_e="" mapz_s="" mapz_e="" map0 mapz
+  while IFS=$'\t' read -r hs he htitle; do
+    case "$htitle" in
+      0.*"이 모듈 지도"*) [[ -z "$map0_s" ]] && { map0_s="$hs"; map0_e="$he"; } ;;
+    esac
+    case "$htitle" in
+      *"한 장 정리"*) [[ -z "$mapz_s" ]] && { mapz_s="$hs"; mapz_e="$he"; } ;;
+    esac
+  done < <(h2_blocks "$f")
+  if [[ -n "$map0_s" && -n "$mapz_s" ]]; then
+    map0=$(first_mermaid_body "$f" "$map0_s" "$map0_e")
+    mapz=$(first_mermaid_body "$f" "$mapz_s" "$mapz_e")
+    # 한쪽에 Mermaid가 없으면 위의 개수 검사가 이미 잡으므로 건너뜁니다
+    if [[ -n "$map0" && -n "$mapz" ]]; then
+      if [[ "$map0" == "$mapz" ]]; then
+        c_warn "§0과 「한 장 정리」의 모듈 지도가 완전 동일 복제 — §3.2: 진행 표시나 절별 한 줄 요약 라벨을 더해 다른 정보를 주게 하세요"
+      else
+        c_pass "「한 장 정리」 모듈 지도가 §0과 다름"
+      fi
+    fi
+  fi
+
+  # 이미지 파일 존재 (§3.2: 파일은 img/{module-id}-{slug}.svg, 참조는 ../../img/)
+  local img_n=0 img_bad=0 img_msg="" iln ipath icand
+  while IFS=$'\t' read -r iln ipath; do
+    [[ -z "$iln" ]] && continue
+    img_n=$((img_n+1))
+    if [[ "$ipath" == /* ]]; then icand=".${ipath}"; else icand="$(dirname "$f")/${ipath}"; fi
+    if [[ ! -f "$icand" ]]; then
+      img_bad=$((img_bad+1))
+      [[ "$img_bad" -le 5 ]] && img_msg+="L${iln}  ${ipath}"$'\n'
+    fi
+  done < <(printf '%s\n' "$vis" | awk -F'\t' '$1=="IMG"{print $2"\t"$3}')
+  if [[ "$img_n" -gt 0 ]]; then
+    if [[ "$img_bad" -eq 0 ]]; then
+      c_pass "이미지 참조 ${img_n}개가 모두 실재"
+    else
+      c_fail "없는 이미지 파일 ${img_bad}/${img_n}개 — §3.2: 파일은 img/{module-id}-{slug}.svg, 참조는 ../../img/"
+      while IFS= read -r dline; do
+        [[ -n "$dline" ]] && printf '        %s\n' "$dline"
+      done <<< "$img_msg"
+      [[ "$img_bad" -gt 5 ]] && printf '        %s\n' "... 외 $((img_bad-5))개"
+    fi
+  fi
 
   # ── E. 이해 사다리 §3.9 ────────────────────────────────────
   printf '\n  \033[1mE. 이해 사다리 (§3.9)\033[0m\n'
