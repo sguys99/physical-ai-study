@@ -585,6 +585,190 @@ print(prose.count('—'), prose.count('·'))
 PY
 }
 
+# ── 워크드 예제 스캔 (H군) ───────────────────────────────────────
+# 번호 붙은 본문 대절 중 **수식이나 계산이 나오는 절**만 골라
+# '시작줄<TAB>제목<TAB>워크드예제줄(없으면 0)'을 출력합니다.
+#
+# §3.11: **수식이나 계산이 나오는 절마다 워크드 예제 최소 1개.** 실제 숫자를 대입해
+# 손으로 따라가는 예제이고, 계산을 practice/*.py로 외주하지 않습니다. 실습 코드는
+# **검산용**이지 최초 이해용이 아닙니다(W1-M1 실측 0개, §9.19).
+#
+# 판정 둘을 여기서 정해둡니다.
+#  - **수식 절**은 `$$` display 블록이 있거나 인라인 수식이 **2개 이상**인 절입니다.
+#    인라인 1개는 기호 하나를 스쳐 언급한 것일 수 있어 계산 절로 보지 않습니다
+#  - **워크드 예제**는 lesson-template.md가 정한 `**숫자를 넣어봅니다.**`가 1순위이고,
+#    문구가 조금 달라질 수 있어 굵은 리드 줄에 `숫자를 넣어`·`숫자를 대입`·`손으로 따라`가
+#    들어간 것도 인정합니다
+#
+# 코드펜스 안은 수식으로도 예제로도 세지 않습니다. bash의 `$VAR`가 인라인 수식으로 잡힙니다.
+worked_example_scan() {
+  python3 - "$1" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+
+INL  = re.compile(r'(?<!\$)\$[^$\n]+\$(?!\$)')
+LEAD = re.compile(r'\*\*[^*\n]*(?:숫자를 넣어|숫자를 대입|손으로 따라)[^*\n]*\*\*')
+
+heads, skip, fence = [], [True] * (len(lines) + 2), False
+for i, l in enumerate(lines, 1):
+    if l.lstrip().startswith('```'):
+        fence = not fence
+        skip[i] = True
+        continue
+    skip[i] = fence
+    if not fence and l.startswith('## '):
+        heads.append((i, l[3:].strip()))
+
+for k, (start, title) in enumerate(heads):
+    end = heads[k + 1][0] - 1 if k + 1 < len(heads) else len(lines)
+    if not re.match(r'^[0-9]+\.', title):
+        continue
+    disp = inl = ex = 0
+    for i in range(start, end + 1):
+        if skip[i]:
+            continue
+        l = lines[i - 1]
+        disp += l.count('$$')
+        inl += len(INL.findall(l))
+        if not ex and LEAD.search(l):
+            ex = i
+    if disp or inl >= 2:
+        print("%d\t%s\t%d" % (start, title, ex))
+PY
+}
+
+# ── 퀴즈 3단 라벨 · 명령형 문항 스캔 (H군) ───────────────────────
+# 퀴즈 대절 구간(시작줄, 끝줄) 안을 훑어 두 가지를 뽑습니다.
+#   LABEL<TAB>라벨            찾은 3단 난이도 구간 라벨
+#   IMP<TAB>줄번호<TAB>줄내용   명령형 종결이 있는 줄
+#
+# §3.11: 10문항을 전부 서술형 고난도로 내지 않습니다. 기억 확인 1~4, 적용 5~8, 종합 9~10이고
+# 문항은 **평서형 질문**으로 씁니다(`계산하라`가 아니라 `계산해보세요`).
+#
+# 라벨은 `**기억 확인** (한 줄로 답이 나오는 것)` 형태를 기본으로 보되 소제목(`### 적용`)과
+# 굵게 없는 줄머리도 받습니다. 낱말 경계를 요구하므로 문항 안의 `적용해보면`은 잡히지 않습니다.
+# 명령형은 `하라`·`쓰라`·`시오`가 **종결 자리**에 왔을 때만 셉니다. `~하라고`, `~하라는`처럼
+# 뒤에 글자가 이어지면 인용이나 연결이지 명령이 아닙니다.
+quiz_scan() {
+  python3 - "$1" "$2" "$3" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+s, e = int(sys.argv[2]), min(int(sys.argv[3]), len(lines))
+
+LABEL = re.compile(r'^(?:#{3,6}\s*)?\*{0,2}\s*(기억 확인|적용|종합)\b')
+IMP   = re.compile(r'(?:하라|쓰라|시오)(?=[.!?)\]]|\s|$)')
+
+found, fence = set(), False
+for i in range(s, e + 1):
+    t = lines[i - 1].strip()
+    if t.startswith('```'):
+        fence = not fence
+        continue
+    if fence:
+        continue
+    m = LABEL.match(t)
+    if m:
+        found.add(m.group(1))
+    if IMP.search(t):
+        print("IMP\t%d\t%s" % (i, t[:100]))
+for w in ('기억 확인', '적용', '종합'):
+    if w in found:
+        print("LABEL\t%s" % w)
+PY
+}
+
+# ── 합니다체가 아닌 종결 스캔 (H군) ──────────────────────────────
+# '줄번호<TAB>종류<TAB>문맥'을 출력합니다. 종류는 `다` 또는 명사형 종결의 마지막 글자입니다.
+#
+# §3.11: **본문, `📌` 박스, 「한 장 정리」 표, 퀴즈를 전부 합니다체로 씁니다.** W1-M1은
+# 본문이 합니다체인데 📌 박스 8개가 음슴체(`재발견이고 바뀌었다`)이고 퀴즈가 명령형이라
+# 한 문서 안에서 세 목소리가 났습니다(§9.19).
+#
+# ⚠️ **한국어 종결 판정은 오탐이 나기 쉬워 범위를 좁게 잡았습니다.** 7개 lesson 실측으로
+#    표본 30건과 명사형 전수 13건을 눈으로 확인해 오탐 0건이 되도록 다음을 정했습니다.
+#  - **연결어미는 종결이 아닙니다.** `~다는 것`, `~다고`, `~다면`, `~다가`처럼 `다` 뒤에
+#    글자가 이어지면 세지 않습니다. `다`가 문장부호나 줄 끝에 닿을 때만 종결로 봅니다
+#  - **`니다`와 `시다`는 합니다체**라 제외합니다. `합니다`·`습니다`·`입니다`가 앞이고,
+#    `~라고 합시다`·`~해봅시다`처럼 합니다체와 짝을 이루는 청유형이 뒤입니다.
+#    §3.11의 워크드 예제 예시문 자체가 `~든다고 합시다.`로 끝납니다
+#  - **헤딩은 대상이 아닙니다.** §3.11이 든 자리는 본문과 📌 박스와 표와 퀴즈이고, 절 제목은
+#    한국어 문서에서 명사형이나 평서형으로 씁니다. 넣으면 7개 파일에서 22건이 전부 오탐이었습니다
+#  - **표 셀은 대상입니다.** §3.11이 「한 장 정리」 표를 명시했습니다. 표 행은 셀 단위로 봅니다
+#  - **명사형(`음`·`함`·`임`·`됨`·`옴`)은 흔한 명사를 걸러냅니다.** `묶음`, `프레임`, `없음`처럼
+#    종결어미가 아닌 낱말이 표 셀에 자주 나옵니다. 12자 미만 짧은 셀은 문장이 아니라 라벨입니다.
+#    거르지 않으면 이 갈래만 오탐률이 절반을 넘었습니다
+#  - frontmatter, 코드펜스, `$$` 블록, 인라인 수식, 링크, 인용부호 안, 「출처」 절은 제외합니다
+style_scan() {
+  python3 - "$1" <<'PY'
+import re, sys
+
+INLINE_CODE = re.compile(r'`[^`\n]*`')
+MDLINK      = re.compile(r'!?\[[^\]]*\]\([^)\n]*\)')
+URL         = re.compile(r'https?://\S+')
+HTML        = re.compile(r'<[^>\n]*>')
+MATH        = re.compile(r'(?<!\$)\$[^$\n]+\$(?!\$)')
+QUOTE       = re.compile(r'"[^"\n]*"|“[^”\n]*”|‘[^’\n]*’'
+                         r'|「[^」\n]*」|『[^』\n]*』'
+                         r"|'[^'\n]*'")
+SEP         = re.compile(r'^\|(\s*:?-+:?\s*\|)+$')
+
+PLAIN = re.compile(r'(?<![니시])다(?=[.!?]|$)')
+NOUN  = re.compile(r'([가-힣]+[음함임됨옴])(?=[.!?]|$)')
+
+# 종결어미가 아니라 명사인 낱말 (실측 오탐 + 흔한 기술 용어)
+STOP = set('''
+묶음 모음 프레임 키프레임 처음 다음 마음 잡음 소음 게임 타임 이음 얼음 자음 모임
+웃음 죽음 믿음 알림 구름 이름 저음 고음 화음 발음 녹음 방음 도움 싸움 물음 걸음 흐름
+없음 있음 낮음 높음 짧음 적음 많음 작음 섞임 담음 쓰임
+'''.split())
+
+def clean(t):
+    for rx in (INLINE_CODE, MDLINK, URL, HTML, MATH, QUOTE):
+        t = rx.sub(' ', t)
+    return re.sub(r'[*_~\s]+$', '', t.rstrip())
+
+def segments(s):
+    """표 행은 셀 단위로, 나머지는 줄 전체를 하나의 구간으로"""
+    if s.startswith('|'):
+        return [c.strip() for c in re.split(r'(?<!\\)\|', s) if c.strip()]
+    return [s]
+
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+fence = fm = disp = src = False
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True; continue
+    if fm:
+        if s == '---': fm = False
+        continue
+    if s.startswith('```'):
+        fence = not fence; continue
+    if fence:
+        continue
+    if disp:
+        if s.count('$$') % 2 == 1: disp = False
+        continue
+    if s.startswith('$$'):
+        if s.count('$$') % 2 == 1: disp = True
+        continue
+    if s.startswith('#'):
+        if s.startswith('## '): src = ('출처' in s)
+        continue                       # 헤딩은 대상이 아닙니다
+    if src or SEP.match(s):
+        continue
+    for seg in segments(s):
+        c = clean(seg)
+        for m in PLAIN.finditer(c):
+            print("%d\t다\t%s" % (i, c[max(0, m.start() - 34):m.end() + 1]))
+        for m in NOUN.finditer(c):
+            w = m.group(1)
+            if w in STOP or w[-2:] in STOP or len(c) < 12:
+                continue
+            print("%d\t%s\t%s" % (i, w[-1], c[max(0, m.start() - 34):m.end() + 1]))
+PY
+}
+
 # ── eli5.md 단일 훑기 (I군 전용) ─────────────────────────────────
 # 한 번의 훑기로 일곱 가지를 뽑습니다. 레코드는 종류로 시작합니다.
 #   FIRST<TAB>줄번호<TAB>줄내용            첫 비어있지 않은 줄
@@ -706,6 +890,11 @@ lint_one() {
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
 
   if [[ ! -f "$f" ]]; then c_fail "파일이 없습니다"; return; fi
+
+  # 빈 파일 가드 — prose_metrics()가 0바이트 파일에서 ZeroDivisionError를 냅니다.
+  # prose_metrics()는 §9.6 실측값·회귀식과의 비교 가능성 때문에 한 글자도 고치지 않으므로
+  # 호출 쪽에서 막습니다. I군의 eli5.md 호출부에도 같은 가드가 있습니다
+  if [[ ! -s "$f" ]]; then c_fail "파일이 비어 있습니다 (0바이트)"; return; fi
 
   local tier prose total protect
   tier=$(awk 'NR<=20 && /^tier:/ {print $2; exit}' "$f")
@@ -1286,6 +1475,115 @@ lint_one() {
     [[ -f "$(dirname "$f")/deep-dive.md" ]] \
       && c_pass "deep-dive.md 링크와 파일이 모두 존재" \
       || c_fail "deep-dive.md를 링크했으나 파일이 없습니다"
+  fi
+
+  # ── H. 독자를 데려가는 장치 §3.11 ──────────────────────────
+  # §3.11은 2026-08-25에 신설됐는데 집필 도구 3종(pai-agent.md, lesson-template.md,
+  # authoring-checklist.md C6군)에만 반영되고 lint에는 빠져 있었습니다. 워크드 예제 0개와
+  # 음슴체 혼용이 2차 피드백의 진단 항목이라(§9.19) 육안 검사에만 맡기지 않습니다.
+  printf '\n  \033[1mH. 독자를 데려가는 장치 (§3.11)\033[0m\n'
+
+  # 워크드 예제 — 수식이나 계산이 나오는 절마다 최소 1개 (FAIL)
+  local we_n=0 we_bad=0 we_msg="" hline wln wtitle wex
+  while IFS=$'\t' read -r wln wtitle wex; do
+    [[ -z "$wln" ]] && continue
+    we_n=$((we_n+1))
+    if [[ "$wex" -eq 0 ]]; then
+      we_bad=$((we_bad+1))
+      [[ "$we_bad" -le 5 ]] && we_msg+="L${wln}  「${wtitle}」"$'\n'
+    fi
+  done < <(worked_example_scan "$f")
+
+  if [[ "$we_n" -eq 0 ]]; then
+    c_info "수식이나 계산이 나오는 대절이 없어 워크드 예제 검사를 건너뜁니다"
+  elif [[ "$we_bad" -eq 0 ]]; then
+    c_pass "워크드 예제가 수식 절 ${we_n}개에 모두 있음"
+  else
+    c_fail "워크드 예제 없는 수식 절 ${we_bad}/${we_n}개 — §3.11: 실제 숫자를 대입해 손으로 따라가는 예제를 답니다. 계산을 practice/*.py로 외주하지 마세요(실습 코드는 검산용입니다). 리드는 '**숫자를 넣어봅니다.**'"
+    while IFS= read -r hline; do
+      [[ -n "$hline" ]] && printf '        %s\n' "$hline"
+    done <<< "$we_msg"
+    [[ "$we_bad" -gt 5 ]] && printf '        %s\n' "... 외 $((we_bad-5))개"
+  fi
+
+  # 「여기서 많이 헷갈립니다」 박스 (WARN)
+  # 절마다 강제하지 않습니다. 오해가 없는 절도 있어서, 문서 전체에 하나도 없을 때만 봅니다
+  local cfz_n
+  cfz_n=$(awk '
+    /^[[:space:]]*```/ { fence = !fence; next }
+    fence { next }
+    /여기서 많이 헷갈립니다/ { n++ }
+    END { print n+0 }' "$f")
+  if [[ "$cfz_n" -gt 0 ]]; then
+    c_pass "「여기서 많이 헷갈립니다」 박스 ${cfz_n}개"
+  else
+    c_warn "「여기서 많이 헷갈립니다」 박스가 하나도 없습니다 — §3.11: 「흔한 오해」는 문서 끝이라 정작 헷갈리는 자리에서 도움이 되지 않습니다. 오해가 생기기 쉬운 그 자리에 '> ⚠️ **여기서 많이 헷갈립니다**'를 다세요"
+  fi
+
+  # 퀴즈 대절과 「한 장 정리」 대절 구간을 한 번에 잡습니다
+  local qz_s="" qz_e="" wrap_s="" wrap_e=""
+  while IFS=$'\t' read -r hs he htitle; do
+    case "$htitle" in
+      *"셀프 체크"*|*"퀴즈"*) [[ -z "$qz_s" ]] && { qz_s="$hs"; qz_e="$he"; } ;;
+    esac
+    case "$htitle" in
+      *"한 장 정리"*) [[ -z "$wrap_s" ]] && { wrap_s="$hs"; wrap_e="$he"; } ;;
+    esac
+  done < <(h2_blocks "$f")
+
+  # 퀴즈 3단 난이도 (WARN) · 명령형 문항 (WARN)
+  # 퀴즈 절 자체가 없으면 B군이 이미 FAIL을 내므로 여기서는 건너뜁니다
+  if [[ -z "$qz_s" ]]; then
+    c_info "셀프 체크 퀴즈 절이 없어 3단 난이도와 문항 형식 검사를 건너뜁니다 (B군이 이미 FAIL)"
+  else
+    local qz_out qz_missing="" qz_imp_n qz_imp_msg qlbl
+    qz_out=$(quiz_scan "$f" "$qz_s" "$qz_e")
+    for qlbl in "기억 확인" "적용" "종합"; do
+      printf '%s\n' "$qz_out" \
+        | awk -F'\t' -v w="$qlbl" '$1=="LABEL" && $2==w {f=1} END{exit !f}' \
+        || qz_missing="${qz_missing} 「${qlbl}」"
+    done
+    if [[ -z "$qz_missing" ]]; then
+      c_pass "퀴즈 3단 난이도 라벨 완비 (기억 확인, 적용, 종합)"
+    else
+      c_warn "퀴즈 난이도 구간 라벨 누락:${qz_missing} — §3.11: 10문항을 전부 서술형 고난도로 내지 않습니다. 기억 확인 1~4, 적용 5~8, 종합 9~10으로 나누세요"
+    fi
+
+    qz_imp_msg=$(printf '%s\n' "$qz_out" | awk -F'\t' '$1=="IMP"{printf "L%s  %s\n", $2, $3}')
+    qz_imp_n=$(printf '%s\n' "$qz_imp_msg" | awk 'NF{n++} END{print n+0}')
+    if [[ "$qz_imp_n" -eq 0 ]]; then
+      c_pass "퀴즈 문항이 모두 평서형"
+    else
+      c_warn "명령형 퀴즈 문항 ${qz_imp_n}건 — §3.11: 문항은 평서형 질문으로 씁니다. '계산하라'가 아니라 '계산해보세요'"
+      printf '%s\n' "$qz_imp_msg" | show_hits 3 "$qz_imp_n"
+    fi
+  fi
+
+  # 자기 설명 프롬프트 (WARN) — 「한 장 정리」에 능동 회상 장치 1개
+  if [[ -z "$wrap_s" ]]; then
+    c_info "「한 장 정리」 절이 없어 자기 설명 프롬프트 검사를 건너뜁니다 (B군이 이미 FAIL)"
+  else
+    local recall_ln
+    recall_ln=$(awk -v s="$wrap_s" -v e="$wrap_e" '
+      NR>=s && NR<=e && /말해보/ && (/덮고/ || /보지 않고/) { print NR; exit }' "$f")
+    if [[ -n "$recall_ln" ]]; then
+      c_pass "자기 설명 프롬프트 있음 (L${recall_ln})"
+    else
+      c_warn "「한 장 정리」에 자기 설명 프롬프트가 없습니다 — §3.11: 능동 회상 장치를 1개 둡니다. '**덮고 말해보세요.** 이 그림을 보지 않고 ...를 순서대로 말해보세요'"
+    fi
+  fi
+
+  # 문체 통일 (FAIL) — 본문·📌 박스·「한 장 정리」 표·퀴즈를 전부 합니다체로
+  # 판정 등급 근거: 7개 lesson 실측 438건에서 표본 30건과 명사형 전수 13건을 눈으로 확인해
+  # 오탐 0건이었습니다. 헤딩 제외와 명사 스톱리스트가 오탐 갈래 둘을 걷어낸 결과입니다
+  local st_n st_msg
+  st_msg=$(style_scan "$f" | awk -F'\t' '{printf "L%s  [%s] %s\n", $1, $2, $3}')
+  st_n=$(printf '%s\n' "$st_msg" | awk 'NF{n++} END{print n+0}')
+  if [[ "$st_n" -eq 0 ]]; then
+    c_pass "문체가 합니다체로 통일됨"
+  else
+    c_fail "합니다체가 아닌 종결 ${st_n}곳 — §3.11: 본문, 📌 박스, 「한 장 정리」 표, 퀴즈를 전부 합니다체로 씁니다. W1-M1은 본문이 합니다체인데 📌 박스가 음슴체라 한 문서 안에서 세 목소리가 났습니다"
+    printf '%s\n' "$st_msg" | show_hits 5 "$st_n"
   fi
 
   # ── I. 3층 문서 §2.1 ───────────────────────────────────────
