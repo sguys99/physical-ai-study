@@ -281,6 +281,132 @@ print('\n'.join(body))
 PY
 }
 
+# ── 설명 회피 · 「이미 안다」 문장 스캔 ───────────────────────────
+# '줄번호<TAB>줄내용'을 출력합니다. **코드펜스 안은 제외**합니다. 골격 템플릿이나
+# 예시 인용을 코드블록에 담은 문서에서 오탐이 나기 때문입니다(§3.9 예시 박스 자체가
+# 코드펜스로 적혀 있습니다).
+#
+# §3.9 「수반 규칙」 두 항을 함께 봅니다.
+#  - **"당신은 이미 안다" 류 문장 금지.** W1-M1 헤딩 「당신은 이미 이 구조를 알고 있다」(L85)가
+#    대표 사례입니다. `이미 아실`, `익숙하실`, `아실 겁니다`도 같습니다
+#  - **설명 회피 문장 금지.** 생략할 거면 대신 링크를 주세요
+dodge_scan() {
+  python3 - "$1" <<'PY'
+import re, sys
+
+# 설명 회피 (2026-08-09 이래의 기존 패턴, 하나도 빼지 않았습니다)
+DODGE = [
+    r'설명이 필요 없',
+    r'이미 아는 것으로 전제',
+    r'아는 것으로 보고 (넘어|건너)',
+    r'배경이면 이 (식|부분)은',
+    r'생략합니다\.$',
+]
+# "당신은 이미 안다" 류 (2026-08-25 §3.9 수반 규칙에서 추가)
+ALREADY_KNOW = [
+    r'당신은 이미',
+    r'이미 .{0,10}알고 있',
+    r'이미 아실',
+    r'아실 겁니다',
+    r'아실 것입니다',
+    r'익숙하실',
+    r'익숙하다면',
+]
+rx = re.compile('|'.join(DODGE + ALREADY_KNOW))
+
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+fence = False
+for i, l in enumerate(lines, 1):
+    if l.strip().startswith('```'):
+        fence = not fence
+        continue
+    if fence:
+        continue
+    if rx.search(l.rstrip()):
+        print("%d\t%s" % (i, l.strip()))
+PY
+}
+
+# ── 용어표 「비유」 열 스캔 ───────────────────────────────────────
+# 표 **머리행**의 셀 중 「비유」를 포함하는 것이 있으면 '줄번호<TAB>머리행'을 출력합니다.
+# 머리행 판정은 **다음 줄이 구분행**(`|---|---|`)인 것으로 합니다. 본문 데이터 셀에
+# 「비유」라는 낱말이 들어간 것까지 잡으면 오탐이라, 머리행만 봅니다.
+#
+# §3.9: **용어표에 `제어·LLM 비유` 열을 두지 않습니다.** 이 열이 비유를 문서 아키텍처로
+# 승격시켰고, W1-M1 실측으로 비유 지점 50개 중 36개가 이 열이었습니다.
+# 2열 `| 용어 | 비유 |`도 같은 위반이라 열 수와 무관하게 잡습니다. C군의 「3열 이상
+# 용어표」와 겹칠 수 있는데, 규약을 둘 어긴 것이니 그대로 둡니다.
+analogy_col_rows() {
+  python3 - "$1" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+SEP = re.compile(r'^\|(\s*:?-+:?\s*\|)+$')
+fence = fm = False
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True; continue
+    if fm:
+        if s == '---': fm = False
+        continue
+    if s.startswith('```'):
+        fence = not fence; continue
+    if fence or not s.startswith('|'):
+        continue
+    nxt = lines[i].strip() if i < len(lines) else ''
+    if not SEP.match(nxt):          # 다음 줄이 구분행이 아니면 머리행이 아닙니다
+        continue
+    cells = re.split(r'(?<!\\)\|', s)
+    if cells and not cells[0].strip():  cells = cells[1:]
+    if cells and not cells[-1].strip(): cells = cells[:-1]
+    if any('비유' in c for c in cells):
+        print("%d\t%s" % (i, s))
+PY
+}
+
+# ── frontmatter prereq 항목 ──────────────────────────────────────
+# prereq 값의 항목을 한 줄에 하나씩 출력합니다. 값이 비었으면 아무것도 출력하지 않습니다.
+# 인라인 목록 `prereq: [W1-M1, W1-M5]`와 블록 목록(`prereq:` 다음 줄부터 `- W1-M1`)을
+# 둘 다 읽습니다.
+#
+# §3.9: **`prereq`와 「선수 지식」이 단일 전제와 일치해야 합니다. 앞 모듈에서 배운 것만
+# `prereq`에 올립니다.** 제어공학과 생성모델 내부 기제와 로봇 개념은 이제 **가르쳐야 할
+# 대상**이지 선수 지식이 아닙니다.
+prereq_items() {
+  python3 - "$1" <<'PY'
+import re, sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+if not lines or lines[0].strip() != '---':
+    sys.exit(0)
+fm = []
+for l in lines[1:]:
+    if l.strip() == '---':
+        break
+    fm.append(l)
+items, i = [], 0
+while i < len(fm):
+    m = re.match(r'^prereq:\s*(.*)$', fm[i])
+    if not m:
+        i += 1; continue
+    val = m.group(1).strip()
+    if val.startswith('['):
+        inner = val[1:val.rindex(']')] if ']' in val else val[1:]
+        items = [x.strip() for x in inner.split(',')]
+    elif val:
+        items = [val]
+    else:                            # 블록 목록
+        j = i + 1
+        while j < len(fm) and re.match(r'^\s*-\s+', fm[j]):
+            items.append(re.sub(r'^\s*-\s+', '', fm[j]).strip())
+            j += 1
+    break
+for it in items:
+    it = it.strip().strip('\'"').strip()
+    if it:
+        print(it)
+PY
+}
+
 lint_one() {
   local f="$1"
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
@@ -635,22 +761,97 @@ lint_one() {
     fi
   fi
 
-  # ── E. 이해 사다리 §3.9 ────────────────────────────────────
-  printf '\n  \033[1mE. 이해 사다리 (§3.9)\033[0m\n'
-  local dodge
-  dodge=$(grep -nE '(설명이 필요 없|이미 아는 것으로 전제|아는 것으로 보고 (넘어|건너)|배경이면 이 (식|부분)은|생략합니다\.$)' "$f" | head -5)
-  if [[ -z "$dodge" ]]; then
-    c_pass "설명 회피 문장 없음"
+  # ── E. 학습자 전제와 비유 §3.9 ─────────────────────────────
+  # 「이해 사다리」는 2026-08-25에 폐기됐습니다(§9.19). 영역별 난이도 차등이
+  # 2차 불만의 직접 원인이었고, §3.9는 「단일 전제」로 전면 재작성됐습니다.
+  printf '\n  \033[1mE. 학습자 전제와 비유 (§3.9)\033[0m\n'
+
+  # 설명 회피 · 「이미 안다」 문장 (2026-08-25 확장, §3.9 수반 규칙)
+  local dodge_n=0 dodge_msg="" eline dln dtxt
+  while IFS=$'\t' read -r dln dtxt; do
+    [[ -z "$dln" ]] && continue
+    dodge_n=$((dodge_n+1))
+    [[ "$dodge_n" -le 5 ]] && dodge_msg+="L${dln}  ${dtxt}"$'\n'
+  done < <(dodge_scan "$f")
+
+  if [[ "$dodge_n" -eq 0 ]]; then
+    c_pass "설명 회피·「이미 안다」 문장 없음"
   else
-    c_fail "설명 회피 문장 발견 — 생략할 거면 대신 링크를 주세요:"
-    printf '        %s\n' "$dodge" | head -5
+    c_fail "설명 회피·「이미 안다」 문장 ${dodge_n}건 — §3.9: 안다고 가정하는 것은 ML/DL 기본, LLM 기본, Agent·RAG 실무 셋뿐입니다. 경력을 근거로 설명을 건너뛸 수 없습니다. 생략할 거면 대신 링크를 주세요:"
+    while IFS= read -r eline; do
+      [[ -n "$eline" ]] && printf '        %s\n' "$eline"
+    done <<< "$dodge_msg"
+    [[ "$dodge_n" -gt 5 ]] && printf '        %s\n' "... 외 $((dodge_n-5))개"
   fi
 
-  # 선수 지식이 '없음'인데 제어/ML 개념을 앵커로 쓰는지
-  if grep -qE '선수 지식.*없음' "$f" && grep -qE '(cascade|캐스케이드|MPC|상태공간|제어 배경)' "$f"; then
-    c_fail "「선수 지식: 없음」인데 제어 개념을 가정하고 있습니다 — 무엇을 가정하는지 명시하세요"
+  # 용어표 「비유」 열 (2026-08-25 신설, §3.9)
+  local anlg_n=0 anlg_msg="" aln atxt
+  while IFS=$'\t' read -r aln atxt; do
+    [[ -z "$aln" ]] && continue
+    anlg_n=$((anlg_n+1))
+    [[ "$anlg_n" -le 3 ]] && anlg_msg+="L${aln}  ${atxt}"$'\n'
+  done < <(analogy_col_rows "$f")
+
+  if [[ "$anlg_n" -eq 0 ]]; then
+    c_pass "용어표에 「비유」 열 없음"
   else
-    c_pass "선수 지식 표기와 실제 가정이 모순되지 않음"
+    c_fail "용어표 「비유」 열 ${anlg_n}개 — §3.9: 이 열이 비유를 문서 아키텍처로 승격시켰습니다(W1-M1 비유 지점 50개 중 36개). 열을 걷고 비유가 꼭 필요하면 절 끝 💡 <details> 박스 하나로 옮기세요:"
+    while IFS= read -r eline; do
+      [[ -n "$eline" ]] && printf '        %s\n' "$eline"
+    done <<< "$anlg_msg"
+    [[ "$anlg_n" -gt 3 ]] && printf '        %s\n' "... 외 $((anlg_n-3))개"
+  fi
+
+  # prereq 항목 (2026-08-25 신설, §3.9. 폐기된 「선수 지식 없음 + 제어 개념」 검사를 대체)
+  # 새 §3.9에서 제어 개념은 **가르치는 대상**입니다. 선수 지식이 비어 있는데 본문에
+  # 캐스케이드 제어가 나오는 것은 정상이고, 오히려 prereq에 올리는 쪽이 위반입니다.
+  local pre_n=0 pre_bad=0 pre_list="" pitem
+  while IFS= read -r pitem; do
+    [[ -z "$pitem" ]] && continue
+    pre_n=$((pre_n+1))
+    if [[ ! "$pitem" =~ ^W[0-9]+-M[0-9]+$ ]]; then
+      pre_bad=$((pre_bad+1)); pre_list="$pre_list ${pitem}"
+    fi
+  done < <(prereq_items "$f")
+
+  if [[ "$pre_bad" -eq 0 ]]; then
+    c_pass "prereq ${pre_n}개가 모두 모듈 ID"
+  else
+    c_fail "모듈 ID가 아닌 prereq ${pre_bad}/${pre_n}개:${pre_list}  → §3.9: prereq에는 앞 모듈에서 배운 것만 올립니다. 제어나 생성모델 내부 기제나 로봇 개념을 선수 지식으로 요구할 수 없습니다"
+  fi
+
+  # 비유 박스 절당 최대 1개 (2026-08-25 신설, §3.9)
+  # 💡 <summary>를 단 <details>를 비유 박스로 봅니다. 여러 개가 필요하면
+  # 그 절의 본문 설명이 부족하다는 뜻입니다.
+  local box_all=0 box_nw=0 box_msg="" nbox
+  box_all=$(awk '
+    /^[[:space:]]*```/ { fence = !fence; next }
+    fence { next }
+    /<summary>/ && /💡/ { n++ }
+    END { print n+0 }' "$f")
+  while IFS=$'\t' read -r hs he htitle; do
+    [[ "$htitle" =~ ^[0-9]+\. ]] || continue
+    nbox=$(awk -v s="$hs" -v e="$he" '
+      /^[[:space:]]*```/ { fence = !fence; next }
+      fence { next }
+      NR>=s && NR<=e && /<summary>/ && /💡/ { n++ }
+      END { print n+0 }' "$f")
+    if [[ "$nbox" -ge 2 ]]; then
+      box_nw=$((box_nw+1))
+      [[ "$box_nw" -le 3 ]] && box_msg+="L${hs}  「${htitle}」 비유 박스 ${nbox}개"$'\n'
+    fi
+  done < <(h2_blocks "$f")
+
+  if [[ "$box_all" -eq 0 ]]; then
+    c_info "💡 비유 박스가 없습니다 (§3.9: 본문은 비유 없이 완결되는 것이 기본)"
+  elif [[ "$box_nw" -eq 0 ]]; then
+    c_pass "비유 박스 ${box_all}개, 절당 1개 이하"
+  else
+    c_warn "비유 박스가 2개 이상인 대절 ${box_nw}개 — §3.9: 비유 박스는 절당 최대 1개입니다. 여러 개가 필요하면 그 절의 본문 설명이 부족하다는 뜻입니다"
+    while IFS= read -r eline; do
+      [[ -n "$eline" ]] && printf '        %s\n' "$eline"
+    done <<< "$box_msg"
+    [[ "$box_nw" -gt 3 ]] && printf '        %s\n' "... 외 $((box_nw-3))개"
   fi
 
   # ── F. 분량 §4 ─────────────────────────────────────────────
