@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # lint-lesson.sh — lesson.md 집필 규약 검사
 #
-# SSOT: docs/course-plan.md §3.1 frontmatter · §3.2 시각자료 · §3.7 문서 구조
-#       §3.8 용어 도입 · §3.9 이해 사다리 · §3.10 문장부호 · §4 분량
+# SSOT: docs/course-plan.md §2.1 3층 문서 · §3.1 frontmatter · §3.2 시각자료
+#       §3.7 문서 구조 · §3.8 용어 도입 · §3.9 학습자 전제와 비유
+#       §3.10 문장부호 · §3.11 독자를 데려가는 장치 · §4 분량
 # 근거: docs/course-plan.md §9.11 (2026-08-09 규약 개정)
+#       docs/course-plan.md §9.19 (2026-08-25 규약 2차 개정)
 #
 # 사용법:
 #   bash scripts/lint-lesson.sh course/w1-generative-core/01-physical-ai-landscape/lesson.md
@@ -46,6 +48,31 @@ print(f"{prose} {total} {round(100*(struct+inline)/total)}")
 PY
 }
 
+# ── H2 대절 블록 분할 ────────────────────────────────────────────
+# 각 H2 대절을 '시작줄<TAB>끝줄<TAB>제목' 한 줄로 출력합니다.
+# 시작줄은 H2 헤딩 줄(1-indexed), 끝줄은 다음 H2 직전 줄 또는 파일 끝입니다.
+#
+# 코드펜스(```) 안의 '## '는 헤딩으로 세지 않습니다. 골격을 코드블록에 담은
+# 문서(docs/course-plan.md §3.7)가 있고 lesson.md도 앞으로 그럴 수 있습니다.
+#
+# 이 헬퍼는 B군·C군·H군이 공유합니다.
+h2_blocks() {
+  python3 - "$1" <<'PY'
+import sys
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+heads, fence = [], False
+for i, l in enumerate(lines, 1):
+    if l.lstrip().startswith('```'):
+        fence = not fence
+        continue
+    if not fence and l.startswith('## '):
+        heads.append((i, l[3:].strip()))
+for k, (start, title) in enumerate(heads):
+    end = heads[k + 1][0] - 1 if k + 1 < len(heads) else len(lines)
+    print(f"{start}\t{end}\t{title}")
+PY
+}
+
 lint_one() {
   local f="$1"
   printf '\n\033[1m▐ %s\033[0m\n' "$f"
@@ -80,6 +107,66 @@ lint_one() {
   grep -q '<details>' "$f" \
     && c_pass "퀴즈 정답 <details> 접힘" || c_fail "퀴즈 정답이 <details> 안에 없음"
   grep -qE '^## .*출처' "$f" && c_pass "출처 존재" || c_fail "출처 섹션 없음"
+
+  # 도입 산문 — 대절 제목 다음 첫 요소는 산문 (2026-08-25 신설, §3.7)
+  # 대상은 번호 붙은 본문 대절만. 「흔한 오해」 「한 장 정리」 「출처」는 제외합니다
+  local intro_n=0 intro_ok=0 intro_nf=0 intro_nw=0
+  local intro_fail="" intro_warn="" intro_msg="" intro_line=""
+  local hs he htitle hln hfirst hkind
+  while IFS=$'\t' read -r hs he htitle; do
+    [[ "$htitle" =~ ^[0-9]+\. ]] || continue
+    intro_n=$((intro_n+1))
+    hln=""; hfirst=""; hkind=""
+    # 헤딩 다음 첫 비어있지 않은 줄 (줄 번호 + 내용, 들여쓰기는 벗겨짐)
+    read -r hln hfirst < <(awk -v s="$hs" -v e="$he" 'NR>s && NR<=e && NF {print NR, $0; exit}' "$f")
+    case "$hfirst" in
+      '```mermaid'*) hkind="Mermaid" ;;
+      '```'*)        hkind="코드펜스" ;;
+      '|'*)          hkind="표" ;;
+      '!['*)         hkind="이미지" ;;
+    esac
+    intro_msg="「${htitle}」 첫 요소가 ${hkind:-?}"
+    [[ -n "$hln" ]] && intro_msg="${intro_msg} (L${hln})"
+    if [[ -n "$hkind" ]]; then
+      intro_nf=$((intro_nf+1))
+      [[ "$intro_nf" -le 5 ]] && intro_fail+="L${hs}  ${intro_msg}"$'\n'
+      continue
+    fi
+    case "$hfirst" in
+      '- '*|'* '*) hkind="불릿" ;;
+      '> '*)       hkind="인용" ;;
+      '### '*)     hkind="소제목" ;;
+      '')          hkind="내용 없음" ;;
+    esac
+    if [[ -n "$hkind" ]]; then
+      intro_nw=$((intro_nw+1))
+      intro_msg="「${htitle}」 첫 요소가 ${hkind}"
+      [[ -n "$hln" ]] && intro_msg="${intro_msg} (L${hln})"
+      [[ "$intro_nw" -le 5 ]] && intro_warn+="L${hs}  ${intro_msg}"$'\n'
+    else
+      intro_ok=$((intro_ok+1))
+    fi
+  done < <(h2_blocks "$f")
+
+  if [[ "$intro_n" -gt 0 ]]; then
+    if [[ "$intro_nf" -eq 0 && "$intro_nw" -eq 0 ]]; then
+      c_pass "도입 산문 ${intro_ok}/${intro_n}개 대절 — 제목 다음 첫 요소가 모두 산문"
+    fi
+    if [[ "$intro_nf" -gt 0 ]]; then
+      c_fail "도입 산문 없는 대절 ${intro_nf}/${intro_n}개 — §3.7: 대절 제목 다음 첫 요소는 산문 3~5문장입니다 (앞 절 요약 / 안 풀린 것 / 이 절이 답할 것)"
+      while IFS= read -r intro_line; do
+        [[ -n "$intro_line" ]] && printf '        %s\n' "$intro_line"
+      done <<< "$intro_fail"
+      [[ "$intro_nf" -gt 5 ]] && printf '        %s\n' "... 외 $((intro_nf-5))개"
+    fi
+    if [[ "$intro_nw" -gt 0 ]]; then
+      c_warn "도입이 산문이 아닌 대절 ${intro_nw}/${intro_n}개 — §3.7: 불릿·인용·소제목보다 산문 3~5문장이 먼저입니다"
+      while IFS= read -r intro_line; do
+        [[ -n "$intro_line" ]] && printf '        %s\n' "$intro_line"
+      done <<< "$intro_warn"
+      [[ "$intro_nw" -gt 5 ]] && printf '        %s\n' "... 외 $((intro_nw-5))개"
+    fi
+  fi
 
   # 대절별 📌 정리 박스 — 본문 절만 대상(부록성 절은 제외)
   local body_h2 pin_cnt
