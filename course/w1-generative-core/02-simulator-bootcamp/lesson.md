@@ -437,7 +437,7 @@ f \;=\; \underbrace{k_p \cdot \texttt{ctrl}}_{\text{gain}} \;\underbrace{-\,k_p\
 \;=\; k_p\,(\texttt{ctrl} - q) \;-\; k_v\,\dot q
 $$
 
-`data.ctrl[i]`는 토크가 아니라 **목표 관절각[rad]**입니다. 목표각 오차에 비례한 힘에 속도 감쇠를 더하는 그 위치 서보이고, [W1-M1 §3.3](../01-physical-ai-landscape/lesson.md)의 L1 계층 $\tau = K_p(q_{des} - q) - K_d\dot q$와 같은 식입니다. 시뮬레이터가 온보드 서보를 이미 모사하고 있습니다.
+`data.ctrl[i]`는 토크가 아니라 **목표 관절각[rad]**입니다. 목표각 오차에 비례한 힘에 속도 감쇠를 더하는 그 위치 서보이고, [W1-M1 §3.1](../01-physical-ai-landscape/lesson.md)의 L1 계층 $\tau = K_p(q_{des} - q) - K_d\dot q$와 같은 식입니다. 시뮬레이터가 온보드 서보를 이미 모사하고 있습니다.
 
 `dampratio="1"`은 **임계감쇠**이고 MuJoCo는 $k_v = 2\zeta\sqrt{k_p M_{\text{eff}}}$ (eq. 2)로 `kv`를 관절마다 계산합니다. 아래는 실측과 역산 $M_{\text{eff}} = (k_v/2\zeta)^2 / k_p$입니다.
 
@@ -619,7 +619,7 @@ sequenceDiagram
     Note over P,M: 1 정책 스텝 = 20 ms = 물리 10 스텝 · 1 에피소드 1000 정책 스텝 = 20 s = 물리 10000 스텝
 ```
 
-[W1-M1 §3.3](../01-physical-ai-landscape/lesson.md)의 **전신제어 50~500 Hz 대역**입니다. 정책이 명령을 갱신하지 않는 10 스텝 동안에도 **물리는 계속 돕니다.** [W1-M1 §4](../01-physical-ai-landscape/lesson.md)의 action chunking 구조입니다.
+[W1-M1 §3.2](../01-physical-ai-landscape/lesson.md)의 **전신제어 50~500 Hz 대역**입니다. 정책이 명령을 갱신하지 않는 10 스텝 동안에도 **물리는 계속 돕니다.** [W1-M1 §4](../01-physical-ai-landscape/lesson.md)의 action chunking 구조입니다.
 
 ### 7.5 보상항 24개는 비용함수 설계다
 
@@ -760,7 +760,7 @@ flowchart LR
 
 5. `timestep` 0.002 → **0.004**, `iterations` 100 → **5**, `ls_iterations` 50 → **8**, `kp` 500 → **75**(발목과 손목 10개는 **20**), `kv` 관절별(43.01/15.85/…) → **2 고정**, `ngeom` 72 → **63**(콜리전 단순화), 키프레임 `['stand']` → `['home','knees_bent']`. 이유는 **GPU 병렬 처리량**이다. 총 비용 = 스텝당 비용 × 스텝 수이므로 둘 다 깎으면 학습이 크게 빨라지고 모델 오차는 도메인 랜더마이제이션이 흡수한다는 전제가 있다. 뻣뻣한 서보가 큰 `timestep`에서 발산하므로 게인도 함께 낮췄다고 읽는 것이 자연스럽다. **같은 로봇의 MJCF가 두 벌 존재하고 물리 파라미터가 다르다.** 학습 모델에서 된 정책이 검증 모델에서도 되는지 확인하는 것이 sim2sim이고 이 두 파일의 관계가 그 축소판이다.
 
-6. $f = k_p(\texttt{ctrl} - q) - k_v \dot q$ (`gainprm[0]=kp`, `biasprm=[0,-kp,-kv]`에서 나옴). **`ctrl`은 토크가 아니라 목표 관절각[rad]** 이다. 이는 W1-M1 §3.3 블록도의 **L1 하드웨어 계층**, 즉 온보드 위치 서보 $\tau = K_p(q_{des}-q) - K_d\dot q$와 같은 식이다. 시뮬레이터가 실기 온보드 서보를 이미 모사하고 있다.
+6. $f = k_p(\texttt{ctrl} - q) - k_v \dot q$ (`gainprm[0]=kp`, `biasprm=[0,-kp,-kv]`에서 나옴). **`ctrl`은 토크가 아니라 목표 관절각[rad]** 이다. 이는 W1-M1 §3.1 블록도의 **L1 하드웨어 계층**, 즉 온보드 위치 서보 $\tau = K_p(q_{des}-q) - K_d\dot q$와 같은 식이다. 시뮬레이터가 실기 온보드 서보를 이미 모사하고 있다.
 
 7. $k_v = 2\zeta\sqrt{k_p M_{\text{eff}}}$이고 $\zeta = 1$(임계감쇠)로 고정돼 있으므로, **관절마다 유효관성 $M_{\text{eff}}$가 다르면 `kv`도 달라진다.** 역산하면 $M_{\text{eff}} = (k_v/2\zeta)^2/k_p = (9.42912002/2)^2/500 = (4.71456)^2/500 = 22.227/500 \approx$ **0.044 kg·m²**. 참고로 `left_hip_pitch_joint`는 ≈0.925로 20배 이상 큰데, 몸 전체를 흔드는 관절과 아래팔만 흔드는 관절의 차이다. (이 값에는 `armature`가 포함돼 있다.)
 

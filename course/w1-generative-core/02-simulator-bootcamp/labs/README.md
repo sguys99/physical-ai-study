@@ -670,7 +670,7 @@ MUJOCO_GL=egl python 03_g1_sin_wave.py --joints legs        # ③ 넘어집니�
 ```
 
 `1e-13` 수준이면 통과입니다. **이 한 줄이 lesson §5.5의 $f = k_p(\texttt{ctrl} - q) - k_v\dot q$ 를 코드로 확인한 것**이고,
-그 식은 [W1-M1 §3.3](../../01-physical-ai-landscape/lesson.md)의 L1 계층 PD 서보와 글자 그대로 같은 식입니다.
+그 식은 [W1-M1 §3.1](../../01-physical-ai-landscape/lesson.md)의 L1 계층 PD 서보와 글자 그대로 같은 식입니다.
 
 **③ `--joints arms` — 넘어지지 않습니다.**
 

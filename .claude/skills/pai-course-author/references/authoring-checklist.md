@@ -87,7 +87,7 @@ grep -nE '^est_reading_min:|\*\*소요\*\*' <target_dir>/lesson.md
 ## B. 링크와 이미지
 
 - [ ] 모든 상대링크가 실존 파일을 가리킴 (`lesson.md`와 `eli5.md` 둘 다) *(lint D군이 `lesson.md`의 로컬 이미지 참조만. 그 밖의 링크와 `eli5.md`의 이미지는 육안)*
-- [ ] 이미지 참조는 `../../img/{module-id}-{slug}.svg` 형태 (SVG입니다. `.png`는 구 규약)
+- [ ] 이미지 참조는 `../../../img/{module-id}-{slug}.svg` 형태 (SVG입니다. `.png`는 구 규약)
 - [ ] **SVG가 GitHub에서 실제로 렌더되는가.** 브라우저로 파일을 열어 확인합니다
 - [ ] **다크 모드에서 선과 글자가 읽히는가.** 실패하면 PNG 병행을 검토합니다(`docs/course-author-update-plan.md` §8의 알려진 위험)
 - [ ] "다음 토픽" 링크가 다음 모듈 폴더를 정확히 가리킴

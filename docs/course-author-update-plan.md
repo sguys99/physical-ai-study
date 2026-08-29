@@ -217,7 +217,7 @@ frontmatter는 `est_reading_min: 39`인데 본문 L64는 "이론 3h"이고, 표 
 ### 4.6 시각자료 개정 (§3.2)
 
 - **모든 그림에 "읽는 법" 캡션 필수.** 그림 아래 1~3문장으로 무엇을 보라고 지시합니다
-- **개념 설명 그림은 SVG로 만들어 `img/{module-id}-{slug}.svg`에 저장**하고 `../../img/`로 참조합니다. `diagram-design` 스킬을 씁니다. Mermaid는 구조와 흐름과 계보에 계속 씁니다
+- **개념 설명 그림은 SVG로 만들어 `img/{module-id}-{slug}.svg`에 저장**하고 `../../../img/`로 참조합니다. `diagram-design` 스킬을 씁니다. Mermaid는 구조와 흐름과 계보에 계속 씁니다
 - **큰 ASCII 블록도는 조각내 산문 사이에 배치합니다.** 한 블록 20줄 상한
 - **한글 폭 정렬이 필요한 ASCII 그림은 만들지 않습니다**
 - 「한 장 정리」의 모듈 지도 재게시는 §0과 완전 동일 복제를 금지하고 진행 표시나 요약 라벨을 더합니다
@@ -547,8 +547,9 @@ FAIL 7종과 WARN 8종이 예외 없이 7개 파일 모두에 걸립니다. 총 
   - [x] `$13,500` 세 곳 이스케이프
   - [x] `est_reading_min`을 실측으로 바꾸고 §0 「소요」와 정합
 - [x] **5-4. `deep-dive.md` 갱신.** 본문에서 덜어낸 것을 받고 절 번호 참조 정합
-- [ ] **5-5. 하류 참조 정합.** `grep -rn "W1-M1 §" course/ notes/ docs/` 와 `grep -rn "§[0-9]" course/w1-generative-core/01-physical-ai-landscape/labs course/w1-generative-core/01-physical-ai-landscape/practice` 로 확인 후 참조하는 쪽만 수정. `practice/*.py` 수정 시 `jupytext --sync`
-- [ ] **`practice/`와 `labs/`의 내용은 손대지 않습니다** (절 번호 참조 정정만)
+- [x] **5-5. 하류 참조 정합.** `grep -rn "W1-M1 §" course/ notes/ docs/` 와 `grep -rn "§[0-9]" course/w1-generative-core/01-physical-ai-landscape/labs course/w1-generative-core/01-physical-ai-landscape/practice` 로 확인 후 참조하는 쪽만 수정. `practice/*.py` 수정 시 `jupytext --sync`
+  - [x] 이미지 상대 경로 규약 정정 (`../../img/` → `../../../img/`, 10개 파일 18곳). 사용자 승인 2026-08-28
+- [x] **`practice/`와 `labs/`의 내용은 손대지 않습니다** (절 번호 참조 정정만)
 
 ### Phase 6. 검증
 

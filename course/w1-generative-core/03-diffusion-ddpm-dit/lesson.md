@@ -318,7 +318,7 @@ DDPM은 $T=1000$으로 학습하고 결과는 250 스텝으로 냅니다. [W1-M1
 | **250** | 750 ms | 810 ms | **1.2 Hz** | **82** | **1,640 ms** |
 | **1000** | 3,000 ms | 3,060 ms | **0.33 Hz** | **307** | **6,140 ms** |
 
-마지막 두 줄이 핵심입니다. 1000 스텝이면 청크가 307 스텝, 곧 **6.14초짜리 눈 감은 개방루프**입니다. [W1-M1 §3.3](../01-physical-ai-landscape/lesson.md) "200 ms"의 30배이고 비유가 아니라 위 나눗셈입니다.
+마지막 두 줄이 핵심입니다. 1000 스텝이면 청크가 307 스텝, 곧 **6.14초짜리 눈 감은 개방루프**입니다. [W1-M1 §3.2](../01-physical-ai-landscape/lesson.md) "200 ms"의 30배이고 비유가 아니라 위 나눗셈입니다.
 
 ```mermaid
 sequenceDiagram
@@ -624,7 +624,7 @@ flowchart TB
 | L4 청크 생성 · 10 Hz | 100 ms | 40 ms | 13 NFE | 4 NFE |
 
 - **diffusion 헤드는 L2 안에 못 들어갑니다.** 500 Hz면 예산이 2 ms라 forward 한 번도 못 합니다
-- 청킹으로 L4에 올려야 수십 NFE가 생깁니다. 반응성을 팔아 예산을 사는 [W1-M1 §4.4](../01-physical-ai-landscape/lesson.md)의 MPC 지평 거래
+- 청킹으로 L4에 올려야 수십 NFE가 생깁니다. 반응성을 팔아 예산을 사는 [W1-M1 §4.3](../01-physical-ai-landscape/lesson.md)의 MPC 지평 거래
 - 3 ms와 10 ms는 가정값입니다(실측은 §8.4 ③)
 
 ### 8.4 확인되지 않은 것
@@ -732,7 +732,7 @@ flowchart LR
 
 7. $\nabla_{x_t}\log q(x_t|x_0)=-\epsilon/\sqrt{1-\bar\alpha_t}$이므로 $\epsilon_\theta\approx-\sqrt{1-\bar\alpha_t}\,s_\theta$로 상수배 차이입니다. 노이즈 예측과 score matching은 같은 대상을 학습했습니다. 그래서 두 줄기가 Score SDE(2011.13456)의 probability flow ODE에서 합류합니다.
 
-8. $\tau_{\text{infer}}=60+250\times3=810$ ms이므로 $H\ge50\times(0.810+0.810+0.020)=82$ 스텝, 최악 반응 지연 $=1.64$초. 그동안 새 관측을 반영하지 못하는 개방루프입니다. 자세가 무너지는 시간은 200 ms 미만이라([W1-M1 §3.3](../01-physical-ai-landscape/lesson.md)) 8배 이상 늦습니다.
+8. $\tau_{\text{infer}}=60+250\times3=810$ ms이므로 $H\ge50\times(0.810+0.810+0.020)=82$ 스텝, 최악 반응 지연 $=1.64$초. 그동안 새 관측을 반영하지 못하는 개방루프입니다. 자세가 무너지는 시간은 200 ms 미만이라([W1-M1 §3.2](../01-physical-ai-landscape/lesson.md)) 8배 이상 늦습니다.
 
 9. in-context(35.24) → cross-attention(26.14) → adaLN(25.21) → **adaLN-Zero(19.47)**. FID-50K, DiT-XL/2, 400K 스텝 기준. 차이는 **잔차 직전의 차원별 스케일 $\alpha$를 추가하고 그 MLP를 0으로 초기화한 것 하나**입니다. $\alpha=0$이면 블록이 항등함수라 28층을 통과해도 초기 그래디언트가 폭주하거나 소멸하지 않습니다. 학습이 진행되며 각 블록이 필요한 만큼 $\alpha$를 엽니다. 제어 대응은 소프트 스타트이며 adaLN-Zero는 그 순서를 옵티마이저에 위임합니다.
 

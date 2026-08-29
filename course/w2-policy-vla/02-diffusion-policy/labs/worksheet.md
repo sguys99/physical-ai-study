@@ -460,7 +460,7 @@ python 04_dp_latency_bench.py --device cuda
 
 ### 6.3 200 ms 문턱과 대면
 
-[W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md)의 "자세가 무너지기까지 200 ms"와 맞댑니다.
+[W1-M1 §3.2](../../../w1-generative-core/01-physical-ai-landscape/lesson.md)의 "자세가 무너지기까지 200 ms"와 맞댑니다.
 
 | 실행 방식 | 최악 반응 지연 | 200 ms의 몇 배 밖 |
 |---|---|---|

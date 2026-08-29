@@ -562,7 +562,7 @@ practice README의 과제 A입니다. `W2M1-2`(기록 FPS ↔ 배포 $f_2$)와 `
 
 > **lesson 상단의 완료 기준 그 자체입니다.**
 >
-> > LeRobot ACT 기본값 `chunk_size=100`, `n_action_steps=100`, `temporal_ensemble_coeff=None`을 놓고 **(a)** 이 설정이 청크를 끝까지 개방루프로 실행한다는 뜻임을 지적하고 **(b)** 30 Hz 기준 3.33초의 최악 반응 지연을 계산하고 **(c)** 그 값이 [W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md)의 "자세가 무너지기까지 200 ms" 문턱과 왜 충돌하지 않는지(ALOHA는 고정 베이스라 낙상 모드가 없다)를 **한 문단으로 쓸 수 있다.**
+> > LeRobot ACT 기본값 `chunk_size=100`, `n_action_steps=100`, `temporal_ensemble_coeff=None`을 놓고 **(a)** 이 설정이 청크를 끝까지 개방루프로 실행한다는 뜻임을 지적하고 **(b)** 30 Hz 기준 3.33초의 최악 반응 지연을 계산하고 **(c)** 그 값이 [W1-M1 §3.2](../../../w1-generative-core/01-physical-ai-landscape/lesson.md)의 "자세가 무너지기까지 200 ms" 문턱과 왜 충돌하지 않는지(ALOHA는 고정 베이스라 낙상 모드가 없다)를 **한 문단으로 쓸 수 있다.**
 >
 > 🔴 **lesson과 ⑥을 닫고 한 번에 쓰세요.** 다 쓴 뒤에 열어서 대조합니다.
 > 🔴 **(a)(b)(c)를 세 개의 분리된 답으로 쓰면 안 됩니다. 한 문단입니다.**

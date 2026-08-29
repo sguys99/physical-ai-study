@@ -37,7 +37,7 @@
 | Unitree G1 실기 | 불필요 | |
 | **excalidraw (웹)** | **필요** | Step 6의 워크시트를 여는 데 씁니다. 설치 없이 [excalidraw.com](https://excalidraw.com)에서 파일을 열면 됩니다 |
 | **선수 모듈 W1-M3** | **필수** | 이 랩의 절반이 W1-M3와의 대조입니다. lesson·practice·labs 셋 다 |
-| 선수 모듈 W1-M1 | 권장 | Step 7의 200 ms 문턱과 chunking 부등식이 [W1-M1 §3.3·§4.1](../../01-physical-ai-landscape/lesson.md) |
+| 선수 모듈 W1-M1 | 권장 | Step 7의 200 ms 문턱과 chunking 부등식이 [W1-M1 §3.2·§4.1](../../01-physical-ai-landscape/lesson.md) |
 
 ### 0.2 선수 확인 — 세 가지 (하나가 이 모듈만의 것입니다)
 
@@ -998,7 +998,7 @@ $$
 
 **이 검산이 되면 나머지는 $t_{\text{NFE}}$만 바꿔 넣는 일입니다.** worksheet ⑥ 6.4의 표를 **자기 기기 값**으로 채우세요.
 
-> 🔴 **결론 문장에 반드시 들어가야 하는 것**: [W1-M1 §3.3](../../01-physical-ai-landscape/lesson.md)이 못박은 **200 ms 문턱**과의 대조입니다.
+> 🔴 **결론 문장에 반드시 들어가야 하는 것**: [W1-M1 §3.2](../../01-physical-ai-landscape/lesson.md)이 못박은 **200 ms 문턱**과의 대조입니다.
 > NFE 250이 **1,640 ms로 8배 밖**이고, NFE 4~10이 **180~200 ms로 안쪽**입니다. **같은 백본·같은 하드웨어에서 objective만 바꿔 얻은 결과**라는 것이 이 답안의 핵심 문장입니다.
 
 ### 7.4 ★ 답안에 반드시 함께 적을 것 — 유보 조항

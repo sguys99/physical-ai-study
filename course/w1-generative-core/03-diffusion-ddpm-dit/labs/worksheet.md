@@ -445,7 +445,7 @@ $$
 
 지연을 NFE의 함수로 정리하면 $\text{지연} = 140 + 2\,\text{NFE}\cdot t_{\text{NFE}}$ (ms)이므로 $\text{NFE} \le 30 / t_{\text{NFE}}$입니다.
 
-**[W1-M1 §3.3](../../01-physical-ai-landscape/lesson.md)이 "발이 미끄러지기 시작해서 자세가 무너지기까지 200 ms가 안 걸린다"고 못박았습니다.**
+**[W1-M1 §3.2](../../01-physical-ai-landscape/lesson.md)이 "발이 미끄러지기 시작해서 자세가 무너지기까지 200 ms가 안 걸린다"고 못박았습니다.**
 
 | $t_{\text{NFE}}$ | 지연이 200 ms를 넘지 않는 NFE 상한 |
 |---|---|
@@ -477,7 +477,7 @@ $$
 
 ```
 
-**Q3. 그래서 action chunking은 무엇과 무엇을 교환하는 거래입니까?** ([W1-M1 §4.4](../../01-physical-ai-landscape/lesson.md)의 MPC 지평 트레이드오프와 연결)
+**Q3. 그래서 action chunking은 무엇과 무엇을 교환하는 거래입니까?** ([W1-M1 §4.3](../../01-physical-ai-landscape/lesson.md)의 MPC 지평 트레이드오프와 연결)
 
 ```
 

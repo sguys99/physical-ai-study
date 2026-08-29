@@ -32,7 +32,7 @@ lesson 「실습으로 가기」가 그 경계를 정해뒀습니다.
 
 | 스크립트 | 재현 대상 | 답하는 질문 |
 |---|---|---|
-| `01_latency_budget.py` | **§3.6** 지연 예산 표 (+ [W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md) 200 ms 문턱) | 부등식 좌변에 들어가는 것이 `chunk_size`인가 `n_action_steps`인가? 3,333 ms는 정말 3,333인가? 전신 균형이라면 몇 스텝까지 실행해도 되는가? |
+| `01_latency_budget.py` | **§3.6** 지연 예산 표 (+ [W1-M1 §3.2](../../../w1-generative-core/01-physical-ai-landscape/lesson.md) 200 ms 문턱) | 부등식 좌변에 들어가는 것이 `chunk_size`인가 `n_action_steps`인가? 3,333 ms는 정말 3,333인가? 전신 균형이라면 몇 스텝까지 실행해도 되는가? |
 | `02_ensemble_weights.py` | **§3.5** 지수 가중 · **§6.4** 계수 표 5행 | $w_0$는 최신인가 최고령인가? $S$와 $n_{\text{eff}}$는 왜 다른가? 권장값 0.01이 정말 "거의 균등 평균"인가? |
 | `03_compounding_error.py` | **§3.2** $O(\epsilon T^2)$ · **§3.3** chunking이 바꾸는 상한 | 최적 $k$가 정말 중간에 있는가? U자를 만드는 힘은 무엇인가? receding horizon은 공짜인가? |
 | `04_act_cvae_minimal.py` | **§3.4** ELBO → ACT loss · **§4.1** CVAE 세 스택 | `kl_weight=10.0`이 "KL이 10배 중요"인가? $z=0$ 추론은 정말 결정론적인가? CVAE는 다봉 타깃을 해결하는가? |

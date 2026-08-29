@@ -42,7 +42,7 @@ CLAUDE.md   README.md   .env.example   .gitignore
 - 주차 폴더: `w{N}-{slug}` / 토픽 폴더: `{NN}-{topic-slug}` — **숫자 prefix가 정렬 순서를 결정**
 - 토픽 번호는 모듈 번호와 1:1 (`W2-M3` → `course/w2-policy-vla/03-vla-lineage/`)
 - `lesson.md` 상단에 모듈 ID를 프론트매터로 명시: `module: W2-M3`
-- 링크는 상대 경로, 이미지는 `../../img/` 사용
+- 링크는 상대 경로, 이미지는 `../../../img/` 사용
 
 ---
 

@@ -16,7 +16,7 @@
 # %% [markdown]
 # # W1-M1 실습 2 — 데이터 피라미드 + 5계층 스택 렌더
 #
-# lesson.md `§5.1`(데이터 피라미드)와 `§3.3`(5계층 블록도)을 matplotlib 그림으로 만듭니다.
+# lesson.md `§5.1`(데이터 피라미드)와 `§3.2`(5계층 블록도)을 matplotlib 그림으로 만듭니다.
 # 문서용 그림 소스이므로, 수치가 갱신되면 이 파일의 상수만 고치면 됩니다.
 #
 # 산출물:
@@ -299,16 +299,16 @@ def plot_data_pyramid(out_path: Path) -> Path:
 
 
 # %% [markdown]
-# ## 2. 5계층 스택 — lesson §3.3 / §3.4
+# ## 2. 5계층 스택 — lesson §3.2 / §3.3
 #
-# 주파수를 **로그 스케일 x축**에 올리면 lesson §3.4의
+# 주파수를 **로그 스케일 x축**에 올리면 lesson §3.3의
 # $\omega_{L1} \gg \omega_{L2} \gg \omega_{L4} \gg \omega_{L5}$ 가 막대 사이 거리로 그대로 보입니다.
 # L3만 고정 주파수가 없는 **이벤트 구동**(L4 호출당 1회) 계층이라 빗금으로 표시했습니다.
 
 # %%
 @dataclass
 class StackLayer:
-    """스택 한 계층 (lesson §3.3)."""
+    """스택 한 계층 (lesson §3.2)."""
 
     tag: str
     name_ko: str
@@ -333,7 +333,7 @@ STACK: list[StackLayer] = [  # 아래(빠름) → 위(느림) 순서로 y축에 
                "DualMap", "DualMap", "#dbe7f3"),
 ]
 
-# ytick 부제로 쓸 대역폭 분리비 (기하평균 기준, lesson §3.4 · 01번 스크립트와 동일한 계산)
+# ytick 부제로 쓸 대역폭 분리비 (기하평균 기준, lesson §3.3 · 01번 스크립트와 동일한 계산)
 _RATIO_NOTE_KO = {
     "L1": "기준",
     "L2": "L1 대비 ÷8.9",
@@ -352,7 +352,7 @@ _RATIO_NOTE_EN = {
 
 # %%
 def plot_stack_layers(out_path: Path) -> Path:
-    """lesson §3.3의 5계층 스택을 로그 주파수 축 위에 렌더한다."""
+    """lesson §3.2의 5계층 스택을 로그 주파수 축 위에 렌더한다."""
     fig, ax = plt.subplots(figsize=(12.5, 6.2))
     ax.set_xscale("log")
 
@@ -385,8 +385,8 @@ def plot_stack_layers(out_path: Path) -> Path:
     ax.grid(axis="x", which="major", alpha=0.35)
     ax.grid(axis="x", which="minor", alpha=0.12)
     ax.set_title(
-        t("W1-M1 · 5계층 스택과 대역폭 분리 (lesson §3.3 / §3.4)",
-          "W1-M1 · Five-layer stack and bandwidth separation (lesson §3.3 / §3.4)"),
+        t("W1-M1 · 5계층 스택과 대역폭 분리 (lesson §3.2 / §3.3)",
+          "W1-M1 · Five-layer stack and bandwidth separation (lesson §3.2 / §3.3)"),
         fontsize=14, pad=12,
     )
     ax.text(
@@ -421,7 +421,7 @@ def _in_notebook() -> bool:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="W1-M1: 데이터 피라미드 + 5계층 스택 렌더 (lesson §3.3/§5.1)")
+    p = argparse.ArgumentParser(description="W1-M1: 데이터 피라미드 + 5계층 스택 렌더 (lesson §3.2/§5.1)")
     p.add_argument("--smoke", action="store_true",
                    help="다른 실습과 인터페이스를 맞추기 위한 플래그. 이 스크립트는 원래 수 초라 결과가 동일하다")
     p.add_argument("--ascii-labels", action="store_true", help="한글 폰트가 있어도 영문 라벨로 렌더")

@@ -16,7 +16,7 @@
 # %% [markdown]
 # # W1-M1 실습 1 — 주파수 예산과 action chunking
 #
-# lesson.md `§3.3`(5계층 블록도) · `§3.4`(대역폭 분리) · `§4`(지연 예산 부등식)을 손으로 돌려보는 스크립트입니다.
+# lesson.md `§3.2`(5계층 블록도) · `§3.3`(대역폭 분리) · `§4`(지연 예산 부등식)을 손으로 돌려보는 스크립트입니다.
 #
 # 이 실습에서 확인할 것:
 #
@@ -177,16 +177,16 @@ def print_table(headers: list[str], rows: list[list[str]], aligns: list[str] | N
 
 
 # %% [markdown]
-# ## 1. 5계층 주파수 예산 — lesson §3.3
+# ## 1. 5계층 주파수 예산 — lesson §3.2
 #
-# 계층 정의는 lesson §3.3 블록도를 그대로 옮긴 것입니다.
+# 계층 정의는 lesson §3.2 블록도를 그대로 옮긴 것입니다.
 # L3(액션 인터페이스)만 고정 주파수가 없습니다 — **L4 호출당 1회** 동작하는 이벤트 구동 계층이라서
 # 아래 대역폭 분리 계산에서는 제외합니다.
 
 # %%
 @dataclass(frozen=True)
 class Layer:
-    """스택 한 계층. 주파수는 lesson §3.3 블록도 값."""
+    """스택 한 계층. 주파수는 lesson §3.2 블록도 값."""
 
     tag: str  # L1 ~ L5
     name_ko: str
@@ -209,7 +209,7 @@ class Layer:
         return f"{self.f_lo:g} ~ {self.f_hi:g} Hz"
 
 
-# lesson §3.3 — 위(느림·똑똑함)에서 아래(빠름·반사적)로
+# lesson §3.2 — 위(느림·똑똑함)에서 아래(빠름·반사적)로
 LAYERS: list[Layer] = [
     Layer("L5", "인지·매핑", "Perception / Mapping", 0.5, 5.0,
           "RGB-D·LiDAR·언어목표 → 시맨틱 맵·목표 3D 좌표", "DualMap"),
@@ -226,14 +226,14 @@ LAYERS: list[Layer] = [
 # 대역폭 분리를 볼 때는 주파수가 정의된 계층만, 빠른 쪽 → 느린 쪽 순서로 본다.
 FREQ_ORDER = ["L1", "L2", "L4", "L5"]
 
-# 캐스케이드 제어의 경험칙: inner loop 대역폭을 outer의 5~10배 (lesson §3.4)
+# 캐스케이드 제어의 경험칙: inner loop 대역폭을 outer의 5~10배 (lesson §3.3)
 CASCADE_MIN_RATIO = 5.0
 
 
 # %%
 def print_frequency_budget() -> None:
-    """lesson §3.3의 5계층 주파수 예산 표를 stdout에 출력."""
-    print("\n=== [1] 5계층 주파수 예산 (lesson §3.3) ===")
+    """lesson §3.2의 5계층 주파수 예산 표를 stdout에 출력."""
+    print("\n=== [1] 5계층 주파수 예산 (lesson §3.2) ===")
     rows = []
     for lyr in LAYERS:
         nominal = lyr.f_nominal
@@ -256,7 +256,7 @@ def separation_ratios() -> list[tuple[str, float, float, float]]:
     """인접 계층(주파수가 정의된 것만)의 대역폭 분리비를 계산.
 
     반환: (경계 라벨, 빠른 쪽 대표주파수, 느린 쪽 대표주파수, 비율)
-    lesson §3.4:  w_L1 >> w_L2 >> w_L4 >> w_L5
+    lesson §3.3:  w_L1 >> w_L2 >> w_L4 >> w_L5
     """
     by_tag = {lyr.tag: lyr for lyr in LAYERS}
     out = []
@@ -269,8 +269,8 @@ def separation_ratios() -> list[tuple[str, float, float, float]]:
 
 
 def print_separation_ratios() -> None:
-    """lesson §3.4의 w_L1 >> w_L2 >> w_L4 >> w_L5가 수치로 성립하는지 확인."""
-    print("\n=== [2] 대역폭 분리비 (lesson §3.4) ===")
+    """lesson §3.3의 w_L1 >> w_L2 >> w_L4 >> w_L5가 수치로 성립하는지 확인."""
+    print("\n=== [2] 대역폭 분리비 (lesson §3.3) ===")
     by_tag = {lyr.tag: lyr for lyr in LAYERS}
     rows = []
     for label, f_fast, f_slow, ratio in separation_ratios():
@@ -298,7 +298,7 @@ def print_separation_ratios() -> None:
     print("   - L1/L2, L2/L4는 캐스케이드 경험칙(x5~10)을 넉넉히 만족한다 → 계층 분리가 물리적으로 정당하다.")
     print("   - L4/L5는 대표 비율이 x2.0 수준이고 최악에서는 밴드가 역전(x1 미만)한다.")
     print("     둘 다 '느린 계층'이라 대역폭 분리보다 기능 분리(인지 vs 행동 의도) 성격이 강하다는 뜻이다.")
-    print("     lesson §3.4의 '대략 한 자릿수'는 L1~L4 구간에서 성립하고 L4~L5는 그 예외라고 읽으면 된다.")
+    print("     lesson §3.3의 '대략 한 자릿수'는 L1~L4 구간에서 성립하고 L4~L5는 그 예외라고 읽으면 된다.")
 
 
 # %% [markdown]
@@ -581,7 +581,7 @@ def _in_notebook() -> bool:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="W1-M1: 주파수 예산과 action chunking (lesson §3.3/§3.4/§4)")
+    p = argparse.ArgumentParser(description="W1-M1: 주파수 예산과 action chunking (lesson §3.2/§3.3/§4)")
     p.add_argument("--smoke", action="store_true", help="스윕 포인트를 줄여 수 초 안에 완주")
     p.add_argument("--f2", type=float, default=50.0, help="L2 제어 주파수 [Hz] (기본 50)")
     p.add_argument("--f4", type=float, default=5.0, help="L4 재계획 주파수 [Hz] (기본 5)")

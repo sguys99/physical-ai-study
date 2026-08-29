@@ -786,7 +786,7 @@ PY
 #  - **코드펜스 안은 전부 제외합니다.** 수식도 arXiv 번호도 약어도 마찬가지입니다.
 #    Mermaid 라벨과 코드 예시까지 잡으면 오탐이 규격보다 커집니다
 #  - **약어는 한글 조사가 붙어도 잡습니다**(`MPC는`). abbr_scan()과 같은 경계식을 씁니다.
-#    대신 링크 대상 `](...)`과 URL은 지웁니다. `../../img/DDPM-flow.svg`는 본문 약어가 아닙니다
+#    대신 링크 대상 `](...)`과 URL은 지웁니다. `../../../img/DDPM-flow.svg`는 본문 약어가 아닙니다
 #  - **표 행 수는 구분행을 뺍니다.** 구분행은 마크다운 문법이지 읽는 행이 아닙니다
 #    (reading_estimate()와 같은 판정)
 eli5_scan() {
@@ -1305,7 +1305,7 @@ lint_one() {
     fi
   fi
 
-  # 이미지 파일 존재 (§3.2: 파일은 img/{module-id}-{slug}.svg, 참조는 ../../img/)
+  # 이미지 파일 존재 (§3.2: 파일은 img/{module-id}-{slug}.svg, 참조는 ../../../img/)
   local img_n=0 img_bad=0 img_msg="" iln ipath icand
   while IFS=$'\t' read -r iln ipath; do
     [[ -z "$iln" ]] && continue
@@ -1320,7 +1320,7 @@ lint_one() {
     if [[ "$img_bad" -eq 0 ]]; then
       c_pass "이미지 참조 ${img_n}개가 모두 실재"
     else
-      c_fail "없는 이미지 파일 ${img_bad}/${img_n}개 — §3.2: 파일은 img/{module-id}-{slug}.svg, 참조는 ../../img/"
+      c_fail "없는 이미지 파일 ${img_bad}/${img_n}개 — §3.2: 파일은 img/{module-id}-{slug}.svg, 참조는 ../../../img/"
       while IFS= read -r dline; do
         [[ -n "$dline" ]] && printf '        %s\n' "$dline"
       done <<< "$img_msg"

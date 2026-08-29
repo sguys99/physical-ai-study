@@ -29,7 +29,7 @@
 # 2. **최악 반응 지연**과 **추론 호출 빈도**
 #    $$\tau_{\text{react}}^{\max} = \frac{\texttt{n\_action\_steps}}{f_2}, \qquad
 #      f_{\text{infer}} = \frac{f_2}{\texttt{n\_action\_steps}} \tag{§3.6}$$
-# 3. **200 ms 문턱**([W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md),
+# 3. **200 ms 문턱**([W1-M1 §3.2](../../../w1-generative-core/01-physical-ai-landscape/lesson.md),
 #    "발이 미끄러져 자세가 무너지기까지 200 ms")과의 대조. **각 설정이 전신 균형 태스크에서 안전한가.**
 # 4. `--sweep`은 `n_action_steps`를 1~100으로 훑어 200 ms 문턱을 넘는 **경계값**을 찾는다
 #
@@ -49,7 +49,7 @@ from pathlib import Path
 
 MODULE_ID = "W2-M1"
 
-# W1-M1 §3.3의 "발이 미끄러져 자세가 무너지기까지 200 ms". 전신 균형 태스크의 개방루프 창 상한.
+# W1-M1 §3.2의 "발이 미끄러져 자세가 무너지기까지 200 ms". 전신 균형 태스크의 개방루프 창 상한.
 BALANCE_THRESHOLD_MS = 200.0
 
 # lesson §3.6 표의 ground truth. 여기가 어긋나면 구현이 아니라 문서(또는 이 상수)가 틀린 것이다.
@@ -147,7 +147,7 @@ def inference_rate_hz(n_action_steps: int, f2_hz: float) -> float:
 
 
 def balance_verdict(worst_ms: float, threshold_ms: float = BALANCE_THRESHOLD_MS) -> tuple[bool, float]:
-    """전신 균형 태스크(W1-M1 §3.3의 200 ms 문턱)에서 안전한가. (안전여부, 문턱 대비 배수)"""
+    """전신 균형 태스크(W1-M1 §3.2의 200 ms 문턱)에서 안전한가. (안전여부, 문턱 대비 배수)"""
     return worst_ms <= threshold_ms, worst_ms / threshold_ms
 
 
@@ -232,7 +232,7 @@ def describe_config(chunk_size: int, n_action_steps: int, f2_hz: float,
         f"    추론 호출 빈도        : {rate:g} Hz     "
         f"({1000.0 / rate:,.1f} ms 마다 1회)" if rate > 0 else "",
         f"    200 ms 문턱 대비      : {'안전' if safe else f'초과 {ratio:.2f}배'}  "
-        f"(전신 균형 태스크 기준 · W1-M1 §3.3)",
+        f"(전신 균형 태스크 기준 · W1-M1 §3.2)",
     ]
     return [ln for ln in lines if ln]
 
@@ -301,7 +301,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--n-action-steps", type=int, default=100,
                    help="실행하는 스텝 수 (기본 100 = 개방루프 완주)")
     p.add_argument("--threshold-ms", type=float, default=BALANCE_THRESHOLD_MS,
-                   help="전신 균형 문턱 [ms] (기본 200 = W1-M1 §3.3)")
+                   help="전신 균형 문턱 [ms] (기본 200 = W1-M1 §3.2)")
     p.add_argument("--sweep", action="store_true",
                    help="n_action_steps 1~chunk_size 스윕으로 문턱 경계값을 찾는다")
     p.add_argument("--no-csv", action="store_true", help="CSV 저장을 건너뛴다")

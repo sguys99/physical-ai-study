@@ -49,7 +49,7 @@
 | `gym-aloha` · `gym-pusht` | **불필요** | 시뮬 롤아웃·평가는 **W2-M2의 몫**입니다(lesson 「실습으로 가기」) |
 | **excalidraw (웹)** | **필요** | Step 7에서 씁니다. 설치 없이 [excalidraw.com](https://excalidraw.com)에서 파일을 엽니다 |
 | **선수 모듈 W2-M1 practice** | **필수** | `01`~`04`를 먼저 돌려야 Step 8이 성립합니다 — 0.2 ③ |
-| 선수 모듈 W1-M1 | **권장** | Step 8의 200 ms 문턱이 [W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md), 부등식이 §4.1 |
+| 선수 모듈 W1-M1 | **권장** | Step 8의 200 ms 문턱이 [W1-M1 §3.2](../../../w1-generative-core/01-physical-ai-landscape/lesson.md), 부등식이 §4.1 |
 | 선수 모듈 W1-M2 | 권장 | 헤드리스 규약과 tmux 사용법이 [그 랩](../../../w1-generative-core/02-simulator-bootcamp/labs/README.md)에 있습니다 |
 
 **디스크 내역, 집필 환경 실측**
@@ -1095,7 +1095,7 @@ $$T_{\text{replan}} + \tau_{\text{infer}} + \tau_{\text{comm}} \;\le\; \frac{\te
 
 > 🔴 **이것이 이 모듈의 최종 제출물입니다.** lesson 상단의 **완료 기준**을 그대로 옮깁니다.
 
-> **완료 기준**: LeRobot ACT 기본값 `chunk_size=100`, `n_action_steps=100`, `temporal_ensemble_coeff=None`을 놓고 **(a)** 이 설정이 청크를 끝까지 개방루프로 실행한다는 뜻임을 지적하고 **(b)** 30 Hz 기준 3.33초의 최악 반응 지연을 계산하고 **(c)** 그 값이 [W1-M1 §3.3](../../../w1-generative-core/01-physical-ai-landscape/lesson.md)의 "자세가 무너지기까지 200 ms" 문턱과 왜 충돌하지 않는지(ALOHA는 고정 베이스라 낙상 모드가 없다)를 **한 문단으로 쓸 수 있다.**
+> **완료 기준**: LeRobot ACT 기본값 `chunk_size=100`, `n_action_steps=100`, `temporal_ensemble_coeff=None`을 놓고 **(a)** 이 설정이 청크를 끝까지 개방루프로 실행한다는 뜻임을 지적하고 **(b)** 30 Hz 기준 3.33초의 최악 반응 지연을 계산하고 **(c)** 그 값이 [W1-M1 §3.2](../../../w1-generative-core/01-physical-ai-landscape/lesson.md)의 "자세가 무너지기까지 200 ms" 문턱과 왜 충돌하지 않는지(ALOHA는 고정 베이스라 낙상 모드가 없다)를 **한 문단으로 쓸 수 있다.**
 
 **worksheet ⑦에 씁니다. lesson과 worksheet의 앞 칸들을 전부 닫고 한 번에 쓰세요.**
 
