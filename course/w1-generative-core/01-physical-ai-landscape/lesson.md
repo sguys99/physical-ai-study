@@ -477,31 +477,31 @@ latent action을 유한한 번호로 바꾸려면 양자화 장치가 필요한�
 flowchart LR
     subgraph GDM["Google DeepMind"]
         direction TB
-        A1["RT-1 · 2022"] --> A2["RT-2 · 2023<br/>시각-언어 모델 + 액션 토큰"]
-        A2 --> A3["Gemini Robotics 1.5 · 2025"]
+        A1["RT-1, 2022"] --> A2["RT-2, 2023<br/>시각-언어 모델 + 액션 토큰"]
+        A2 --> A3["Gemini Robotics 1.5, 2025"]
         A3 --> A4["Gemini Robotics ER 1.6"]
-        A4 --> A5["Gemini Robotics 2 · 2026-07-31<br/>상체 조작 → 전신 제어 확장"]
+        A4 --> A5["Gemini Robotics 2, 2026-07-31<br/>상체 조작 → 전신 제어 확장"]
     end
 
     subgraph PI["Physical Intelligence"]
         direction TB
-        B1["π0 · 2024-10<br/>백본 + Flow Matching 액션 출력단"] --> B2["π0-FAST · 2025<br/>DCT 액션 토큰화"]
-        B1 --> B3["π0.5 · 2025<br/>open-world 계층 추론"]
-        B3 --> B4["π*0.6 · 2025-11<br/>RL Token으로 온라인 RL"]
-        B4 --> B5["π0.7 · 2026-04<br/>diverse context conditioning"]
+        B1["π0, 2024-10<br/>백본 + Flow Matching 액션 출력단"] --> B2["π0-FAST, 2025<br/>DCT 액션 토큰화"]
+        B1 --> B3["π0.5, 2025<br/>open-world 계층 추론"]
+        B3 --> B4["π*0.6, 2025-11<br/>RL Token으로 온라인 RL"]
+        B4 --> B5["π0.7, 2026-04<br/>diverse context conditioning"]
     end
 
     subgraph NV["NVIDIA GEAR"]
         direction TB
-        C1["GR00T N1 · 2025-03<br/>System1/System2"] --> C2["GR00T N1.5"]
-        C2 --> C3["GR00T N1.6 · 3B · CES 2026<br/>SigLip2 + T5, flow matching + world modeling"]
-        C4["Cosmos · 월드 파운데이션 모델"] --> C5["Cosmos 3 · 2026"]
-        C6["GEAR-SONIC · 2025-11<br/>전신 제어 파운데이션 정책"] --> C7["GR00T-WholeBodyControl<br/>Decoupled WBC + SONIC + MotionBricks"]
+        C1["GR00T N1, 2025-03<br/>System1/System2"] --> C2["GR00T N1.5"]
+        C2 --> C3["GR00T N1.6, 3B, CES 2026<br/>SigLip2 + T5, flow matching + world modeling"]
+        C4["Cosmos 월드 파운데이션 모델"] --> C5["Cosmos 3, 2026"]
+        C6["GEAR-SONIC, 2025-11<br/>전신 제어 파운데이션 정책"] --> C7["GR00T-WholeBodyControl<br/>Decoupled WBC + SONIC + MotionBricks"]
     end
 
-    subgraph OPEN["오픈·중국 생태계"]
+    subgraph OPEN["오픈과 중국 생태계"]
         direction TB
-        D1["Open X-Embodiment · 2023-10<br/>여러 로봇 데이터 통합"] --> D2["OpenVLA · 2024-06<br/>7B 오픈소스"]
+        D1["Open X-Embodiment, 2023-10<br/>여러 로봇 데이터 통합"] --> D2["OpenVLA, 2024-06<br/>7B 오픈소스"]
         D3["Shanghai AI Lab / InternRobotics<br/>InternVLA-M1 / N1 / A1, OpenHomie"]
         D4["AgiBot World<br/>Alpha → Beta → 2026"]
         D5["Unitree G1 / H1 / R1 / H2<br/>하드웨어 공급"]
@@ -550,13 +550,13 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    SENS["센서<br/>RGB-D · Livox Mid-360 LiDAR"] --> L5
+    SENS["센서<br/>RGB-D, Livox Mid-360 LiDAR"] --> L5
     GOAL["자연어 목표<br/>'빨간 컵 있는 곳으로'"] --> L5
-    L5["<b>L5 · DualMap</b> ★<br/>온라인 open-vocabulary 시맨틱 매핑<br/>concrete / abstract 이중 맵<br/>0.5~5 Hz"]
-    L5 --> L4["<b>L4 · VLA / 월드모델</b><br/>목표 → 행동 의도<br/>1~10 Hz<br/><i>구성은 팀 확인 필요</i>"]
-    L4 --> L3["<b>L3 · FSQ 기반 계층 모델</b> ★<br/>이산 액션 토큰<br/><i>레벨과 차원과 토큰 레이트 팀 확인 필요</i>"]
-    L3 --> L2["<b>L2 · GEAR-SONIC 계열 WBC</b> ★<br/>모션 트래킹 파운데이션 정책<br/>50~500 Hz"]
-    L2 --> L1["<b>L1 · Unitree G1</b> ★<br/>23~43 DoF · unitree_sdk2 / DDS<br/>관절 서보 1~2 kHz"]
+    L5["<b>L5 DualMap</b> ★<br/>온라인 open-vocabulary 시맨틱 매핑<br/>concrete / abstract 이중 맵<br/>0.5~5 Hz"]
+    L5 --> L4["<b>L4 VLA / 월드모델</b><br/>목표 → 행동 의도<br/>1~10 Hz<br/><i>구성은 팀 확인 필요</i>"]
+    L4 --> L3["<b>L3 FSQ 기반 계층 모델</b> ★<br/>이산 액션 토큰<br/><i>레벨과 차원과 토큰 레이트 팀 확인 필요</i>"]
+    L3 --> L2["<b>L2 GEAR-SONIC 계열 WBC</b> ★<br/>모션 트래킹 파운데이션 정책<br/>50~500 Hz"]
+    L2 --> L1["<b>L1 Unitree G1</b> ★<br/>23~43 DoF, unitree_sdk2 / DDS<br/>관절 서보 1~2 kHz"]
     L1 -. 관절 상태 피드백 .-> L2
     L1 -. 센서 스트림 .-> L5
 
@@ -564,7 +564,7 @@ flowchart TB
     HOMIE --> DATA["시연 데이터셋"]
     DATA -. 학습 .-> L4
     DATA -. 학습 .-> L3
-    WM["월드모델<br/>데이터 증강 · 정책 평가 · 상상 플래닝"] -. 연구 트랙 .-> L4
+    WM["월드모델<br/>데이터 증강, 정책 평가, 상상 플래닝"] -. 연구 트랙 .-> L4
 ```
 
 **읽는 법.** 가운데 세로줄이 §3의 5계층이고, 별표가 이미 쓰고 있는 것, 기울임체가 확인하지 못한 칸입니다. 오른쪽 아래 HOMIE에서 나가는 점선 두 개를 보면 같은 장비가 로봇을 움직이기도 하고 데이터를 만들기도 합니다.
@@ -655,7 +655,7 @@ flowchart TB
 ```mermaid
 flowchart LR
   S1["§1 두 겹 루프<br/>바깥만 신경망으로 바뀜"] --> S2["§2 정의와 세 차이<br/>병목은 액션 라벨"]
-  S2 --> S3["§3 스택 5계층<br/>속도 8.9배 · 50배 · 2.0배"]
+  S2 --> S3["§3 스택 5계층<br/>속도 8.9배, 50배, 2.0배"]
   S3 --> S4["§4 지연 예산<br/>최소 16스텝, 앞 6개 폐기"]
   S3 --> S5["§5 데이터 피라미드<br/>세 자릿수 격차"]
   S4 --> S7["§7 회사 스택 배치 ★<br/>다섯 도구와 세 빈칸"]
@@ -782,7 +782,7 @@ flowchart LR
 
 ## 더 깊이
 
-- [`deep-dive.md`](deep-dive.md)에는 대역폭 분리의 유래(§1), L3 네 근거의 반론(§2), 지연 예산 유도(§3), 계보 연대기(§4), 분리형과 통합형(§5), 출처 검증 메모(§6), 세 동인의 근거(§7), 계층별 입출력(§8), 번외 오해(§9)가 있습니다
+- [`deep-dive.md`](deep-dive.md)에는 대역폭 분리의 유래(§1), L3 네 근거의 반론(§2), 지연 예산 유도(§3), 계보 연대기(§4), 분리형과 통합형(§5), 출처 검증 메모(§6), 세 동인의 근거(§7), 계층별 입출력(§8), 오해와 퀴즈 풀이(§9~§11)가 있습니다
 
 ---
 

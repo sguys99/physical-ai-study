@@ -588,10 +588,9 @@ python 02_data_pyramid_plot.py  # 재실행
 [font] 한글 폰트 사용: NanumGothic
 ```
 
-`sudo`가 없는 컨테이너라면 `--ascii-labels`로 명시적 영문 렌더도 됩니다. 단 **⚠️ 주의**:
-`--ascii-labels`는 `02`·`03`에서만 `*_ascii.png`로 따로 저장되고, **`01`은 같은 파일명(`01_frequency_budget.png`)에 덮어씁니다.**
-(`../practice/README.md` §3의 "모두 `*_ascii.png`로 저장" 설명은 `01`에는 해당하지 않습니다.)
-한글판 `01` 그림을 보존하려면 먼저 백업하세요.
+`sudo`가 없는 컨테이너라면 `--ascii-labels`로 명시적 영문 렌더도 됩니다.
+세 스크립트 모두 이 옵션으로 뽑은 그림을 `*_ascii.png`에 따로 저장하므로 한글판 그림은 덮이지 않습니다.
+파일명은 `01_frequency_budget_ascii.png`, `02_data_pyramid_ascii.png`와 `02_stack_layers_ascii.png`, `03_player_landscape_ascii.png`입니다.
 
 ### E2. 창이 안 뜬다 / `plt.show()`가 없다
 
