@@ -1,7 +1,7 @@
 # Physical AI 4주 스터디 마스터 플랜 (v1.1)
 
 > **대상**: Control Engineering 10년 + ML/DL/LLM/Agent 실무 경력, Physical AI 무경험 연구자·Application 엔지니어
-> **목표**: 4주 안에 회사 기술 스택(Unitree G1, HOMIE, GEAR-SONIC, DualMap, FSQ 기반 계층 모델)의 논문·코드를 스스로 읽고, 팀 논의에 참여하며, 시뮬레이션 실습을 완주할 수 있는 "실무 기본 체력" 확보
+> **목표**: 4주 안에 회사 기술 스택(Unitree G1, HOMIE, GEAR-SONIC, FAST-LIO2, Nav2, FSR-VLN/DualMap, GR00T VLA, FSQ 기반 계층 모델)의 논문·코드를 스스로 읽고, 팀 논의에 참여하며, 시뮬레이션 실습을 완주할 수 있는 "실무 기본 체력" 확보
 > **작성일**: 2026-08-01
 
 ---
@@ -11,7 +11,7 @@
 이 문서는 그 자체가 학습자료가 아니라 **학습자료 생성을 위한 마스터 플랜**입니다. 다음 흐름으로 사용하세요.
 
 1. 각 모듈에는 고유 ID가 있습니다 (예: `W1-M2`). 상세 학습자료가 필요할 때, §11의 프롬프트 템플릿에 해당 모듈 섹션을 그대로 붙여넣어 Claude에게 요청하세요.
-2. 코드 분석(OpenHomie, DualMap, unitree_rl_gym 등)은 Claude Code로 리포를 클론한 뒤 §11.3 템플릿으로 "코드베이스 투어"를 요청하세요.
+2. 코드 분석(OpenHomie, FAST_LIO, HoloAgent, DualMap, unitree_rl_gym 등)은 Claude Code로 리포를 클론한 뒤 §11.3 템플릿으로 "코드베이스 투어"를 요청하세요.
 3. 각 주차 마지막의 **체크포인트 질문**에 백지 상태로 답해보고, 막히면 해당 모듈만 다시 학습자료를 요청하세요.
 4. 우선순위 태그: **[P0]** 반드시 / **[P1]** 가능하면 / **[P2]** 여유 시. 시간이 부족하면 §12의 컷 가이드를 따르세요.
 
@@ -37,15 +37,21 @@
 Physical AI는 "인터넷 데이터로 학습한 지능을 물리 세계의 몸에 넣는 문제"이고, 현재 업계 표준 스택은 대략 5계층입니다.
 
 ```
-[L5] 인지·매핑        : 카메라/LiDAR → 시맨틱 맵, 언어 grounding     ← DualMap
-[L4] 상위 지능        : VLA / 월드모델 / 플래너 (수 Hz)              ← VLA, WFM/WAM, GR00T
+[L5] 인지 (기하)      : LiDAR → 3D 점군 맵(pcd), 위치 추정          ← FAST-LIO2 ★운영중
+[L5] 인지 (시맨틱)    : RGB-D + 언어 → 목표 좌표, open-vocab 맵      ← FSR-VLN ⚙구현중 / DualMap 🔍검토중
+[L4] 상위 지능        : VLA / 월드모델 / 플래너 (수 Hz)              ← GR00T N1.x VLA ★회사 사용, WFM/WAM
+[L4→L2 내비 경로]     : 2D 격자 맵 → 경로 + 속도 명령 (2 / 20 Hz)    ← Nav2 ★운영중
 [L3] 액션 인터페이스   : 연속 액션 or 이산 토큰 (chunking)            ← FSQ ★회사 핵심
 [L2] 전신 제어 (WBC)  : RL 정책, 모션 트래킹 (50~500 Hz)             ← SONIC ★회사 사용
 [L1] 하드웨어/미들웨어 : 관절 모터, DDS/SDK, 센서                     ← Unitree G1
       + 데이터 수집    : 텔레옵, 모캡, 휴먼 비디오                    ← HOMIE
+
+상태 표기: ★ 현재 운영 중, ⚙ 구현 중, 🔍 검토 중
 ```
 
 핵심 통찰: **상위(L4)는 느리고 똑똑하게, 하위(L2)는 빠르고 반사적으로** 움직이며, 둘을 잇는 인터페이스(L3)가 시스템 설계의 승부처입니다. 회사가 FSQ 이산 토큰을 쓰는 것도, SONIC이 "universal token space"로 VLA·텔레옵·플래너를 하나의 정책에 연결하는 것도 모두 L3 설계 문제입니다.
+
+**두 번째 통찰(2026-08-29 추가): L2로 내려가는 길이 하나가 아닙니다.** 사내 「GenP Navigation 모듈 진행 현황」으로 확인된 바로는, 내비게이션은 Nav2가 `geometry_msgs/Twist` 속도 명령을 WBC로 직접 보내고 **L4 VLA를 거치지 않습니다.** 조작만 VLA → FSQ 토큰 경로를 탑니다. SONIC의 universal token space가 "성격이 다른 입력들을 하나의 하위 정책에 물린다"고 할 때, 그 입력의 실물 사례가 이 두 갈래입니다.
 
 ### 2.2 회사 스택 한 줄 정리
 
@@ -54,15 +60,32 @@ Physical AI는 "인터넷 데이터로 학습한 지능을 물리 세계의 몸�
 | **Unitree G1** | L1 | 23~43 DoF 휴머노이드. Livox Mid-360 LiDAR + 뎁스카메라, DDS 기반 SDK | support.unitree.com/home/en/G1_developer, github.com/unitreerobotics |
 | **HOMIE (OpenHomie)** | L2+데이터 | 하체는 RL 보행 정책, 상체는 외골격 cockpit 텔레옵으로 분리한 loco-manipulation 시스템. 데이터 수집 파이프라인 역할 | arXiv:2502.13013, github.com/InternRobotics/OpenHomie |
 | **GEAR-SONIC (SONIC)** | L2~L3 | NVIDIA GEAR의 WBC 파운데이션 정책. 모션 트래킹을 스케일업(42M 파라미터, 700시간 모캡, 21k GPU-hours)해서 하나의 통합 정책으로 VLA(GR00T N1.5)·VR 텔레옵·게임패드 kinematic planner(내비게이션·스타일 보행)를 모두 구동. "universal token space"가 핵심 | arXiv:2511.07820, github.com/NVlabs/GR00T-WholeBodyControl |
-| **DualMap** | L5 | 온라인 open-vocabulary 시맨틱 매핑. 동적으로 변하는 환경에서 자연어 목표("빨간 컵 있는 곳으로")로 내비게이션 | github.com/Eku127/DualMap |
-| **FSQ 기반 모델** | L3 | 상위 모델과 하위 제어기를 잇는 이산 액션 토큰화 (VQ-VAE의 개선판, codebook collapse 없음) | arXiv:2309.15505 |
+| **FAST-LIO2** ★ | L5 기하 | LiDAR-관성 오도메트리. 특징 추출 없이 원시 점군을 지도에 직접 정합하고 ikd-Tree로 증분 갱신. 출력은 3D 점군 맵(pcd) + 현 위치 추정 + 전처리 LiDAR. **현재 운영 중** | arXiv:2107.06829 (IEEE T-RO 38:2053-2073), github.com/hku-mars/FAST_LIO |
+| **FSR-VLN** ⚙ | L5 시맨틱 | 4단 계층 멀티모달 장면그래프(HMSG) 위에서 빠른 매칭을 먼저 하고 실패했을 때만 VLM 정밀화를 켜는 fast-to-slow 구조. 자연어 질의 → 목표 좌표. **구현 중.** 도입되면 맵 출처가 여기로 바뀌고 FAST-LIO2는 위치 추정만 담당 | arXiv:2509.13733, github.com/HorizonRobotics/HoloAgent |
+| **DualMap** 🔍 | L5 시맨틱 | 온라인 open-vocabulary 시맨틱 매핑. 동적으로 변하는 환경에서 자연어 목표("빨간 컵 있는 곳으로")로 내비게이션. **검토 중** | arXiv:2506.01950, github.com/Eku127/DualMap |
+| **Nav2** ★ | L4→L2 내비 | ROS 2 내비게이션 스택. 행동 트리가 planner와 controller와 recovery 서버를 조율하고 costmap 2D 위에서 돎. 2D로 변환된 맵을 받아 Global Path 2 Hz / Local Path 20 Hz / 속도 명령을 내고, **속도 명령이 WBC로 직접 감(L4 VLA를 거치지 않음)**. **현재 운영 중** | arXiv:2003.00368 (Marathon 2), docs.nav2.org |
+| **GR00T N1.x VLA** ★ | L4 | NVIDIA GEAR의 VLA 파운데이션 모델. System1/System2 구조로 빠른 반응과 느린 추론을 한 모델에. **회사 사용 중이나 버전과 파인튜닝 여부는 미확인**(M1-9) | arXiv:2503.14734 |
+| **FSQ 기반 모델** | L3 | 상위 모델과 하위 제어기를 잇는 이산 액션 토큰화 (VQ-VAE의 개선판, codebook collapse 없음). 조작 경로 담당 | arXiv:2309.15505 |
 
-### 2.3 추정 전체 파이프라인 (팀에 검증받을 것)
+### 2.3 전체 파이프라인 (내비 경로는 확인됨, 조작 경로는 추정)
+
+**경로 A. 내비게이션 (2026-08-29 사내 문서로 확인. 추정 아님)**
 
 ```
-센서(RGB-D, LiDAR)
-  → DualMap (시맨틱 맵 + 언어 목표 grounding)
-  → VLA/상위 플래너 (목표 → 행동 의도)
+LiDAR ──► FAST-LIO2 ──┬─► 3D 점군 맵(pcd)  ─┐
+                      ├─► 현 위치 추정      │
+                      └─► 전처리된 LiDAR    ▼
+depth (RGB 미사용) ──► self/object filtering ──► 2D 변환 맵 ──► Nav2 ──┬─► Global Path  2 Hz
+                       (carry_on 모드, hull 생성)                       ├─► Local Path  20 Hz
+Text 질의 ──► FSR-VLN ⚙ ──► 목표 좌표 (x,y,z) ─────────────────────────┴─► 속도 명령 ──► SONIC 계열 WBC
+                                                                                          → G1 (unitree_sdk2 / DDS)
+```
+
+**경로 B. 조작 (여전히 추정. 팀에 검증받을 것)**
+
+```
+센서(RGB-D) + 목표 좌표
+  → GR00T N1.x VLA (목표 → 행동 의도)
   → FSQ 이산 액션 토큰
   → SONIC 스타일 WBC 정책 (모션 트래킹)
   → G1 관절 명령 (unitree_sdk2 / DDS)
@@ -71,7 +94,15 @@ Physical AI는 "인터넷 데이터로 학습한 지능을 물리 세계의 몸�
 [연구] World Model (WFM/WAM) → 데이터 증강, 정책 평가, 상상 기반 플래닝
 ```
 
-**Week 4 캡스톤 과제 중 하나가 이 다이어그램을 팀원에게 검증받고 수정하는 것입니다.**
+**두 경로가 같은 WBC로 들어갑니다.** 그런데 넘기는 것이 서로 다릅니다. 경로 A는 선속도와 각속도 두세 개의 실수이고 경로 B는 `[H_chunk, D_action]` 청크입니다. 이 둘이 WBC의 어느 입력 자리에서 만나는지가 미확인이고 `notes/questions-for-team.md`의 M1-7입니다.
+
+**알려진 한계 셋** (사내 문서 기록. W4-M3에서 다룸)
+
+1. Nav2가 2D 맵만 받아 계단 오르기 등 3D 정보가 필요한 태스크를 수행할 수 없음
+2. hull 생성에 depth만 써서 투명하거나 검은 물체(유리병 등)를 놓치고, hull 기반 경로가 좁은 공간을 통과하지 못함
+3. 운반 중인 물건 아래에 장애물이 있으면 인식하지 못함
+
+**Week 4 캡스톤 과제 중 하나가 경로 B와 두 경로의 접점을 팀원에게 검증받고 수정하는 것입니다.**
 
 ---
 
@@ -109,7 +140,7 @@ VLA = Vision-Language-Action 모델 / WBC = Whole-Body Control / **WFM** = World
 | **W1** | Physical AI 지형도 + 생성모델 코어 (Diffusion/FM/DiT/VQ-VAE/FSQ) | 2D toy Flow Matching 구현, FSQ 토크나이저 구현, 시뮬 환경 셋업 | FSQ ★ |
 | **W2** | 로봇 정책학습 (ACT/DP) + VLA (pi0/OpenVLA/GR00T) + 액션 표현 | LeRobot으로 PushT에 Diffusion Policy 학습 완주 | VLA 백본, FSQ 계층 설계 |
 | **W3** | 휴머노이드 WBC & RL (AMP→모션트래킹→SONIC, HOMIE) + Sim2Real | mujoco_playground로 G1 보행 정책 학습 → 표준 MuJoCo sim2sim | SONIC ★, HOMIE ★, G1 ★ |
-| **W4** | 월드모델/WFM/WAM + 내비게이션(DualMap) + 시스템 통합 캡스톤 | DualMap 데모 실행, 회사 스택 아키텍처 문서 + 발표 | DualMap ★, 전체 통합 |
+| **W4** | 월드모델/WFM/WAM + 내비게이션(FAST-LIO2 → Nav2 → FSR-VLN/DualMap) + 시스템 통합 캡스톤 | 시맨틱 매핑 데모 실행 + 리포 투어, 회사 스택 아키텍처 문서 + 발표 | FAST-LIO2 ★, Nav2 ★, FSR-VLN ⚙, DualMap 🔍, 전체 통합 |
 
 매일 리듬(권장): 오전 = 논문·개념 (Claude로 생성한 학습자료 + 원논문), 오후 = 실습/코드, 마감 30분 = 노트 정리 + 용어집 갱신.
 
@@ -255,7 +286,7 @@ VLA = Vision-Language-Action 모델 / WBC = Whole-Body Control / **WFM** = World
 
 ## 8. Week 4 — 월드모델·WFM·WAM + 내비게이션 + 시스템 통합 캡스톤
 
-**주간 목표**: 월드모델 계보와 최신 WFM/WAM 동향을 정리하고, DualMap 중심의 내비게이션 스택을 이해한 뒤, 4주 학습을 "회사 스택 아키텍처 문서 + 발표"로 통합한다.
+**주간 목표**: 월드모델 계보와 최신 WFM/WAM 동향을 정리하고, **회사 내비게이션 스택(FAST-LIO2 → Nav2 → FSR-VLN/DualMap)**을 이해한 뒤, 4주 학습을 "회사 스택 아키텍처 문서 + 발표"로 통합한다.
 
 ### W4-M1. 월드모델 계보: World Models → Dreamer → V-JEPA 2 [P0] — Day 1
 
@@ -268,12 +299,19 @@ VLA = Vision-Language-Action 모델 / WBC = Whole-Body Control / **WFM** = World
 - 핵심 자료: **「World Model for Robot Learning: A Comprehensive Survey」(2605.00080 — 팀 제공. 이 분야 지도 그리기에 이 한 편이면 충분, 전부 읽지 말고 §3·§5 중심으로)**, Cosmos(2501.03575), Genie(2402.15391).
 - 보충: 「A Comprehensive Survey on World Models for Embodied AI」(2510.16732 — 분류축이 다른 보조 서베이), 「Physics Cognition in Video Generation」(2503.21765 — 물리 일관성 관점 [P2]), Unitree 자체 WAM 플랫폼 UnifoLM-WMA-0(unitreerobotics GitHub — 회사 하드웨어 벤더의 월드모델이므로 존재만 알아둘 것), Li-Zn-H/AwesomeWorldModels.
 
-### W4-M3. 내비게이션: SLAM 개요 → open-vocab 매핑 → DualMap ★ [P0] — Day 3
+### W4-M3. 내비게이션: FAST-LIO2 → Nav2 → open-vocab 매핑(FSR-VLN / DualMap) ★★ [P0] — Day 3
 
-- 다룰 내용: 고전 스택 초압축(30분: SLAM→코스트맵→플래너; ORB-SLAM3, FAST-LIO2는 이름과 역할만), open-vocabulary 시맨틱 매핑 계보 — CLIP 특징을 3D에 사상(VLMaps), 장면그래프(ConceptGraphs), **DualMap(온라인·동적 환경 대응 dual map 구조 — concrete/abstract 맵, 자연어 질의 내비게이션)**, VLN(Vision-and-Language Navigation) 개요, legged robot 특유의 SLAM 이슈(진동, 시점 요동).
-- 핵심 자료: github.com/Eku127/DualMap(논문 링크는 README), VLMaps(2210.05714), ConceptGraphs(2309.16650).
+> ⚠️ **2026-08-29 개정.** 사내 「GenP Navigation 모듈 진행 현황」으로 FAST-LIO2와 Nav2가 **현재 운영 중**임이 확인돼, 「이름과 역할만」에서 **본격 대상으로 승격**했습니다. 이 모듈은 이제 회사 내비 스택 본체를 다룹니다.
+
+- 다룰 내용:
+  - **회사 운영 스택 (본체)**: **FAST-LIO2**(LiDAR-관성 오도메트리, 원시 점군 직접 정합 + ikd-Tree, 출력은 pcd와 위치 추정과 전처리 LiDAR), **3D pcd → 2D 격자 변환에서 잃는 것**, **Nav2**(행동 트리, planner와 controller와 recovery 서버, costmap 2D, Global 2 Hz / Local 20 Hz, 속도 명령 → WBC), self/object filtering의 hull 생성(carry_on 모드).
+  - **알려진 한계 셋과 그 원인**: ① 2D 맵이라 계단 등 3D 태스크 불가 ② hull이 depth만 써서 투명하거나 검은 물체를 놓치고 좁은 공간을 못 지나감 ③ 운반 중인 물건 아래 장애물 미인식. **이 셋이 이 모듈의 실질적 학습 목표입니다.**
+  - **시맨틱 매핑 계보**: CLIP 특징을 3D에 사상(VLMaps), 장면그래프(ConceptGraphs), **FSR-VLN**(HMSG 4단 계층 + fast-to-slow 추론, 구현 중), **DualMap**(concrete/abstract 이중 맵, 검토 중). **둘을 비교하는 것이 이 절의 과제**입니다.
+  - 고전 스택 초압축(SLAM→코스트맵→플래너; ORB-SLAM3는 이름과 역할만), VLN 개요, legged robot 특유의 SLAM 이슈(진동, 시점 요동).
+- 핵심 자료: **FAST-LIO2(2107.06829, github.com/hku-mars/FAST_LIO)**, **Nav2(2003.00368 Marathon 2, docs.nav2.org)**, **FSR-VLN(2509.13733, github.com/HorizonRobotics/HoloAgent)**, DualMap(2506.01950, github.com/Eku127/DualMap), VLMaps(2210.05714), ConceptGraphs(2309.16650).
 - 보충(팀 제공): VLN+파운데이션모델 서베이(2407.07035), VLN 종합 리뷰(Springer Discover Computing, s10791-026-09977-z), KwanWaiPang/Awesome-Legged-Robot-Localization-and-Mapping.
-- 실습: **DualMap 데모 데이터셋 실행 + Claude Code로 리포 투어**(맵 자료구조와 질의 흐름 파악).
+- 실습: **FSR-VLN과 DualMap 중 하나의 데모 실행 + Claude Code로 리포 투어**(맵 자료구조와 질의 흐름 파악). 여력이 되면 FAST-LIO2 데모 rosbag으로 pcd 추출까지.
+- 주의: **FSR-VLN 논문은 FAST-LIVO2(LiDAR-관성-시각)로 맵을 만들었고 회사 파이프라인은 FAST-LIO2(LiDAR-관성)입니다.** 서로 다른 방법이니 구분할 것.
 
 ### W4-M4. 시스템 통합: 주파수 예산·미들웨어·안전 [P0] — Day 4
 
@@ -291,7 +329,7 @@ VLA = Vision-Language-Action 모델 / WBC = Whole-Body Control / **WFM** = World
 
 1. 백지에 회사 전체 스택을 그리고 각 모듈의 입력·출력·주파수를 설명하라.
 2. 월드모델의 3가지 활용 축(정책 결합/시뮬레이터/데이터 생성)을 대표 모델과 함께 설명하라.
-3. DualMap이 "온라인·동적 환경"을 다루기 위해 도입한 구조를 설명하라.
+3. 회사 내비 스택에서 LiDAR 한 줄이 WBC 속도 명령이 되기까지의 경로를 그리고, 3D pcd를 2D로 낮출 때 무엇을 잃는지 설명하라. FSR-VLN과 DualMap이 같은 자리를 놓고 무엇이 다른지도 함께.
 4. 지금 팀 논문 리딩에 들어가면 못 알아들을 것 같은 주제는 무엇인가? (→ 다음 4주 계획의 입력)
 
 ---
@@ -314,7 +352,7 @@ VLA = Vision-Language-Action 모델 / WBC = Whole-Body Control / **WFM** = World
 | World Models / DreamerV3 / V-JEPA 2 | 월드모델 | W4-M1 |
 | AMP / SONIC | WBC | W3-M2/M4 |
 | RT-2 / OXE / OpenVLA | VLA 계보 | W2-M3 |
-| OpenHomie / GEAR-SONIC / DualMap / unitree 문서·GitHub | 회사 스택 | W3-M3/M4/M5, W4-M3 |
+| OpenHomie / GEAR-SONIC / FAST_LIO / HoloAgent(FSR-VLN) / DualMap / unitree 문서·GitHub | 회사 스택 | W3-M3/M4/M5, W4-M3 |
 | awesome-legged-SLAM / AwesomeWorldModels / awesome-physical-ai ×2 | 색인용 (통독 금지, 검색용) | 수시 |
 | arXiv:2606.12783 | World Models & Physical AI 튜토리얼 | W1-M1 |
 | panaversity 코스 / DeepRobotics RL 가이드 / CVPR2026 워크숍 | 입문·행사 자료 — 참고 수준 [P2] | 수시 |
@@ -368,7 +406,7 @@ VLA = Vision-Language-Action 모델 / WBC = Whole-Body Control / **WFM** = World
   그 밖은 전부 모른다고 가정합니다: 제어공학(MPC·상태공간·캐스케이드 제어·PD 서보·대역폭),
   생성모델 내부 기제(BPE·autoregressive·codebook·ELBO·KV 캐시), 로봇 전 영역(시뮬레이터·
   VLA·WBC·SLAM·미들웨어), 그리고 이 모듈이 다루는 개념 자체.
-[회사 스택] Unitree G1, HOMIE, GEAR-SONIC(SONIC WBC), DualMap, FSQ 기반 상위-하위 계층 모델.
+[회사 스택] Unitree G1, HOMIE, GEAR-SONIC(SONIC WBC), FAST-LIO2, Nav2, FSR-VLN/DualMap, GR00T N1.x VLA, FSQ 기반 상위-하위 계층 모델. 내비 경로와 조작 경로 두 갈래.
 
 아래 모듈의 상세 학습자료를 작성해주세요.
 --- (마스터 플랜에서 해당 모듈 섹션 전체를 붙여넣기) ---
@@ -435,7 +473,7 @@ lesson.md 구조 (순서 고정, 상세는 docs/course-plan.md §3.7):
 
 ```
 # 리포 클론 후 Claude Code에서:
-이 리포([OpenHomie | DualMap | unitree_rl_gym | GR00T-WholeBodyControl])의 코드베이스 투어를 해줘.
+이 리포([OpenHomie | FAST_LIO | HoloAgent | DualMap | unitree_rl_gym | GR00T-WholeBodyControl])의 코드베이스 투어를 해줘.
 
 1. 디렉토리 맵: 각 최상위 디렉토리의 역할 한 줄씩.
 2. 실행 진입점부터 콜스택 순서로 핵심 파일 5개 워크스루 (파일 경로:라인 인용).
@@ -476,7 +514,7 @@ lesson.md 구조 (순서 고정, 상세는 docs/course-plan.md §3.7):
 
 ## 13. 4주 이후 (다음 스텝 미리보기)
 
-W4 회고 결과에 따라 다음 중 하나로 심화하는 것을 권합니다. ① VLA 트랙: LeRobot으로 자체 데이터 파인튜닝 + FSQ 토크나이저를 회사 모델에 맞게 실험 ② WBC 트랙: SONIC 코드로 커스텀 모션 트래킹 학습 + 실기 배포 절차 습득 ③ 내비 트랙: DualMap을 G1 센서 스트림에 연결하는 통합 실험 ④ 월드모델 트랙: 회사 데이터로 정책 평가용 월드모델 실험. 선택되면 동일한 형식의 4주 심화 플랜을 다시 요청하세요.
+W4 회고 결과에 따라 다음 중 하나로 심화하는 것을 권합니다. ① VLA 트랙: LeRobot으로 자체 데이터 파인튜닝 + FSQ 토크나이저를 회사 모델에 맞게 실험 ② WBC 트랙: SONIC 코드로 커스텀 모션 트래킹 학습 + 실기 배포 절차 습득 ③ 내비 트랙: FSR-VLN이나 DualMap을 G1 센서 스트림에 연결하고 Nav2의 2D 한계를 3D 코스트맵으로 넘기는 실험 ④ 월드모델 트랙: 회사 데이터로 정책 평가용 월드모델 실험. 선택되면 동일한 형식의 4주 심화 플랜을 다시 요청하세요.
 
 ---
 
@@ -497,7 +535,7 @@ W4 회고 결과에 따라 다음 중 하나로 심화하는 것을 권합니다
 | W1 | toy Diffusion/Flow Matching, FSQ 토크나이저, MuJoCo·G1 부트캠프 | ✅ 여유 있음. **클라우드 불필요** |
 | W2 | LeRobot PushT Diffusion Policy 학습 | ✅ 충분. VRAM 12GB로 배치 축소 없이 가능 |
 | W3 | mujoco_playground MJX PPO 병렬 보행 학습 | ⚠️ **환경 개수를 줄이면 가능, 학습 시간은 늘어남.** 실측 후 판단 — 느리면 그때 클라우드로 |
-| W4 | DualMap 데모, 월드모델 개념 | ⚠️ 미검증. DualMap 요구사항 확인 필요 |
+| W4 | 시맨틱 매핑 데모(FSR-VLN 또는 DualMap), 월드모델 개념 | ⚠️ 미검증. 두 리포의 요구사항 확인 필요 |
 
 > Ampere 계열이므로 JAX 실험 전 `export JAX_DEFAULT_MATMUL_PRECISION=highest` (mujoco_playground 공식 권장).
 

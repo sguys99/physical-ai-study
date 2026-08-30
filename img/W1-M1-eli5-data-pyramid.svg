@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-label="자료는 많으면 기록이 없고 기록이 있으면 적습니다">
+  <rect x="0" y="0" width="960" height="560" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">자료는 많으면 기록이 없고 기록이 있으면 적습니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">여기서 말하는 기록은 그때 관절을 얼마나 돌렸는가 하는 숫자입니다</text>
+
+    <text x="40" y="108" font-size="14" fill="#7a8399">위로 갈수록 자료가 많습니다</text>
+
+    <!-- 1층 인터넷 영상 -->
+    <polygon points="60,120 560,120 520,216 100,216" fill="#ece9e4" stroke="#b3ada4" stroke-width="1"/>
+    <text x="310" y="164" font-size="17" font-weight="700" fill="#2d3142" text-anchor="middle">인터넷에 널린 영상</text>
+    <text x="310" y="192" font-size="14" fill="#5c564e" text-anchor="middle">사람이 컵을 집는 장면 같은 것</text>
+    <line x1="540" y1="178" x2="600" y2="178" stroke="#b3ada4" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="612" y="172" font-size="15" font-weight="600" fill="#2d3142">아주 많습니다</text>
+    <text x="612" y="196" font-size="14" font-weight="600" fill="#c4501f">관절 기록이 없습니다</text>
+
+    <!-- 2층 사람 움직임 기록 -->
+    <polygon points="100,226 520,226 480,322 140,322" fill="#e3e5e6" stroke="#a6adb5" stroke-width="1"/>
+    <text x="310" y="270" font-size="17" font-weight="700" fill="#2d3142" text-anchor="middle">사람 움직임을 재어 둔 기록</text>
+    <text x="310" y="298" font-size="14" fill="#4f5d75" text-anchor="middle">사람 몸만 재어 둔 것입니다</text>
+    <line x1="508" y1="276" x2="600" y2="276" stroke="#a6adb5" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="612" y="270" font-size="15" font-weight="600" fill="#2d3142">훨씬 적습니다</text>
+    <text x="612" y="294" font-size="14" font-weight="600" fill="#4f5d75">사람 관절 기록만 있습니다</text>
+
+    <!-- 3층 로봇을 조종해 모은 기록 -->
+    <polygon points="140,332 480,332 440,428 180,428" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1"/>
+    <text x="310" y="376" font-size="16" font-weight="700" fill="#2d3142" text-anchor="middle">로봇을 조종해 모은 기록</text>
+    <text x="310" y="404" font-size="14" fill="#1f3f70" text-anchor="middle">사람이 손으로 만든 것입니다</text>
+    <line x1="466" y1="382" x2="600" y2="382" stroke="#8fa3c4" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="612" y="376" font-size="15" font-weight="600" fill="#2d3142">가장 적습니다</text>
+    <text x="612" y="400" font-size="14" font-weight="600" fill="#2e5aa8">관절 기록이 정확합니다</text>
+
+    <text x="40" y="456" font-size="14" fill="#7a8399">아래로 갈수록 기록이 정확합니다</text>
+
+    <line x1="40" y1="482" x2="920" y2="482" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="508" font-size="14" fill="#4f5d75">위쪽 영상은 넘치는데 로봇을 움직이는 데 필요한 숫자가 그 안에 없습니다.</text>
+    <text x="40" y="530" font-size="14" fill="#4f5d75">아래쪽 기록은 정확한데 사람이 하나씩 모아야 해서 양이 턱없이 모자랍니다.</text>
+  </g>
+</svg>

@@ -600,7 +600,7 @@ W1-M3의 같은 다이어그램은 명령 공백 40 스텝 이상으로 끝났�
 
 ```mermaid
 flowchart TB
-    L5["<b>L5 · DualMap</b> ★<br/>언어 목표 → 시맨틱 맵 · 좌표<br/>0.5~5 Hz"]
+    L5["<b>L5 인지와 매핑</b> ★<br/>FAST-LIO2 기하 + FSR-VLN 의미<br/>언어 목표에서 좌표로, 0.5~5 Hz"]
     VLM["<b>L4 · VLM 백본</b><br/>이미지 · 언어 · proprioception → 조건 토큰<br/>적분 루프 밖 · 청크당 1회<br/><i>구성 팀 확인 필요</i>"]
     HEAD["<b>L4 액션 헤드</b><br/>objective = flow matching 이 앉는 자리<br/>ODE Euler K회 → 액션 청크 [B,H,29]<br/><i>존재 여부 · K · 스케줄 팀 확인 필요</i>"]
     FSQ["<b>L3 · FSQ 이산 액션 토큰</b> ★<br/>round of f of z · 정수 하나가 계약<br/>→ W1-M5"]

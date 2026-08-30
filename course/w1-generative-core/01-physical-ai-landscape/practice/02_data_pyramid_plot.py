@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# # W1-M1 실습 2 — 데이터 피라미드 + 5계층 스택 렌더
+# # W1-M1 실습 2, 데이터 피라미드와 5계층 스택 렌더
 #
 # lesson.md `§5.1`(데이터 피라미드)와 `§3.2`(5계층 블록도)을 matplotlib 그림으로 만듭니다.
 # 문서용 그림 소스이므로, 수치가 갱신되면 이 파일의 상수만 고치면 됩니다.
@@ -28,7 +28,7 @@
 #
 # GPU 불필요. 전체 실행 수 초.
 #
-# > **한글 폰트 주의** — 실행 환경에 한글 폰트가 없으면 라벨이 두부(□)로 깨집니다.
+# > **한글 폰트 주의.** 실행 환경에 한글 폰트가 없으면 라벨이 두부(□)로 깨집니다.
 # > 아래 `setup_korean_font()`가 폰트를 탐색하고, 못 찾으면 **영문 라벨로 자동 폴백**합니다.
 # > `--ascii-labels`로 강제 폴백해 두 경로를 모두 확인할 수 있습니다.
 
@@ -43,7 +43,7 @@ from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")  # headless 고정 — plt.show() 금지
+matplotlib.use("Agg")  # headless 고정. plt.show() 금지
 
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
@@ -55,7 +55,7 @@ MODULE_ID = "W1-M1"
 
 
 # %% [markdown]
-# ## 0. 경로·폰트 유틸 (01번 스크립트와 동일)
+# ## 0. 경로와 폰트 유틸 (01번 스크립트와 동일)
 
 # %%
 _ROOT_MARKERS = ("course", "docs", "CLAUDE.md")
@@ -151,7 +151,7 @@ def save_and_check(fig, out_path: Path, dpi: int = 140, rect: tuple | None = Non
 
 
 # %% [markdown]
-# ## 1. 데이터 피라미드 — lesson §5.1
+# ## 1. 데이터 피라미드 (lesson §5.1)
 #
 # 위로 갈수록 데이터는 넘치는데 액션 $a_t$ 가 없고, 아래로 갈수록 $a_t$ 는 정확한데 데이터가 마릅니다.
 # 정량 수치는 lesson §5.1 표에서 그대로 가져왔습니다.
@@ -299,7 +299,7 @@ def plot_data_pyramid(out_path: Path) -> Path:
 
 
 # %% [markdown]
-# ## 2. 5계층 스택 — lesson §3.2 / §3.3
+# ## 2. 5계층 스택 (lesson §3.2 / §3.3)
 #
 # 주파수를 **로그 스케일 x축**에 올리면 lesson §3.3의
 # $\omega_{L1} \gg \omega_{L2} \gg \omega_{L4} \gg \omega_{L5}$ 가 막대 사이 거리로 그대로 보입니다.
@@ -328,12 +328,12 @@ STACK: list[StackLayer] = [  # 아래(빠름) → 위(느림) 순서로 y축에 
     StackLayer("L3", "액션 인터페이스", "Action Interface", None, None,
                "FSQ 기반 계층 모델", "FSQ-based hierarchical model", "#7fa9d0"),
     StackLayer("L4", "상위 지능 (VLA/월드모델)", "High-level (VLA / World Model)", 1.0, 10.0,
-               "VLA / World Model", "VLA / World Model", "#b7cfe6"),
-    StackLayer("L5", "인지·매핑", "Perception / Mapping", 0.5, 5.0,
-               "DualMap", "DualMap", "#dbe7f3"),
+               "GR00T N1.x VLA / World Model", "GR00T N1.x VLA / World Model", "#b7cfe6"),
+    StackLayer("L5", "인지와 매핑", "Perception / Mapping", 0.5, 5.0,
+               "FAST-LIO2 + FSR-VLN", "FAST-LIO2 + FSR-VLN", "#dbe7f3"),
 ]
 
-# ytick 부제로 쓸 대역폭 분리비 (기하평균 기준, lesson §3.3 · 01번 스크립트와 동일한 계산)
+# ytick 부제로 쓸 대역폭 분리비 (기하평균 기준, lesson §3.3, 01번 스크립트와 동일한 계산)
 _RATIO_NOTE_KO = {
     "L1": "기준",
     "L2": "L1 대비 ÷8.9",
@@ -362,7 +362,7 @@ def plot_stack_layers(out_path: Path) -> Path:
         yticks.append(y)
         ylabels.append(f"{lyr.tag} · {t(lyr.name_ko, lyr.name_en)}\n({note})")
 
-        if lyr.f_lo is None:  # L3 — 고정 주파수 없음. L4 구간에 빗금으로 표시
+        if lyr.f_lo is None:  # L3는 고정 주파수 없음. L4 구간에 빗금으로 표시
             lo, hi = 1.0, 10.0
             ax.barh(y, hi - lo, left=lo, height=0.55,
                     facecolor="none", edgecolor=lyr.color, hatch="///", lw=1.6)

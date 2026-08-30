@@ -14,9 +14,9 @@
 # ---
 
 # %% [markdown]
-# # W1-M1 실습 1 — 주파수 예산과 action chunking
+# # W1-M1 실습 1, 주파수 예산과 action chunking
 #
-# lesson.md `§3.2`(5계층 블록도) · `§3.3`(대역폭 분리) · `§4`(지연 예산 부등식)을 손으로 돌려보는 스크립트입니다.
+# lesson.md `§3.2`(5계층 블록도), `§3.3`(대역폭 분리), `§4`(지연 예산 부등식)을 손으로 돌려보는 스크립트입니다.
 #
 # 이 실습에서 확인할 것:
 #
@@ -41,7 +41,7 @@ from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")  # headless 고정 — plt.show() 금지, 결과는 전부 파일로
+matplotlib.use("Agg")  # headless 고정. plt.show() 금지, 결과는 전부 파일로
 
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
@@ -177,10 +177,10 @@ def print_table(headers: list[str], rows: list[list[str]], aligns: list[str] | N
 
 
 # %% [markdown]
-# ## 1. 5계층 주파수 예산 — lesson §3.2
+# ## 1. 5계층 주파수 예산 (lesson §3.2)
 #
 # 계층 정의는 lesson §3.2 블록도를 그대로 옮긴 것입니다.
-# L3(액션 인터페이스)만 고정 주파수가 없습니다 — **L4 호출당 1회** 동작하는 이벤트 구동 계층이라서
+# L3(액션 인터페이스)만 고정 주파수가 없습니다. **L4 호출당 1회** 동작하는 이벤트 구동 계층이라서
 # 아래 대역폭 분리 계산에서는 제외합니다.
 
 # %%
@@ -209,12 +209,18 @@ class Layer:
         return f"{self.f_lo:g} ~ {self.f_hi:g} Hz"
 
 
-# lesson §3.2 — 위(느림·똑똑함)에서 아래(빠름·반사적)로
+# 회사 내비게이션 경로 실측값 (사내 GenP Navigation 모듈 진행 현황, 2026-08-29)
+# lesson §3.3 표의 마지막 행 / §7.4 두 경로
+NAV2_GLOBAL_HZ = 2.0   # Global Path
+NAV2_LOCAL_HZ = 20.0   # Local Path
+
+# lesson §3.2를 따라 위(느리고 똑똑함)에서 아래(빠르고 반사적)로
 LAYERS: list[Layer] = [
-    Layer("L5", "인지·매핑", "Perception / Mapping", 0.5, 5.0,
-          "RGB-D·LiDAR·언어목표 → 시맨틱 맵·목표 3D 좌표", "DualMap"),
+    Layer("L5", "인지와 매핑", "Perception / Mapping", 0.5, 5.0,
+          "RGB-D, LiDAR, 언어목표 → 점군/시맨틱 맵, 목표 3D 좌표",
+          "FAST-LIO2 (기하) + FSR-VLN / DualMap (의미)"),
     Layer("L4", "상위 지능(VLA/월드모델)", "High-level (VLA / World Model)", 1.0, 10.0,
-          "이미지·언어·상태 → 액션 청크 [B,H_chunk,D_action]", "VLA / World Model"),
+          "이미지, 언어, 상태 → 액션 청크 [B,H_chunk,D_action]", "GR00T N1.x VLA / World Model"),
     Layer("L3", "액션 인터페이스", "Action Interface", None, None,
           "액션 의도 → 이산 토큰/setpoint (L4 호출당 1회)", "FSQ 기반 계층 모델"),
     Layer("L2", "전신 제어 WBC", "Whole-Body Control", 50.0, 500.0,
@@ -293,16 +299,31 @@ def print_separation_ratios() -> None:
         rows,
         aligns=["left", "right", "right", "right", "right", "right", "center"],
     )
+    # 회사 실측: Nav2 지역 20 Hz vs 전역 2 Hz (사내 GenP Navigation 문서, 2026-08-29)
+    # 논문 밴드가 아니라 파이프라인에 박힌 설정값이라 최선/최악 범위가 없다.
+    nav_ratio = NAV2_LOCAL_HZ / NAV2_GLOBAL_HZ
+    rows.append([
+        "Nav2 지역/전역 (회사 실측)",
+        f"{NAV2_LOCAL_HZ:,.1f}",
+        f"{NAV2_GLOBAL_HZ:,.2f}",
+        f"x{nav_ratio:,.1f}",
+        "범위없음",
+        "범위없음",
+        "OK" if nav_ratio >= CASCADE_MIN_RATIO else "약함",
+    ])
     print("  읽는 법:")
     print("   - 대표 비율 = 기하평균끼리의 비. 최선 = 빠른쪽 상한 / 느린쪽 하한, 최악 = 빠른쪽 하한 / 느린쪽 상한.")
     print("   - L1/L2, L2/L4는 캐스케이드 경험칙(x5~10)을 넉넉히 만족한다 → 계층 분리가 물리적으로 정당하다.")
     print("   - L4/L5는 대표 비율이 x2.0 수준이고 최악에서는 밴드가 역전(x1 미만)한다.")
     print("     둘 다 '느린 계층'이라 대역폭 분리보다 기능 분리(인지 vs 행동 의도) 성격이 강하다는 뜻이다.")
+    print("   - 마지막 행만 성격이 다르다. 앞 세 행은 논문 밴드의 기하평균이지만")
+    print(f"     Nav2의 두 값({NAV2_LOCAL_HZ:g} / {NAV2_GLOBAL_HZ:g} Hz)은 우리 파이프라인에 실제로 박힌 설정값이다.")
+    print(f"     x{nav_ratio:,.1f}배는 회사가 이미 캐스케이드 경험칙을 만족시키고 있다는 실측이다.")
     print("     lesson §3.3의 '대략 한 자릿수'는 L1~L4 구간에서 성립하고 L4~L5는 그 예외라고 읽으면 된다.")
 
 
 # %% [markdown]
-# ## 2. 최소 청크 길이 — lesson §4.1 eq.(1)
+# ## 2. 최소 청크 길이 (lesson §4.1 eq.(1))
 #
 # $$\frac{H_{chunk}}{f_2} \ge T_{replan} + \tau_{infer} + \tau_{comm}
 #   \quad\Longleftrightarrow\quad
@@ -645,7 +666,7 @@ def main(argv: list[str] | None = None) -> None:
     print("  MPC 대응: H_chunk는 receding horizon의 예측 지평 N이다 (lesson §4.3).")
     print("  지평을 늘리면 지연에는 강해지지만 그 구간 동안 새 관측을 반영하지 못한다.")
 
-    # 영문 폴백 렌더는 한글본을 덮어쓰지 않고 따로 저장한다 (02·03과 동일 규약)
+    # 영문 폴백 렌더는 한글본을 덮어쓰지 않고 따로 저장한다 (02, 03과 동일 규약)
     suffix = "_ascii" if args.ascii_labels else ""
     out = plot_budget(
         args.f2, args.f4, args.tau_infer, args.tau_comm, n_sweep, duration,

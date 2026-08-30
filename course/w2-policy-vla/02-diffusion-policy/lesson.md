@@ -413,7 +413,7 @@ $$
 
 ```mermaid
 flowchart TB
-  L5["L5 인지·매핑<br/>DualMap"] --> L4["L4 상위 지능<br/>VLA / World Model, 수 Hz"]
+  L5["L5 인지와 매핑<br/>FAST-LIO2 + FSR-VLN"] --> L4["L4 상위 지능<br/>GR00T N1.x VLA / World Model, 수 Hz"]
   L4 --> L3["L3 액션 인터페이스<br/>FSQ 이산 액션 토큰 ★"]
   L3 --> L2["L2 전신 제어<br/>GEAR-SONIC / HOMIE, 50~500 Hz"]
   L2 --> L1["L1 하드웨어<br/>Unitree G1, 23~43 DoF"]

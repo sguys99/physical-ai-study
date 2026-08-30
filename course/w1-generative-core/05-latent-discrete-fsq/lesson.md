@@ -433,7 +433,7 @@ G1 관절 궤적을 토큰화하면 어떤 모양이 되는지를 예시로 채�
 
 ```mermaid
 flowchart TB
-    L5["<b>L5 · DualMap</b> ★<br/>언어 목표 → 시맨틱 맵 · 좌표<br/>0.5~5 Hz"]
+    L5["<b>L5 인지와 매핑</b> ★<br/>FAST-LIO2 기하 + FSR-VLN 의미<br/>언어 목표에서 좌표로, 0.5~5 Hz"]
     L4["<b>L4 · VLA / World Model</b><br/>목표 → 행동 의도<br/>1~10 Hz<br/><i>구성 팀 확인 필요</i>"]
     ENC["<b>L3 · FSQ 인코더</b> ★<br/>액션 의도 → z ∈ R^d → round(f(z))<br/><i>무엇을 토큰화하는지 팀 확인 필요</i>"]
     TOK["<b>액션 토큰 idx</b><br/>0 부터 ∏L_i 빼기 1 까지의 정수 하나<br/>이 정수가 인터페이스 계약<br/><i>레벨 L · 토큰 레이트 팀 확인 필요</i>"]

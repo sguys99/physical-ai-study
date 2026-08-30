@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# # W1-M1 실습 3 — 플레이어 지도 데이터화
+# # W1-M1 실습 3, 플레이어 지도 데이터화
 #
 # lesson.md `§6.2`(주요 플레이어 계보 표)를 `players.csv`로 옮기고, pandas로 읽어
 # **① 조직 × 베팅 계층 매트릭스**와 **② 최신 모델 발표 타임라인**을 렌더합니다.
@@ -29,20 +29,20 @@
 # | 컬럼 | 의미 |
 # |---|---|
 # | `org` | 조직명 |
-# | `lineage` | 계보 (화살표는 ASCII `->` 로 씀 — CSV 인코딩 사고 방지) |
+# | `lineage` | 계보 (화살표는 ASCII `->` 로 씀, CSV 인코딩 사고 방지) |
 # | `latest` | 2026-08 기준 최신 모델. 없으면 빈칸 |
 # | `date` | 발표 시점. `YYYY` / `YYYY-MM` / `YYYY-MM-DD` 중 **아는 만큼만**. 모르면 빈칸 |
 # | `date_confidence` | `confirmed`(1차 출처 확인) / `estimated`(시점 추정) / `unknown`(미확인) |
-# | `bet_layer` | 베팅 영역. `L1`~`L5` + 비계층 영역 `SIM`(시뮬 인프라) `DATA`(데이터·월드모델). `;`로 구분 |
+# | `bet_layer` | 베팅 영역. `L1`~`L5` + 비계층 영역 `SIM`(시뮬 인프라) `DATA`(데이터와 월드모델). `;`로 구분 |
 # | `note` | lesson §6.2 표의 '특기' 열 |
 #
-# **날짜 정밀도를 그림에 그대로 반영합니다** — `2026`만 아는 항목은 2026년 전체를 덮는 가로 막대로,
+# **날짜 정밀도를 그림에 그대로 반영합니다.** `2026`만 아는 항목은 2026년 전체를 덮는 가로 막대로,
 # `2026-07-31`처럼 확정된 항목은 점으로 찍습니다. 없는 정밀도를 지어내지 않기 위한 장치입니다.
 #
 # > lesson §6.2이 "1차 출처 미확인"으로 배제한 정량 수치(Figure 생산 대수, Optimus DoF, 1X 선주문 수량)는
 # > **CSV에 넣지 않았습니다.** 세 조직은 정성 서술만 있는 행으로 남아 있어 타임라인에는 나오지 않습니다.
 #
-# > **그림 라벨로 쓰이는 `org` · `lineage` · `latest`는 가급적 ASCII로 쓰세요.**
+# > **그림 라벨로 쓰이는 `org`, `lineage`, `latest`는 가급적 ASCII로 쓰세요.**
 # > 한글 폰트가 없는 환경에서 영문 폴백을 해도 이 세 컬럼은 CSV 값이 그대로 나가기 때문에
 # > 한글이 들어 있으면 그 부분만 두부(□)로 깨집니다. 한글 설명은 `note`에 넣으면 됩니다.
 # > (깨지면 `save_and_check()`가 "렌더에 빠진 글리프" 경고를 찍어 알려줍니다.)
@@ -60,7 +60,7 @@ from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")  # headless 고정 — plt.show() 금지
+matplotlib.use("Agg")  # headless 고정. plt.show() 금지
 
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
@@ -73,7 +73,7 @@ CSV_NAME = "players.csv"
 
 
 # %% [markdown]
-# ## 0. 경로·폰트 유틸 (01/02번 스크립트와 동일)
+# ## 0. 경로와 폰트 유틸 (01/02번 스크립트와 동일)
 
 # %%
 _ROOT_MARKERS = ("course", "docs", "CLAUDE.md")
@@ -182,8 +182,8 @@ def save_and_check(fig, out_path: Path, dpi: int = 140, rect: tuple | None = Non
 # %% [markdown]
 # ## 1. CSV 로드와 파싱
 #
-# 베팅 영역 축은 **L1~L5(스택 계층) + SIM·DATA(비계층 영역)** 입니다.
-# lesson §6.2의 "주 베팅 계층" 열에 '시뮬 인프라', '데이터·월드모델'처럼 계층이 아닌 항목이 있어
+# 베팅 영역 축은 **L1~L5(스택 계층) + SIM과 DATA(비계층 영역)** 입니다.
+# lesson §6.2의 "주 베팅 계층" 열에 '시뮬 인프라', '데이터와 월드모델'처럼 계층이 아닌 항목이 있어
 # 정보를 버리지 않으려고 두 칸을 더 뒀습니다.
 
 # %%
@@ -334,9 +334,9 @@ def plot_bet_matrix(df: pd.DataFrame, ax) -> None:
 #
 # | 표기 | 뜻 |
 # |---|---|
-# | 채운 점 + 짧은 막대 | `confirmed` — 1차 출처로 확인된 날짜 |
-# | 빈 점 + 구간 막대 | `estimated` — 연/월까지만 아는 항목. 막대가 그 구간 전체 |
-# | (표시 없음) | `unknown` — 시점 미확인. 타임라인에서 제외하고 그림 아래 목록에만 남긴다 |
+# | 채운 점 + 짧은 막대 | `confirmed`. 1차 출처로 확인된 날짜 |
+# | 빈 점 + 구간 막대 | `estimated`. 연/월까지만 아는 항목이고 막대가 그 구간 전체 |
+# | (표시 없음) | `unknown`. 시점 미확인이라 타임라인에서 제외하고 그림 아래 목록에만 남긴다 |
 
 # %%
 def plot_timeline(df: pd.DataFrame, ax) -> None:

@@ -31,7 +31,7 @@ notes/
   papers/                            # 논문 노트 1편 = 1파일
   repo-tours/                        # 외부 리포 투어 노트 1개 = 1파일
   questions-for-team.md              # 팀 확인 질문 누적 ← 온보딩의 핵심 산출물
-repos/                               # 외부 리포 클론 (OpenHomie, DualMap 등) — gitignore
+repos/                               # 외부 리포 클론 (OpenHomie, FAST_LIO, HoloAgent, DualMap 등) — gitignore
 artifacts/                           # 롤아웃 mp4, 학습 커브, 다이어그램 (대용량은 gitignore)
 img/
 CLAUDE.md   README.md   .env.example   .gitignore
@@ -77,13 +77,19 @@ CLAUDE.md   README.md   .env.example   .gitignore
 
 | 계층 | 기술 | 역할 |
 |---|---|---|
-| L5 인지·매핑 | **DualMap** ★ | 온라인 open-vocabulary 시맨틱 매핑, 자연어 목표 내비게이션 |
-| L4 상위 지능 | VLA / World Model | 목표 → 행동 의도 |
-| L3 액션 인터페이스 | **FSQ 기반 계층 모델** ★ | 상위 모델 ↔ 하위 제어기를 잇는 이산 액션 토큰 |
+| L5 인지 (기하) | **FAST-LIO2** ★ | LiDAR-관성 오도메트리. 3D 점군 맵(pcd) + 현 위치 추정 + 전처리 LiDAR |
+| L5 인지 (시맨틱) | **FSR-VLN** ⚙ / **DualMap** 🔍 | open-vocabulary 시맨틱 매핑. 자연어 질의 → 목표 좌표 |
+| L4 상위 지능 | **GR00T N1.x VLA** ★ / World Model | 목표 → 행동 의도 (조작 경로) |
+| L4→L2 내비 경로 | **Nav2** ★ | 2D 격자 맵 → Global Path 2 Hz / Local Path 20 Hz / 속도 명령 → WBC |
+| L3 액션 인터페이스 | **FSQ 기반 계층 모델** ★ | 상위 모델 ↔ 하위 제어기를 잇는 이산 액션 토큰 (조작 경로) |
 | L2 전신 제어 | **GEAR-SONIC** ★ / **HOMIE** ★ | WBC 모션 트래킹 파운데이션 정책 / 텔레옵 기반 데이터 수집 |
-| L1 하드웨어 | **Unitree G1** ★ | 23~43 DoF 휴머노이드, DDS/SDK |
+| L1 하드웨어 | **Unitree G1** ★ | 23~43 DoF 휴머노이드, DDS/SDK. Livox Mid-360 LiDAR + RGB-D |
 
-★ = 회사 사용 중. 3-pass 정독 대상 6편: FSQ(2309.15505) / SONIC(2511.07820) / HOMIE(2502.13013) / pi0(2410.24164) / Diffusion Policy(2303.04137) / DualMap.
+**상태 표기**: ★ = 현재 운영 중, ⚙ = 구현 중, 🔍 = 검토 중 (2026-08-29 사내 「GenP Navigation 모듈 진행 현황」 기준)
+
+**L2로 내려가는 길이 둘입니다.** 내비게이션은 Nav2가 속도 명령을 WBC로 직접 보내고 L4 VLA를 거치지 않습니다. 조작은 VLA → FSQ 토큰으로 갑니다. 자세한 것은 [W1-M1 §7.4](course/w1-generative-core/01-physical-ai-landscape/lesson.md).
+
+3-pass 정독 대상 6편: FSQ(2309.15505) / SONIC(2511.07820) / HOMIE(2502.13013) / pi0(2410.24164) / Diffusion Policy(2303.04137) / DualMap.
 
 ---
 

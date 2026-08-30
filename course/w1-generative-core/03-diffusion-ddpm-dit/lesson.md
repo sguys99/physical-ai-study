@@ -563,14 +563,14 @@ DiT(arXiv:2212.09748)는 U-Net을 Transformer로 바꾸고 Stable Diffusion VAE 
 | **WBC(Whole-Body Control, 전신 제어)** | 팔다리와 몸통을 하나의 목적으로 함께 푸는 하위 제어 계층 | 다입력 다출력 플랜트를 통째로 다루는 안쪽 루프 |
 | **FSQ(Finite Scalar Quantization)** | 연속 벡터를 축마다 정해진 눈금으로 반올림해 정수 토큰으로 만드는 이산화 | 액션의 토크나이저. 인터페이스 계약이 정수 하나가 된다 |
 | **AR(autoregressive, 자기회귀)** | 앞서 낸 토큰을 다시 입력으로 받아 다음 토큰을 내는 순차 생성 | 출력을 상태에 되먹이는 루프. KV 캐시가 그 재계산을 줄인다 |
-| **DualMap** | 자연어 목표를 시맨틱 맵에 연결하는 온라인 매핑 계층 | 목표 좌표를 만들어 바깥 루프에 넘기는 인지 단계 |
+| **L5 인지와 매핑** | FAST-LIO2가 점군 지도를, FSR-VLN이나 DualMap이 그 위에 의미를 얹는 계층 | 목표 좌표를 만들어 바깥 루프에 넘기는 인지 단계 |
 | **GEAR-SONIC과 HOMIE** | 모션 트래킹 WBC 파운데이션 정책, 그리고 외골격 텔레옵 데이터 수집 시스템 | 안쪽 루프 본체와 그 학습 데이터를 만드는 계측 장비 |
 
 ### 8.1 DiT가 앉을 수 있는 자리
 
 ```mermaid
 flowchart TB
-    L5["<b>L5 · DualMap</b> ★<br/>언어 목표 → 시맨틱 맵 · 좌표<br/>0.5~5 Hz"]
+    L5["<b>L5 인지와 매핑</b> ★<br/>FAST-LIO2 기하 + FSR-VLN 의미<br/>언어 목표에서 좌표로, 0.5~5 Hz"]
     VLM["<b>L4 · VLM 백본</b><br/>이미지 · 언어 · proprioception → 조건 토큰<br/><i>구성 팀 확인 필요</i>"]
     HEAD["<b>L4 액션 헤드</b><br/>DiT + adaLN-Zero 가 앉는 자리<br/>NFE회 디노이징 → 액션 청크<br/><i>회사가 이 구조인지 팀 확인 필요</i>"]
     FSQ["<b>L3 · FSQ 이산 액션 토큰</b> ★<br/>round of f of z · 정수 하나가 계약<br/>→ W1-M5"]

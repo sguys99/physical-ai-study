@@ -1,114 +1,122 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 984" width="960" height="984" role="img" aria-label="로봇 지능 스택 다섯 층">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1040" width="960" height="1040" role="img" aria-label="로봇 지능 스택 다섯 층">
   <defs>
     <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
       <polygon points="0 0, 9 3.5, 0 7" fill="#4f5d75"/>
     </marker>
   </defs>
-  <rect x="0" y="0" width="960" height="984" fill="#f8f7f4"/>
+  <rect x="0" y="0" width="960" height="1040" fill="#f8f7f4"/>
   <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
 
     <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">로봇 지능 스택 다섯 층</text>
     <text x="40" y="74" font-size="15" fill="#4f5d75">위층은 느리게 판단하고 아래층은 빠르게 반응합니다</text>
 
     <!-- ============ L5 ============ -->
-    <rect x="40" y="112" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="672" y="112" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="40" y="112" width="616" height="132" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="672" y="112" width="248" height="132" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
     <rect x="64" y="126" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
     <text x="90" y="143" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L5</text>
     <text x="128" y="144" font-size="17" font-weight="700" fill="#2d3142">인지와 매핑</text>
     <text x="64" y="170" font-size="14" fill="#7a8399">하는 일</text>
-    <text x="136" y="170" font-size="14" fill="#2d3142">자연어 목표를 지도 위의 좌표로 바꿉니다</text>
+    <text x="136" y="170" font-size="14" fill="#2d3142">지도를 만들고 자연어 목표를 그 위의 좌표로 바꿉니다</text>
     <text x="64" y="192" font-size="14" fill="#7a8399">입력</text>
     <text x="136" y="192" font-size="14" fill="#4f5d75">RGB-D 영상, 라이다 포인트클라우드, 자연어 목표</text>
     <text x="64" y="214" font-size="14" fill="#7a8399">출력</text>
-    <text x="136" y="214" font-size="14" fill="#4f5d75">시맨틱 맵, 목표 3D 좌표 [3]</text>
+    <text x="136" y="214" font-size="14" fill="#4f5d75">3D 점군 맵과 2D 점유 격자, 시맨틱 맵, 목표 3D 좌표 [3]</text>
+    <text x="64" y="234" font-size="13" fill="#7a8399">기하 담당과 의미 담당이 서로 다른 모듈로 갈려 있습니다</text>
     <text x="692" y="146" font-size="16" font-weight="700" fill="#2d3142">0.5 ~ 5 Hz</text>
-    <text x="692" y="174" font-size="14" fill="#7a8399">회사 도구</text>
-    <text x="692" y="196" font-size="15" font-weight="600" fill="#2e5aa8">DualMap ★</text>
+    <text x="692" y="172" font-size="14" fill="#7a8399">회사 도구</text>
+    <text x="692" y="194" font-size="14" font-weight="600" fill="#2e5aa8">FAST-LIO2 ★  기하</text>
+    <text x="692" y="213" font-size="14" font-weight="600" fill="#2e5aa8">FSR-VLN (구현중)  의미</text>
+    <text x="692" y="232" font-size="14" font-weight="600" fill="#2e5aa8">DualMap (검토중)  의미</text>
 
-    <line x1="104" y1="230" x2="104" y2="262" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
-    <text x="124" y="253" font-size="14" fill="#4f5d75">목표 좌표 [3], 시맨틱 컨텍스트</text>
+    <line x1="104" y1="250" x2="104" y2="282" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="124" y="273" font-size="14" fill="#4f5d75">목표 좌표 [3], 시맨틱 컨텍스트</text>
 
     <!-- ============ L4 ============ -->
-    <rect x="40" y="272" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="672" y="272" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="64" y="286" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
-    <text x="90" y="303" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L4</text>
-    <text x="128" y="304" font-size="17" font-weight="700" fill="#2d3142">상위 지능</text>
-    <text x="64" y="330" font-size="14" fill="#7a8399">하는 일</text>
-    <text x="136" y="330" font-size="14" fill="#2d3142">목표를 앞으로 할 동작 여러 개로 바꿉니다</text>
-    <text x="64" y="352" font-size="14" fill="#7a8399">입력</text>
-    <text x="136" y="352" font-size="14" fill="#4f5d75">카메라 이미지, 언어 지시, 로봇 자기 상태</text>
-    <text x="64" y="374" font-size="14" fill="#7a8399">출력</text>
-    <text x="136" y="374" font-size="14" fill="#4f5d75">액션 청크 [H_chunk, D_action], 보통 8 ~ 50 스텝</text>
-    <text x="692" y="306" font-size="16" font-weight="700" fill="#2d3142">1 ~ 10 Hz</text>
-    <text x="692" y="334" font-size="14" fill="#7a8399">회사 도구</text>
-    <text x="692" y="356" font-size="15" font-weight="600" fill="#2e5aa8">VLA / 월드모델</text>
-    <text x="692" y="376" font-size="14" fill="#7a8399">팀 확인 필요</text>
+    <rect x="40" y="292" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="672" y="292" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="64" y="306" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
+    <text x="90" y="323" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L4</text>
+    <text x="128" y="324" font-size="17" font-weight="700" fill="#2d3142">상위 지능</text>
+    <text x="64" y="350" font-size="14" fill="#7a8399">하는 일</text>
+    <text x="136" y="350" font-size="14" fill="#2d3142">목표를 앞으로 할 동작 여러 개로 바꿉니다</text>
+    <text x="64" y="372" font-size="14" fill="#7a8399">입력</text>
+    <text x="136" y="372" font-size="14" fill="#4f5d75">카메라 이미지, 언어 지시, 로봇 자기 상태</text>
+    <text x="64" y="394" font-size="14" fill="#7a8399">출력</text>
+    <text x="136" y="394" font-size="14" fill="#4f5d75">액션 청크 [H_chunk, D_action], 보통 8 ~ 50 스텝</text>
+    <text x="692" y="326" font-size="16" font-weight="700" fill="#2d3142">1 ~ 10 Hz</text>
+    <text x="692" y="354" font-size="14" fill="#7a8399">회사 도구</text>
+    <text x="692" y="376" font-size="15" font-weight="600" fill="#2e5aa8">GR00T N1.x VLA ★</text>
+    <text x="692" y="396" font-size="13" fill="#7a8399">월드모델은 연구 트랙</text>
 
-    <line x1="104" y1="390" x2="104" y2="422" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
-    <text x="124" y="413" font-size="14" fill="#4f5d75">연속 액션 청크 [H_chunk, D_action]</text>
+    <line x1="104" y1="410" x2="104" y2="442" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="124" y="433" font-size="14" fill="#4f5d75">연속 액션 청크 [H_chunk, D_action]</text>
 
     <!-- ============ L3 (focal) ============ -->
-    <rect x="40" y="432" width="616" height="112" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
-    <rect x="672" y="432" width="248" height="112" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
-    <rect x="64" y="446" width="52" height="24" rx="4" fill="#ffffff" stroke="#eb6c36" stroke-width="1"/>
-    <text x="90" y="463" font-size="14" font-weight="700" fill="#eb6c36" text-anchor="middle">L3</text>
-    <text x="128" y="464" font-size="17" font-weight="700" fill="#2d3142">액션 인터페이스</text>
-    <rect x="296" y="446" width="88" height="24" rx="4" fill="#eb6c36"/>
-    <text x="340" y="463" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">승부처</text>
-    <text x="64" y="490" font-size="14" fill="#7a8399">하는 일</text>
-    <text x="136" y="490" font-size="14" fill="#2d3142">위층의 표현을 아래층이 받을 형태로 바꿉니다</text>
-    <text x="64" y="512" font-size="14" fill="#7a8399">입력</text>
-    <text x="136" y="512" font-size="14" fill="#4f5d75">연속값 액션 의도 [H_chunk, D_action]</text>
-    <text x="64" y="534" font-size="14" fill="#7a8399">출력</text>
-    <text x="136" y="534" font-size="14" fill="#4f5d75">이산 액션 토큰 또는 setpoint [D_cmd]</text>
-    <text x="692" y="466" font-size="16" font-weight="700" fill="#2d3142">L4가 부를 때마다 1회</text>
-    <text x="692" y="494" font-size="14" fill="#7a8399">회사 도구</text>
-    <text x="692" y="516" font-size="15" font-weight="600" fill="#2e5aa8">FSQ 기반 계층 모델 ★</text>
+    <rect x="40" y="452" width="616" height="112" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
+    <rect x="672" y="452" width="248" height="112" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.8"/>
+    <rect x="64" y="466" width="52" height="24" rx="4" fill="#ffffff" stroke="#eb6c36" stroke-width="1"/>
+    <text x="90" y="483" font-size="14" font-weight="700" fill="#eb6c36" text-anchor="middle">L3</text>
+    <text x="128" y="484" font-size="17" font-weight="700" fill="#2d3142">액션 인터페이스</text>
+    <rect x="296" y="466" width="88" height="24" rx="4" fill="#eb6c36"/>
+    <text x="340" y="483" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">승부처</text>
+    <text x="64" y="510" font-size="14" fill="#7a8399">하는 일</text>
+    <text x="136" y="510" font-size="14" fill="#2d3142">위층의 표현을 아래층이 받을 형태로 바꿉니다</text>
+    <text x="64" y="532" font-size="14" fill="#7a8399">입력</text>
+    <text x="136" y="532" font-size="14" fill="#4f5d75">연속값 액션 의도 [H_chunk, D_action]</text>
+    <text x="64" y="554" font-size="14" fill="#7a8399">출력</text>
+    <text x="136" y="554" font-size="14" fill="#4f5d75">이산 액션 토큰 또는 setpoint [D_cmd]</text>
+    <text x="692" y="486" font-size="16" font-weight="700" fill="#2d3142">L4가 부를 때마다 1회</text>
+    <text x="692" y="514" font-size="14" fill="#7a8399">회사 도구</text>
+    <text x="692" y="536" font-size="15" font-weight="600" fill="#2e5aa8">FSQ 기반 계층 모델 ★</text>
 
-    <line x1="104" y1="550" x2="104" y2="582" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
-    <text x="124" y="573" font-size="14" fill="#4f5d75">이산 토큰 또는 setpoint [D_cmd]</text>
+    <line x1="104" y1="570" x2="104" y2="602" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="124" y="593" font-size="14" fill="#4f5d75">이산 토큰 또는 setpoint [D_cmd]</text>
+
+    <!-- ===== 내비게이션 우회 경로 (L4와 L3을 건너뜀) ===== -->
+    <path d="M 616 250 L 636 250 L 636 640 L 616 640" fill="none" stroke="#7a8399" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <text x="646" y="440" font-size="13" fill="#7a8399" transform="rotate(-90 646 440)" text-anchor="middle">내비 경로, Nav2 속도 명령</text>
 
     <!-- ============ L2 ============ -->
-    <rect x="40" y="592" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="672" y="592" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="64" y="606" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
-    <text x="90" y="623" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L2</text>
-    <text x="128" y="624" font-size="17" font-weight="700" fill="#2d3142">전신 제어</text>
-    <text x="64" y="650" font-size="14" fill="#7a8399">하는 일</text>
-    <text x="136" y="650" font-size="14" fill="#2d3142">균형과 접촉을 함께 풀어 이번 스텝의 자세를 정합니다</text>
-    <text x="64" y="672" font-size="14" fill="#7a8399">입력</text>
-    <text x="136" y="672" font-size="14" fill="#4f5d75">상위 명령 [D_cmd], 관측 이력 [T_hist, D_obs]</text>
-    <text x="64" y="694" font-size="14" fill="#7a8399">출력</text>
-    <text x="136" y="694" font-size="14" fill="#4f5d75">관절 목표각 q_des [23~43]</text>
-    <text x="692" y="626" font-size="16" font-weight="700" fill="#2d3142">50 ~ 500 Hz</text>
-    <text x="692" y="654" font-size="14" fill="#7a8399">회사 도구</text>
-    <text x="692" y="676" font-size="15" font-weight="600" fill="#2e5aa8">GEAR-SONIC ★</text>
-    <text x="692" y="696" font-size="15" font-weight="600" fill="#2e5aa8">HOMIE ★</text>
+    <rect x="40" y="612" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="672" y="612" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="64" y="626" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
+    <text x="90" y="643" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L2</text>
+    <text x="128" y="644" font-size="17" font-weight="700" fill="#2d3142">전신 제어</text>
+    <text x="64" y="670" font-size="14" fill="#7a8399">하는 일</text>
+    <text x="136" y="670" font-size="14" fill="#2d3142">균형과 접촉을 함께 풀어 이번 스텝의 자세를 정합니다</text>
+    <text x="64" y="692" font-size="14" fill="#7a8399">입력</text>
+    <text x="136" y="692" font-size="14" fill="#4f5d75">상위 명령 [D_cmd] 또는 속도 명령, 관측 이력 [T_hist, D_state]</text>
+    <text x="64" y="714" font-size="14" fill="#7a8399">출력</text>
+    <text x="136" y="714" font-size="14" fill="#4f5d75">관절 목표각 q_des [23~43]</text>
+    <text x="692" y="646" font-size="16" font-weight="700" fill="#2d3142">50 ~ 500 Hz</text>
+    <text x="692" y="674" font-size="14" fill="#7a8399">회사 도구</text>
+    <text x="692" y="696" font-size="15" font-weight="600" fill="#2e5aa8">GEAR-SONIC ★</text>
+    <text x="692" y="716" font-size="15" font-weight="600" fill="#2e5aa8">HOMIE ★</text>
 
-    <line x1="104" y1="710" x2="104" y2="742" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
-    <text x="124" y="733" font-size="14" fill="#4f5d75">관절 목표각 q_des [23~43]</text>
+    <line x1="104" y1="730" x2="104" y2="762" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="124" y="753" font-size="14" fill="#4f5d75">관절 목표각 q_des [23~43]</text>
 
     <!-- ============ L1 ============ -->
-    <rect x="40" y="752" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="672" y="752" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
-    <rect x="64" y="766" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
-    <text x="90" y="783" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L1</text>
-    <text x="128" y="784" font-size="17" font-weight="700" fill="#2d3142">하드웨어와 미들웨어</text>
-    <text x="64" y="810" font-size="14" fill="#7a8399">하는 일</text>
-    <text x="136" y="810" font-size="14" fill="#2d3142">목표각과 현재각의 차이로 모터 토크를 만듭니다</text>
-    <text x="64" y="832" font-size="14" fill="#7a8399">입력</text>
-    <text x="136" y="832" font-size="14" fill="#4f5d75">관절 목표각 q_des [23~43]</text>
-    <text x="64" y="854" font-size="14" fill="#7a8399">출력</text>
-    <text x="136" y="854" font-size="14" fill="#4f5d75">관절 토크, Kp x (목표각 - 현재각) - Kd x 각속도</text>
-    <text x="692" y="786" font-size="16" font-weight="700" fill="#2d3142">1 ~ 2 kHz</text>
-    <text x="692" y="814" font-size="14" fill="#7a8399">회사 도구</text>
-    <text x="692" y="836" font-size="15" font-weight="600" fill="#2e5aa8">Unitree G1 ★</text>
+    <rect x="40" y="772" width="616" height="112" rx="8" fill="#ffffff" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="672" y="772" width="248" height="112" rx="8" fill="#f1efec" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="64" y="786" width="52" height="24" rx="4" fill="#eef1f6" stroke="#b9c2d0" stroke-width="1"/>
+    <text x="90" y="803" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">L1</text>
+    <text x="128" y="804" font-size="17" font-weight="700" fill="#2d3142">하드웨어와 미들웨어</text>
+    <text x="64" y="830" font-size="14" fill="#7a8399">하는 일</text>
+    <text x="136" y="830" font-size="14" fill="#2d3142">목표각과 현재각의 차이로 모터 토크를 만듭니다</text>
+    <text x="64" y="852" font-size="14" fill="#7a8399">입력</text>
+    <text x="136" y="852" font-size="14" fill="#4f5d75">관절 목표각 q_des [23~43]</text>
+    <text x="64" y="874" font-size="14" fill="#7a8399">출력</text>
+    <text x="136" y="874" font-size="14" fill="#4f5d75">관절 토크, Kp x (목표각 - 현재각) - Kd x 각속도</text>
+    <text x="692" y="806" font-size="16" font-weight="700" fill="#2d3142">1 ~ 2 kHz</text>
+    <text x="692" y="834" font-size="14" fill="#7a8399">회사 도구</text>
+    <text x="692" y="856" font-size="15" font-weight="600" fill="#2e5aa8">Unitree G1 ★</text>
 
-    <line x1="40" y1="896" x2="920" y2="896" stroke="#d9d7d2" stroke-width="1"/>
-    <text x="40" y="920" font-size="14" fill="#4f5d75">★ 는 우리 회사가 이미 쓰고 있는 도구입니다. Hz 는 1초에 도는 횟수입니다.</text>
-    <text x="40" y="942" font-size="14" fill="#4f5d75">주황색 테두리를 두른 L3 가 이 과정의 승부처입니다.</text>
-    <text x="40" y="964" font-size="14" fill="#4f5d75">아래로 내려갈수록 다루는 정보는 줄고 명령은 구체해집니다.</text>
+    <line x1="40" y1="916" x2="920" y2="916" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="940" font-size="14" fill="#4f5d75">★ 는 우리 회사가 지금 돌리고 있는 것이고, 괄호 안은 아직 들어오지 않은 것입니다. Hz 는 1초에 도는 횟수입니다.</text>
+    <text x="40" y="962" font-size="14" fill="#4f5d75">주황색 테두리를 두른 L3 가 이 과정의 승부처입니다.</text>
+    <text x="40" y="984" font-size="14" fill="#4f5d75">아래로 내려갈수록 다루는 정보는 줄고 명령은 구체해집니다.</text>
+    <text x="40" y="1006" font-size="14" fill="#4f5d75">오른쪽 점선은 내비게이션 경로입니다. L4 와 L3 을 건너뛰고 Nav2 가 L2 에 속도 명령을 직접 보냅니다.</text>
   </g>
 </svg>

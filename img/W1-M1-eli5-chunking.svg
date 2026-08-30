@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="1000" height="580" role="img" aria-label="위층이 한 번 생각하는 동안 아래층은 열 번 움직입니다">
+  <rect x="0" y="0" width="1000" height="580" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">위층이 한 번 생각하는 동안 아래층은 열 번 움직입니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">위층은 1초에 다섯 번 생각하고 아래층은 1초에 쉰 번 돕니다</text>
+
+    <!-- 생각 경계 -->
+    <line x1="140" y1="118" x2="140" y2="400" stroke="#eb6c36" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="540" y1="118" x2="540" y2="400" stroke="#eb6c36" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="940" y1="118" x2="940" y2="400" stroke="#eb6c36" stroke-width="1" stroke-dasharray="4,4"/>
+
+    <!-- 위층 -->
+    <text x="40" y="112" font-size="15" font-weight="600" fill="#2d3142">위층이 한 번 생각하는 동안 아래층 눈금 열 칸이 지나갑니다</text>
+    <rect x="140" y="126" width="400" height="44" rx="4" fill="#e7e3dd" stroke="#a7a29a" stroke-width="1"/>
+    <text x="340" y="153" font-size="15" fill="#5c564e" text-anchor="middle">위층이 한 번 생각</text>
+    <rect x="540" y="126" width="400" height="44" rx="4" fill="#e7e3dd" stroke="#a7a29a" stroke-width="1"/>
+    <text x="740" y="153" font-size="15" fill="#5c564e" text-anchor="middle">위층이 다시 한 번 생각</text>
+
+    <!-- 동작 하나만 -->
+    <text x="40" y="212" font-size="15" font-weight="600" fill="#2d3142">동작 하나만 내려보내면 나머지 아홉 칸에 쓸 명령이 없습니다</text>
+    <rect x="140" y="226" width="40" height="44" rx="4" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1"/>
+    <rect x="180" y="226" width="360" height="44" rx="4" fill="#fbe0d3" stroke="#eb6c36" stroke-width="1"/>
+    <text x="360" y="253" font-size="15" font-weight="600" fill="#c4501f" text-anchor="middle">쓸 명령이 없는 아홉 칸</text>
+    <rect x="540" y="226" width="40" height="44" rx="4" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1"/>
+    <rect x="580" y="226" width="360" height="44" rx="4" fill="#fbe0d3" stroke="#eb6c36" stroke-width="1"/>
+    <text x="760" y="253" font-size="15" font-weight="600" fill="#c4501f" text-anchor="middle">쓸 명령이 없는 아홉 칸</text>
+
+    <!-- 열 개를 묶어서 -->
+    <text x="40" y="312" font-size="15" font-weight="600" fill="#2d3142">동작 열 개를 묶어 내려보내면 빈칸 없이 이어집니다</text>
+    <rect x="140" y="326" width="400" height="44" rx="4" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1"/>
+    <text x="340" y="353" font-size="15" font-weight="600" fill="#1f3f70" text-anchor="middle">묶음 하나가 열 칸을 채웁니다</text>
+    <rect x="540" y="326" width="400" height="44" rx="4" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1"/>
+    <text x="740" y="353" font-size="15" font-weight="600" fill="#1f3f70" text-anchor="middle">다음 묶음이 이어받습니다</text>
+    <g stroke="#8fa3c4" stroke-width="1">
+      <line x1="180" y1="326" x2="180" y2="336"/><line x1="180" y1="360" x2="180" y2="370"/><line x1="220" y1="326" x2="220" y2="336"/><line x1="220" y1="360" x2="220" y2="370"/><line x1="260" y1="326" x2="260" y2="336"/><line x1="260" y1="360" x2="260" y2="370"/>
+      <line x1="300" y1="326" x2="300" y2="336"/><line x1="300" y1="360" x2="300" y2="370"/><line x1="340" y1="326" x2="340" y2="336"/><line x1="340" y1="360" x2="340" y2="370"/><line x1="380" y1="326" x2="380" y2="336"/><line x1="380" y1="360" x2="380" y2="370"/>
+      <line x1="420" y1="326" x2="420" y2="336"/><line x1="420" y1="360" x2="420" y2="370"/><line x1="460" y1="326" x2="460" y2="336"/><line x1="460" y1="360" x2="460" y2="370"/><line x1="500" y1="326" x2="500" y2="336"/><line x1="500" y1="360" x2="500" y2="370"/>
+      <line x1="580" y1="326" x2="580" y2="336"/><line x1="580" y1="360" x2="580" y2="370"/><line x1="620" y1="326" x2="620" y2="336"/><line x1="620" y1="360" x2="620" y2="370"/><line x1="660" y1="326" x2="660" y2="336"/><line x1="660" y1="360" x2="660" y2="370"/>
+      <line x1="700" y1="326" x2="700" y2="336"/><line x1="700" y1="360" x2="700" y2="370"/><line x1="740" y1="326" x2="740" y2="336"/><line x1="740" y1="360" x2="740" y2="370"/><line x1="780" y1="326" x2="780" y2="336"/><line x1="780" y1="360" x2="780" y2="370"/>
+      <line x1="820" y1="326" x2="820" y2="336"/><line x1="820" y1="360" x2="820" y2="370"/><line x1="860" y1="326" x2="860" y2="336"/><line x1="860" y1="360" x2="860" y2="370"/><line x1="900" y1="326" x2="900" y2="336"/><line x1="900" y1="360" x2="900" y2="370"/>
+    </g>
+
+    <!-- 아래층 눈금 -->
+    <line x1="140" y1="400" x2="940" y2="400" stroke="#4f5d75" stroke-width="1.2"/>
+    <g stroke="#7a8399" stroke-width="1">
+      <line x1="140" y1="400" x2="140" y2="412"/><line x1="180" y1="400" x2="180" y2="408"/>
+      <line x1="220" y1="400" x2="220" y2="408"/><line x1="260" y1="400" x2="260" y2="408"/>
+      <line x1="300" y1="400" x2="300" y2="408"/><line x1="340" y1="400" x2="340" y2="408"/>
+      <line x1="380" y1="400" x2="380" y2="408"/><line x1="420" y1="400" x2="420" y2="408"/>
+      <line x1="460" y1="400" x2="460" y2="408"/><line x1="500" y1="400" x2="500" y2="408"/>
+      <line x1="540" y1="400" x2="540" y2="412"/><line x1="580" y1="400" x2="580" y2="408"/>
+      <line x1="620" y1="400" x2="620" y2="408"/><line x1="660" y1="400" x2="660" y2="408"/>
+      <line x1="700" y1="400" x2="700" y2="408"/><line x1="740" y1="400" x2="740" y2="408"/>
+      <line x1="780" y1="400" x2="780" y2="408"/><line x1="820" y1="400" x2="820" y2="408"/>
+      <line x1="860" y1="400" x2="860" y2="408"/><line x1="900" y1="400" x2="900" y2="408"/>
+      <line x1="940" y1="400" x2="940" y2="412"/>
+    </g>
+    <text x="40" y="436" font-size="14" fill="#7a8399">아래층 눈금</text>
+    <text x="140" y="436" font-size="14" fill="#4f5d75">여기서 열 칸</text>
+    <text x="540" y="436" font-size="14" fill="#4f5d75">여기서 다시 열 칸</text>
+
+    <line x1="40" y1="466" x2="960" y2="466" stroke="#d9d7d2" stroke-width="1"/>
+    <rect x="40" y="480" width="24" height="14" rx="2" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1"/>
+    <text x="74" y="492" font-size="14" fill="#4f5d75">아래층이 쓸 명령이 있는 칸</text>
+    <rect x="340" y="480" width="24" height="14" rx="2" fill="#fbe0d3" stroke="#eb6c36" stroke-width="1"/>
+    <text x="374" y="492" font-size="14" fill="#4f5d75">쓸 명령이 없는 칸</text>
+
+    <text x="40" y="530" font-size="14" fill="#4f5d75">눈금 한 칸은 아래층이 한 번 움직이는 시간입니다.</text>
+    <text x="40" y="552" font-size="14" fill="#4f5d75">묶음이 열 칸을 채우지 못하면 그만큼 로봇이 멈추거나 마지막 자세로 굳습니다.</text>
+  </g>
+</svg>

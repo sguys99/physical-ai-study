@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1190 600" width="1190" height="600" role="img" aria-label="회사 내비게이션 스택의 실제 구성">
+  <defs>
+    <marker id="na" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#4f5d75"/>
+    </marker>
+    <marker id="nd" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#9aa3b2"/>
+    </marker>
+    <marker id="no" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#eb6c36"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1190" height="600" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="36" y="44" font-size="22" font-weight="700" fill="#2d3142">회사 내비게이션 스택, 라이다 한 줄이 걸음이 되기까지</text>
+    <text x="36" y="72" font-size="15" fill="#4f5d75">가로 한 줄이 하나의 입력 경로입니다. 셋이 Nav2 앞에서 만납니다</text>
+
+    <!-- ── 입력 ── -->
+    <rect x="36" y="118" width="150" height="60" rx="8" fill="#eef1f6" stroke="#b9c2d0"/>
+    <text x="111" y="145" font-size="15" font-weight="600" fill="#2d3142" text-anchor="middle">LiDAR</text>
+    <text x="111" y="165" font-size="12" fill="#7a8399" text-anchor="middle">Livox Mid-360</text>
+
+    <rect x="36" y="230" width="150" height="60" rx="8" fill="#eef1f6" stroke="#b9c2d0"/>
+    <text x="111" y="257" font-size="15" font-weight="600" fill="#2d3142" text-anchor="middle">depth 카메라</text>
+    <text x="111" y="277" font-size="12" fill="#7a8399" text-anchor="middle">RGB 는 쓰지 않음</text>
+
+    <rect x="36" y="342" width="150" height="60" rx="8" fill="#eef1f6" stroke="#b9c2d0"/>
+    <text x="111" y="369" font-size="15" font-weight="600" fill="#2d3142" text-anchor="middle">Text 질의</text>
+    <text x="111" y="389" font-size="12" fill="#7a8399" text-anchor="middle">책상으로 가세요</text>
+
+    <!-- ── 처리 모듈 ── -->
+    <rect x="222" y="110" width="190" height="76" rx="8" fill="#ffffff" stroke="#2e5aa8" stroke-width="1.8"/>
+    <text x="317" y="137" font-size="16" font-weight="700" fill="#2e5aa8" text-anchor="middle">FAST-LIO2 ★</text>
+    <text x="317" y="157" font-size="12" fill="#7a8399" text-anchor="middle">LiDAR 관성 오도메트리</text>
+    <text x="317" y="174" font-size="12" fill="#7a8399" text-anchor="middle">L5 기하, 현재 운영</text>
+
+    <rect x="222" y="222" width="190" height="76" rx="8" fill="#ffffff" stroke="#2e5aa8" stroke-width="1.8"/>
+    <text x="317" y="246" font-size="15" font-weight="700" fill="#2e5aa8" text-anchor="middle">self / object filtering</text>
+    <text x="317" y="265" font-size="12" fill="#7a8399" text-anchor="middle">잡은 물체를 몸으로 보게</text>
+    <text x="317" y="282" font-size="12" fill="#7a8399" text-anchor="middle">hull 생성, carry_on 모드</text>
+
+    <rect x="222" y="334" width="190" height="76" rx="8" fill="#ffffff" stroke="#9aa3b2" stroke-width="1.6" stroke-dasharray="6 4"/>
+    <text x="317" y="361" font-size="16" font-weight="700" fill="#5b6577" text-anchor="middle">FSR-VLN</text>
+    <text x="317" y="381" font-size="12" fill="#7a8399" text-anchor="middle">HMSG 계층 장면그래프</text>
+    <text x="317" y="398" font-size="12" fill="#7a8399" text-anchor="middle">L5 의미, 구현 중</text>
+
+    <!-- ── 중간 산출물 ── -->
+    <rect x="448" y="96" width="180" height="104" rx="8" fill="#f1efec" stroke="#d9d7d2"/>
+    <text x="538" y="124" font-size="13" fill="#2d3142" text-anchor="middle">3D 점군 맵 (pcd)</text>
+    <text x="538" y="148" font-size="13" fill="#2d3142" text-anchor="middle">현 위치 추정</text>
+    <text x="538" y="172" font-size="13" fill="#2d3142" text-anchor="middle">전처리된 LiDAR</text>
+
+    <rect x="448" y="342" width="180" height="60" rx="8" fill="#f1efec" stroke="#d9d7d2"/>
+    <text x="538" y="368" font-size="13" fill="#2d3142" text-anchor="middle">목표 좌표</text>
+    <text x="538" y="388" font-size="13" fill="#2d3142" text-anchor="middle">(x, y, z)</text>
+
+    <rect x="664" y="205" width="130" height="70" rx="8" fill="#fdeee7" stroke="#eb6c36" stroke-width="1.6"/>
+    <text x="729" y="232" font-size="14" font-weight="700" fill="#2d3142" text-anchor="middle">2D 변환 맵</text>
+    <text x="729" y="253" font-size="12" fill="#a2542f" text-anchor="middle">여기서 높이를 버림</text>
+
+    <!-- ── Nav2 ── -->
+    <rect x="830" y="180" width="130" height="110" rx="8" fill="#ffffff" stroke="#2e5aa8" stroke-width="1.8"/>
+    <text x="895" y="222" font-size="18" font-weight="700" fill="#2e5aa8" text-anchor="middle">Nav2 ★</text>
+    <text x="895" y="244" font-size="12" fill="#7a8399" text-anchor="middle">행동 트리 +</text>
+    <text x="895" y="261" font-size="12" fill="#7a8399" text-anchor="middle">costmap 2D</text>
+
+    <!-- ── 출력 ── -->
+    <rect x="996" y="170" width="158" height="130" rx="8" fill="#f1efec" stroke="#d9d7d2"/>
+    <text x="1075" y="200" font-size="13" fill="#2d3142" text-anchor="middle">Global Path  2 Hz</text>
+    <text x="1075" y="228" font-size="13" fill="#2d3142" text-anchor="middle">Local Path  20 Hz</text>
+    <line x1="1012" y1="244" x2="1138" y2="244" stroke="#d9d7d2"/>
+    <text x="1075" y="266" font-size="13" font-weight="700" fill="#a2542f" text-anchor="middle">속도 명령</text>
+    <text x="1075" y="286" font-size="12" fill="#a2542f" text-anchor="middle">선속도, 각속도</text>
+
+    <rect x="996" y="352" width="158" height="68" rx="8" fill="#ffffff" stroke="#eb6c36" stroke-width="1.8"/>
+    <text x="1075" y="380" font-size="15" font-weight="700" fill="#2d3142" text-anchor="middle">L2 전신 제어 ★</text>
+    <text x="1075" y="401" font-size="12" fill="#7a8399" text-anchor="middle">GEAR-SONIC 계열 WBC</text>
+
+    <!-- ── 화살표 ── -->
+    <line x1="186" y1="148" x2="216" y2="148" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <line x1="412" y1="148" x2="442" y2="148" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <line x1="186" y1="260" x2="216" y2="260" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <line x1="186" y1="372" x2="216" y2="372" stroke="#9aa3b2" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#nd)"/>
+    <line x1="412" y1="372" x2="442" y2="372" stroke="#9aa3b2" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#nd)"/>
+
+    <path d="M 628 160 L 646 160 L 646 225 L 658 225" fill="none" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <path d="M 412 268 L 652 268 L 652 255 L 658 255" fill="none" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <line x1="794" y1="240" x2="824" y2="240" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <path d="M 628 362 L 748 362 L 748 268 L 824 268" fill="none" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <line x1="960" y1="235" x2="990" y2="235" stroke="#4f5d75" stroke-width="1.4" marker-end="url(#na)"/>
+    <line x1="1075" y1="300" x2="1075" y2="346" stroke="#eb6c36" stroke-width="2.4" marker-end="url(#no)"/>
+
+    <!-- FSR-VLN 도입 후 맵 출처가 바뀌는 경로 -->
+    <path d="M 317 334 L 317 316 L 700 316 L 700 281" fill="none" stroke="#9aa3b2" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#nd)"/>
+    <text x="508" y="310" font-size="12" fill="#7a8399" text-anchor="middle">도입되면 맵도 이쪽에서 받고 FAST-LIO2 는 위치 추정만 맡습니다</text>
+
+    <text x="1088" y="326" font-size="12" font-weight="600" fill="#a2542f">L4 를 거치지 않습니다</text>
+
+    <line x1="36" y1="452" x2="1154" y2="452" stroke="#d9d7d2"/>
+    <text x="36" y="476" font-size="14" fill="#4f5d75">실선은 지금 돌아가는 것이고 점선은 아직 들어오지 않은 것입니다. ★ 는 현재 운영 중을 뜻합니다.</text>
+    <text x="36" y="498" font-size="14" fill="#4f5d75">주황색 굵은 화살표가 이 그림의 요점입니다. 내비게이션은 상위 VLA 와 FSQ 토큰을 건너뛰고 속도 명령 하나로 전신 제어에 닿습니다.</text>
+    <text x="36" y="520" font-size="14" fill="#4f5d75">주황색 상자 「2D 변환 맵」에서 높이 정보가 버려집니다. 계단을 오를 수 없는 이유가 여기입니다.</text>
+    <text x="36" y="542" font-size="14" fill="#4f5d75">hull 은 depth 만 보고 만듭니다. 투명하거나 검은 물체가 안 보이는 이유이고, 부풀린 hull 이 좁은 틈을 막는 이유이기도 합니다.</text>
+  </g>
+</svg>
