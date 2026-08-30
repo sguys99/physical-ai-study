@@ -21,7 +21,7 @@
     <text x="64" y="192" font-size="14" fill="#7a8399">입력</text>
     <text x="136" y="192" font-size="14" fill="#4f5d75">RGB-D 영상, 라이다 포인트클라우드, 자연어 목표</text>
     <text x="64" y="214" font-size="14" fill="#7a8399">출력</text>
-    <text x="136" y="214" font-size="14" fill="#4f5d75">3D 점군 맵과 2D 점유 격자, 시맨틱 맵, 목표 3D 좌표 [3]</text>
+    <text x="136" y="214" font-size="14" fill="#4f5d75">3D 점군 맵과 2D 격자 지도, 시맨틱 맵, 목표 3D 좌표 [3]</text>
     <text x="64" y="234" font-size="13" fill="#7a8399">기하 담당과 의미 담당이 서로 다른 모듈로 갈려 있습니다</text>
     <text x="692" y="146" font-size="16" font-weight="700" fill="#2d3142">0.5 ~ 5 Hz</text>
     <text x="692" y="172" font-size="14" fill="#7a8399">회사 도구</text>
