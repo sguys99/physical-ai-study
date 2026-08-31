@@ -294,11 +294,6 @@ def print_separation_ratios() -> None:
             f"x{worst:,.2f}",
             verdict,
         ])
-    print_table(
-        ["경계", "빠른쪽[Hz]", "느린쪽[Hz]", "대표 비율", "최선", "최악", f"≥x{CASCADE_MIN_RATIO:g}?"],
-        rows,
-        aligns=["left", "right", "right", "right", "right", "right", "center"],
-    )
     # 회사 실측: Nav2 지역 20 Hz vs 전역 2 Hz (사내 GenP Navigation 문서, 2026-08-29)
     # 논문 밴드가 아니라 파이프라인에 박힌 설정값이라 최선/최악 범위가 없다.
     nav_ratio = NAV2_LOCAL_HZ / NAV2_GLOBAL_HZ
@@ -311,6 +306,11 @@ def print_separation_ratios() -> None:
         "범위없음",
         "OK" if nav_ratio >= CASCADE_MIN_RATIO else "약함",
     ])
+    print_table(
+        ["경계", "빠른쪽[Hz]", "느린쪽[Hz]", "대표 비율", "최선", "최악", f"≥x{CASCADE_MIN_RATIO:g}?"],
+        rows,
+        aligns=["left", "right", "right", "right", "right", "right", "center"],
+    )
     print("  읽는 법:")
     print("   - 대표 비율 = 기하평균끼리의 비. 최선 = 빠른쪽 상한 / 느린쪽 하한, 최악 = 빠른쪽 하한 / 느린쪽 상한.")
     print("   - L1/L2, L2/L4는 캐스케이드 경험칙(x5~10)을 넉넉히 만족한다 → 계층 분리가 물리적으로 정당하다.")

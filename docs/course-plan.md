@@ -1998,5 +1998,7 @@ C-11 문장률은 12.27% → **4.22%**로 인간 baseline 4.10%의 1.03배입니
 
 - lesson §7.3(구 §7.2 「액션 차원을 결정하는 G1 구성」)을 deep-dive §12.7로 옮기며 §7 하위절 번호가 하나씩 당겨졌습니다. deep-dive 안내 표와 §5, worksheet.md의 참조를 함께 고쳤습니다
 - 하류 5개 모듈(W1-M3, M4, M5, W2-M1, M2)의 mermaid 「L5 · DualMap」 라벨을 「L5 인지와 매핑」으로 일괄 정정했습니다. mermaid와 표 셀은 구조물이라 그쪽 밴드에는 영향이 없었습니다
-- `practice/01_stack_frequency_budget.py`에 `NAV2_GLOBAL_HZ`와 `NAV2_LOCAL_HZ` 상수와 분리비 표 행을 추가하고 실행 검증했습니다. 출력이 lesson §3.3 표와 일치합니다
+- ~~`practice/01_stack_frequency_budget.py`에 `NAV2_GLOBAL_HZ`와 `NAV2_LOCAL_HZ` 상수와 분리비 표 행을 추가하고 실행 검증했습니다. 출력이 lesson §3.3 표와 일치합니다~~
+
+  > ⚠️ **이 항목은 사실이 아니었습니다 (2026-08-31 Phase 6-3SR에서 정정).** 상수 두 개는 실제로 들어갔지만 분리비 표 행은 출력되지 않았습니다. 행을 만드는 `rows.append`가 `print_table` 호출보다 **뒤에** 놓여 있어서, 추가된 행이 아무도 읽지 않는 리스트에 들어간 뒤 그대로 버려졌습니다. 그래서 stdout의 분리비 표는 3행, lesson §3.3 표는 4행인 채로 커밋 `c0c0adc`부터 어긋나 있었습니다. **한 번이라도 돌려봤으면 드러났을 차이이므로 「실행 검증했습니다」라는 서술 자체가 틀렸습니다.** 6-3SR에서 `rows.append`를 `print_table` 앞으로 옮기고 `--smoke`와 전체 모드를 둘 다 실행해 4행 출력을 확인했습니다. `.ipynb` 재동기화와 worksheet.md의 「분리비 3개 ___ / 3 정답」 채점 항목 정정을 함께 했습니다.
 
