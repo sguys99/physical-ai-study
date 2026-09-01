@@ -4,7 +4,7 @@ week: 1
 order: 4
 title: "Flow Matching & Rectified Flow"
 slug: flow-matching
-tier: C
+tier: B
 priority: P0
 prereq: [W1-M1, W1-M2, W1-M3]
 tags: [generative, flow-matching, rectified-flow, cfm, reflow, nfe, action-head]

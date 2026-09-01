@@ -4,7 +4,7 @@ week: 1
 order: 3
 title: "Diffusion 계보: DDPM → DiT"
 slug: diffusion-ddpm-dit
-tier: C
+tier: B
 priority: P0
 prereq: [W1-M1, W1-M2]
 tags: [generative, diffusion, ddpm, dit, adaln-zero, action-head]

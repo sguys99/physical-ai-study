@@ -41,7 +41,7 @@ description: Physical AI 온보딩 4주 스터디의 모듈 교육자료를 집�
 시작 시 한 줄을 출력합니다:
 
 ```
-pai-course-author / {모듈ID} / {경로} / Tier {A|B|C} / {신규|재집필|부분보강}
+pai-course-author / {모듈ID} / {경로} / Tier {A|B} / {신규|재집필|부분보강}
 ```
 
 **재집필이면 Phase 2.5를 반드시 거칩니다.** 건너뛰면 기존 문서가 백지에서 다시 쓰이며 유실됩니다.
@@ -145,6 +145,7 @@ lesson의 **절 번호**로 링크를 겁니다. `labs/README.md`가 "lesson §4
 ```bash
 grep -rn "§[0-9]" {target_dir}/labs/ {target_dir}/practice/*.py
 grep -rn "{모듈ID} §" course/ notes/ docs/     # 다른 모듈이 이 모듈을 가리키는 것
+grep -rn "eq\.\|tag{" {target_dir}/labs/ {target_dir}/practice/   # 수식 번호 (§ 없이 걸립니다)
 ```
 
 나온 번호가 새 lesson에 **실재하는지** 하나씩 확인하고, 어긋나면 참조 쪽을 갱신합니다.
@@ -154,6 +155,8 @@ grep -rn "{모듈ID} §" course/ notes/ docs/     # 다른 모듈이 이 모듈�
 - **다른 모듈의 파일도 같은 방식으로 고칩니다.** 두 번째 grep이 잡는 것들입니다. 그쪽도 `.py`를 고치고 `.ipynb`를 동기화합니다. `jupytext`가 없으면 `.ipynb`의 해당 문자열을 직접 고치되 출력 셀은 비운 상태를 유지합니다
 - **오탐을 걸러내세요.** `§03` 같은 두 자리 표기는 절 번호가 아니라 실습 스크립트 번호(`03_g1_sin_wave`)인 경우가 있습니다. 기계적으로 바꾸면 오히려 망가집니다
 - 번호가 아니라 **문구를 인용한 참조**("자세가 무너지기까지 200 ms" 같은)는 grep에 안 걸립니다. 본문에서 문장을 옮기거나 지웠다면 그 문구로도 한 번 훑으세요
+- **수식 번호는 `§`를 달지 않아 위의 첫 두 grep에 안 걸립니다.** 세 번째 grep이 그것을 잡습니다. 절을 새로 끼워 넣으면 뒤 수식이 전부 한 칸씩 밀리므로, 재배치 후 lesson의 `\text{(eq. N)}`을 순서대로 다시 세고 참조 쪽과 대조하세요. **W1-M2 재작성에서 실제로 깨졌습니다** — §5.5에 PD 서보 식을 `eq. 2`로 끼워 넣자 구본의 `eq. 2`였던 $k_v$ 식이 `eq. 3`으로 밀렸고 `practice/` 참조 네 곳이 엉뚱한 식을 가리켰습니다. 참조 쪽은 §3.3이 요구하는 `lesson §N eq.(M)` 접두 형태로 고칩니다
+- ⚠️ **`practice/*.py`가 자기만의 수식 번호 공간을 가질 수 있습니다.** 파일 헤더 docstring에서 `\tag{N}`으로 식을 직접 번호 매긴 경우이고, `02-simulator-bootcamp/practice/03_g1_sin_wave.py`가 `eq.(1)`부터 `eq.(4)`를 그렇게 정의해 `practice/README.md`와 `labs/` 두 파일까지 퍼뜨립니다. **같은 표기가 두 개의 번호 공간을 뜻하므로 기계적 일괄 치환은 멀쩡한 참조를 망가뜨립니다.** `lesson §N` 접두가 붙은 것만 lesson을 가리킵니다. 접두 없는 `eq.(N)`은 그 파일 헤더에 `\tag`가 있는지 먼저 보세요. 위 「오탐을 걸러내세요」와 같은 유형입니다
 
 **부수 갱신**
 
@@ -207,9 +210,10 @@ lesson.md와 같은 폴더에 둡니다. frontmatter는 불필요합니다.
 ```
 module_id: W1-M3
 target_dir: course/w1-generative-core/03-diffusion-ddpm-dit/
-tier: C                      # 본문 산문 문자 A 15,000~21,000 / B 13,000~18,000 / C 12,000~17,000
-                             # 이 줄은 편의용 사본입니다. 정본은 scripts/lint-lesson.sh와 docs/course-plan.md §4 두 곳이고,
-                             # 어긋나면 lint가 이깁니다. 초안은 중앙을 노릴 것 (윤문이 2~5% 늘림)
+tier: B                      # 밴드 숫자는 여기 적지 않습니다. 정본은 scripts/lint-lesson.sh와
+                             # docs/course-plan.md §4 두 곳뿐이고, 집필이 끝나면
+                             # `bash scripts/lint-lesson.sh <파일>`로 확인합니다.
+                             # 초안은 밴드 중앙을 노릴 것 (윤문이 산문을 2~5% 늘림)
 master_plan_section: <해당 모듈 섹션 원문 그대로 붙여넣기>
 company_stack: <마스터플랜 §2.2 표>
 gap_analysis: <마스터플랜 §3 표>
@@ -217,7 +221,9 @@ latest_checks: <Phase 2에서 확인한 버전, URL, 날짜>
 adjacent_modules: <앞뒤 모듈의 slug와 이미 다룬 개념 목록>
 ```
 
-> ⚠️ **밴드 숫자를 다른 문서에 다시 복사하지 마세요.** 숫자를 여러 곳에 복사한 것이 3중 불일치를 두 번 재발시킨 원인입니다(§9.11, §9.19). 위 주석은 payload 편의용이고, 집필이 끝나면 lint로 확인합니다.
+> ⚠️ **밴드 숫자를 이 문서에도, 다른 어느 문서에도 복사하지 마세요.** 숫자를 여러 곳에 복사한 것이 3중 불일치를 **세 번** 재발시킨 원인입니다(§9.11, §9.19, 그리고 2026-08-30 Tier A 상향이 스크립트에만 반영된 건). **2026-09-01에 이 파일과 `pai-agent.md`와 `authoring-checklist.md`와 `lesson-template.md` 네 곳에서 숫자를 아예 지웠습니다.** 정본은 `scripts/lint-lesson.sh`와 `docs/course-plan.md` §4 두 곳뿐이고, 밴드를 알아야 하면 그 둘을 읽고 집필이 끝나면 `bash scripts/lint-lesson.sh <파일>`로 확인합니다.
+
+> 📌 **`tier:`에 넣을 수 있는 값은 `A`와 `B`뿐입니다.** Tier C는 2026-09-01에 폐지됐고 W1-M3과 W1-M4와 W4-M1이 B로 옮겨졌습니다(course-plan §4). `tier: C`인 파일에는 lint가 WARN을 냅니다.
 
 **재집필이면 Phase 2.5의 블록을 payload에 통째로 덧붙입니다.**
 
