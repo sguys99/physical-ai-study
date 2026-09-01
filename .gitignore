@@ -248,3 +248,6 @@ _workspace/
 
 # LeRobot 전용 가상환경 (W2-M1 labs 검증용, 기존 .venv와 분리)
 .venv-lerobot/
+
+# Obsidian 볼트 설정 (개인 편집기 상태 — 저장소 산출물이 아님)
+.obsidian/
