@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 460" width="940" height="460" role="img" aria-label="굽은 길과 곧은 길에서 필요한 걸음 수가 다르다">
+  <rect x="0" y="0" width="940" height="460" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+    <text x="40" y="42" font-size="21" font-weight="700" fill="#2d3142">굽은 길은 잘게, 곧은 길은 한 번에</text>
+    <text x="40" y="68" font-size="14.5" fill="#4f5d75">같은 출발점에서 같은 도착점으로 가는데 필요한 걸음 수가 다릅니다</text>
+
+    <!-- 위: 굽은 길 -->
+    <text x="60" y="118" font-size="16" font-weight="700" fill="#a8410f">굽은 길</text>
+    <path d="M 150 190 C 250 110, 330 270, 430 170 C 530 80, 610 240, 760 160"
+          fill="none" stroke="#c4501f" stroke-width="4"/>
+    <g fill="#c4501f">
+      <circle cx="150" cy="190" r="7"/><circle cx="200" cy="146" r="5"/><circle cx="250" cy="140" r="5"/>
+      <circle cx="300" cy="180" r="5"/><circle cx="350" cy="216" r="5"/><circle cx="400" cy="196" r="5"/>
+      <circle cx="450" cy="156" r="5"/><circle cx="500" cy="122" r="5"/><circle cx="550" cy="118" r="5"/>
+      <circle cx="600" cy="158" r="5"/><circle cx="650" cy="196" r="5"/><circle cx="700" cy="188" r="5"/>
+      <circle cx="760" cy="160" r="7"/>
+    </g>
+    <text x="130" y="222" font-size="13.5" fill="#8a5518">출발</text>
+    <text x="748" y="192" font-size="13.5" fill="#8a5518">도착</text>
+    <text x="790" y="150" font-size="14" font-weight="700" fill="#a8410f">걸음이</text>
+    <text x="790" y="170" font-size="14" font-weight="700" fill="#a8410f">아주 많이</text>
+    <text x="790" y="190" font-size="14" font-weight="700" fill="#a8410f">필요합니다</text>
+
+    <line x1="40" y1="252" x2="900" y2="252" stroke="#c9ccd4" stroke-width="1.4"/>
+
+    <!-- 아래: 곧은 길 -->
+    <text x="60" y="298" font-size="16" font-weight="700" fill="#2c5b3c">곧은 길</text>
+    <line x1="150" y1="360" x2="760" y2="360" stroke="#3f7d55" stroke-width="4"/>
+    <circle cx="150" cy="360" r="7" fill="#3f7d55"/>
+    <circle cx="760" cy="360" r="7" fill="#3f7d55"/>
+    <text x="130" y="392" font-size="13.5" fill="#2c5b3c">출발</text>
+    <text x="748" y="392" font-size="13.5" fill="#2c5b3c">도착</text>
+    <text x="380" y="340" font-size="14.5" font-weight="700" fill="#2c5b3c">한 걸음이면 끝납니다</text>
+    <text x="790" y="350" font-size="14" font-weight="700" fill="#2c5b3c">걸음이</text>
+    <text x="790" y="370" font-size="14" font-weight="700" fill="#2c5b3c">한 번이면</text>
+    <text x="790" y="390" font-size="14" font-weight="700" fill="#2c5b3c">충분합니다</text>
+
+    <rect x="40" y="410" width="860" height="36" rx="8" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="58" y="434" font-size="13.5" fill="#4f5d75">점 하나가 걸음 한 번이고 걸음 한 번마다 계산이 한 번 듭니다. 길 모양이 계산량을 정합니다.</text>
+  </g>
+</svg>

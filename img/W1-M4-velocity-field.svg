@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 470" width="980" height="470" role="img" aria-label="확률 경로와 속도장">
+  <rect x="0" y="0" width="980" height="470" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m4vfArrow" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#9aa6b2"/>
+    </marker>
+    <marker id="m4vfBold" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#2f6f9f"/>
+    </marker>
+    <marker id="m4vfBold2" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#c4501f"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="42" font-size="21" font-weight="700" fill="#2d3142">속도장이 정해지면 점도 분포도 따라 움직입니다</text>
+    <text x="40" y="68" font-size="14.5" fill="#4f5d75">옅은 화살표가 속도장이고 굵은 곡선이 그 화살표를 따라간 점 하나의 자취입니다</text>
+
+    <!-- 배경 속도장 화살표 그리드 -->
+    <g stroke="#9aa6b2" stroke-width="1.5" opacity="0.55" marker-end="url(#m4vfArrow)">
+      <line x1="150" y1="130" x2="182" y2="140"/><line x1="150" y1="200" x2="184" y2="202"/>
+      <line x1="150" y1="270" x2="184" y2="268"/><line x1="150" y1="340" x2="182" y2="330"/>
+      <line x1="270" y1="130" x2="302" y2="146"/><line x1="270" y1="200" x2="304" y2="204"/>
+      <line x1="270" y1="270" x2="304" y2="266"/><line x1="270" y1="340" x2="302" y2="324"/>
+      <line x1="390" y1="130" x2="422" y2="152"/><line x1="390" y1="200" x2="424" y2="208"/>
+      <line x1="390" y1="270" x2="424" y2="262"/><line x1="390" y1="340" x2="422" y2="318"/>
+      <line x1="510" y1="130" x2="542" y2="146"/><line x1="510" y1="200" x2="544" y2="206"/>
+      <line x1="510" y1="270" x2="544" y2="264"/><line x1="510" y1="340" x2="542" y2="324"/>
+      <line x1="630" y1="130" x2="662" y2="132"/><line x1="630" y1="200" x2="664" y2="196"/>
+      <line x1="630" y1="270" x2="664" y2="274"/><line x1="630" y1="340" x2="662" y2="338"/>
+    </g>
+
+    <!-- 시각 눈금 -->
+    <line x1="130" y1="400" x2="850" y2="400" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="130" y="424" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">t = 0</text>
+    <text x="490" y="424" font-size="14" fill="#4f5d75" text-anchor="middle">t = 0.5</text>
+    <text x="850" y="424" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">t = 1</text>
+    <text x="130" y="444" font-size="13" fill="#7a8698" text-anchor="middle">노이즈</text>
+    <text x="850" y="444" font-size="13" fill="#7a8698" text-anchor="middle">데이터</text>
+
+    <!-- 왼쪽 분포: 둥근 구름 -->
+    <ellipse cx="130" cy="235" rx="62" ry="62" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="1.8"/>
+    <text x="130" y="118" font-size="13.5" font-weight="700" fill="#1f4f74" text-anchor="middle">p₀</text>
+
+    <!-- 오른쪽 분포: 두 덩어리 -->
+    <ellipse cx="850" cy="168" rx="40" ry="44" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.8"/>
+    <ellipse cx="850" cy="308" rx="40" ry="44" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.8"/>
+    <text x="850" y="118" font-size="13.5" font-weight="700" fill="#8a5518" text-anchor="middle">p₁</text>
+
+    <!-- 궤적 1 -->
+    <path d="M 130 190 C 320 176, 520 150, 848 166" fill="none" stroke="#2f6f9f" stroke-width="3.4" marker-end="url(#m4vfBold)"/>
+    <circle cx="130" cy="190" r="6" fill="#2f6f9f"/>
+    <!-- 궤적 2 -->
+    <path d="M 130 292 C 330 306, 530 330, 848 306" fill="none" stroke="#c4501f" stroke-width="3.4" marker-end="url(#m4vfBold2)"/>
+    <circle cx="130" cy="292" r="6" fill="#c4501f"/>
+
+    <text x="330" y="164" font-size="13.5" font-weight="700" fill="#1f4f74">출발점 하나가 그린 자취 ψₜ(x)</text>
+    <text x="330" y="352" font-size="13.5" font-weight="700" fill="#a8410f">다른 출발점의 자취</text>
+
+  </g>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" role="img" aria-label="Flow Matching 학습 한 스텝과 샘플링에서 바뀌는 세 줄">
+  <rect x="0" y="0" width="1000" height="640" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m4tlA" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#7a8698"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">바뀌는 것은 주황색 세 줄뿐입니다</text>
+    <text x="36" y="66" font-size="14.5" fill="#4f5d75">회색 줄은 앞 모듈 코드에서 한 글자도 바뀌지 않습니다</text>
+
+    <!-- 학습 블록 -->
+    <rect x="36" y="84" width="928" height="330" rx="10" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="56" y="110" font-size="15" font-weight="700" fill="#2d3142">학습 한 스텝 · 직선 경로</text>
+
+    <rect x="56" y="124" width="470" height="34" rx="6" fill="#eef1f5"/>
+    <text x="70" y="146" font-size="14.5" font-family="ui-monospace,Menlo,monospace" fill="#4f5d75">x₁ ~ q(data)            [B, D]</text>
+    <text x="546" y="146" font-size="13" fill="#7a8698">데이터 배치</text>
+
+    <rect x="56" y="164" width="470" height="34" rx="6" fill="#eef1f5"/>
+    <text x="70" y="186" font-size="14.5" font-family="ui-monospace,Menlo,monospace" fill="#4f5d75">x₀ ~ N(0, I)            [B, D]</text>
+    <text x="546" y="186" font-size="13" fill="#7a8698">노이즈. 앞 모듈의 ε와 같은 텐서</text>
+
+    <rect x="56" y="204" width="470" height="34" rx="6" fill="#fbeee2" stroke="#c4501f" stroke-width="2"/>
+    <text x="70" y="226" font-size="14.5" font-family="ui-monospace,Menlo,monospace" font-weight="700" fill="#a8410f">t  ~ U(0, 1)            [B]</text>
+    <text x="536" y="220" font-size="13" font-weight="700" fill="#a8410f">① 앞 모듈은 1~1000의 정수였습니다</text>
+    <text x="536" y="236" font-size="12.5" fill="#b8762e">연속이라 스케줄 표를 뒤질 일이 없습니다</text>
+
+    <rect x="56" y="244" width="470" height="34" rx="6" fill="#fbeee2" stroke="#c4501f" stroke-width="2"/>
+    <text x="70" y="266" font-size="14.5" font-family="ui-monospace,Menlo,monospace" font-weight="700" fill="#a8410f">x_t = (1-t)·x₀ + t·x₁   [B, D]</text>
+    <text x="536" y="260" font-size="13" font-weight="700" fill="#a8410f">② 앞 모듈은 √ᾱ_t·x₀ + √(1-ᾱ_t)·ε</text>
+    <text x="536" y="276" font-size="12.5" fill="#b8762e">t를 [B] 에서 [B,1,…] 로 브로드캐스트합니다</text>
+
+    <rect x="56" y="284" width="470" height="34" rx="6" fill="#eef1f5"/>
+    <text x="70" y="306" font-size="14.5" font-family="ui-monospace,Menlo,monospace" fill="#4f5d75">v_θ(x_t, t)             [B, D]</text>
+    <text x="546" y="300" font-size="13" fill="#7a8698">백본 그대로. 파라미터도 조건 경로도 무변경</text>
+    <text x="546" y="316" font-size="12.5" fill="#9aa6b2">DiT든 다른 Transformer든 그대로 씁니다</text>
+
+    <rect x="56" y="324" width="470" height="34" rx="6" fill="#fbeee2" stroke="#c4501f" stroke-width="2"/>
+    <text x="70" y="346" font-size="14.5" font-family="ui-monospace,Menlo,monospace" font-weight="700" fill="#a8410f">target u = x₁ - x₀      [B, D]</text>
+    <text x="536" y="340" font-size="13" font-weight="700" fill="#a8410f">③ 앞 모듈은 target = ε</text>
+    <text x="536" y="356" font-size="12.5" fill="#b8762e">경로 위에서 상수라 계수가 안 곱해집니다</text>
+
+    <rect x="56" y="364" width="470" height="34" rx="6" fill="#eef1f5"/>
+    <text x="70" y="386" font-size="14.5" font-family="ui-monospace,Menlo,monospace" fill="#4f5d75">L = mean( (v_θ - u)² ) → backward</text>
+
+    <line x1="291" y1="158" x2="291" y2="164" stroke="#7a8698" stroke-width="1.4" marker-end="url(#m4tlA)"/>
+    <line x1="291" y1="198" x2="291" y2="204" stroke="#7a8698" stroke-width="1.4" marker-end="url(#m4tlA)"/>
+    <line x1="291" y1="238" x2="291" y2="244" stroke="#7a8698" stroke-width="1.4" marker-end="url(#m4tlA)"/>
+    <line x1="291" y1="278" x2="291" y2="284" stroke="#7a8698" stroke-width="1.4" marker-end="url(#m4tlA)"/>
+    <line x1="291" y1="318" x2="291" y2="324" stroke="#7a8698" stroke-width="1.4" marker-end="url(#m4tlA)"/>
+    <line x1="291" y1="358" x2="291" y2="364" stroke="#7a8698" stroke-width="1.4" marker-end="url(#m4tlA)"/>
+
+    <!-- 샘플링 블록 -->
+    <rect x="36" y="428" width="928" height="140" rx="10" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="56" y="454" font-size="15" font-weight="700" fill="#2d3142">샘플링 · 명시적 Euler · NFE = K</text>
+
+    <rect x="56" y="466" width="470" height="30" rx="6" fill="#eef1f5"/>
+    <text x="70" y="486" font-size="14.5" font-family="ui-monospace,Menlo,monospace" fill="#4f5d75">x ← x₀ ~ N(0, I)  [B,D];   h ← 1/K</text>
+
+    <rect x="56" y="500" width="470" height="30" rx="6" fill="#e7f0e9" stroke="#3f7d55" stroke-width="1.8"/>
+    <text x="70" y="520" font-size="14.5" font-family="ui-monospace,Menlo,monospace" font-weight="700" fill="#2c5b3c">for k = 0 … K-1: x ← x + h·v_θ(x, k·h)</text>
+    <text x="546" y="520" font-size="13" font-weight="700" fill="#2c5b3c">forward 정확히 K회 = NFE</text>
+
+    <rect x="56" y="534" width="470" height="30" rx="6" fill="#eef1f5"/>
+    <text x="70" y="554" font-size="14.5" font-family="ui-monospace,Menlo,monospace" fill="#4f5d75">return x</text>
+    <text x="546" y="554" font-size="13" fill="#7a8698">앞 모듈은 스케줄 계수 셋과 노이즈 재주입이 붙습니다</text>
+
+    <rect x="36" y="580" width="928" height="46" rx="8" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="56" y="602" font-size="13.5" fill="#4f5d75">백본, 옵티마이저, 지수이동평균, 조건 주입 경로는 한 줄도 안 바뀝니다.</text>
+    <text x="56" y="620" font-size="13.5" fill="#4f5d75">K=1 이면 x = x₀ + v_θ(x₀, 0) 한 줄이고, 경로가 직선이면 이것이 정확한 답입니다.</text>
+  </g>
+</svg>

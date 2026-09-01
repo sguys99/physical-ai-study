@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 622" width="1020" height="622" role="img" aria-label="VLM 백본이 조건을 만들고 액션 전문가가 그 조건 아래에서 K회 적분한다">
+  <rect x="0" y="0" width="1020" height="622" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m4ahA" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#7a8698"/>
+    </marker>
+    <marker id="m4ahG" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#3f7d55"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">무거운 백본은 루프 밖, 가벼운 전문가만 루프 안</text>
+    <text x="36" y="66" font-size="14.5" fill="#4f5d75">G1 29 DoF, 액션 묶음 길이 H = 50 기준입니다</text>
+
+    <!-- 루프 경계 -->
+    <line x1="430" y1="92" x2="430" y2="520" stroke="#c4501f" stroke-width="3" stroke-dasharray="10,6"/>
+    <text x="418" y="112" font-size="14" font-weight="700" fill="#a8410f" text-anchor="end">묶음당 1회</text>
+    <text x="442" y="112" font-size="14" font-weight="700" fill="#a8410f">K회 반복</text>
+
+    <!-- 왼쪽: 관측 -->
+    <rect x="36" y="130" width="200" height="128" rx="9" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="1.8"/>
+    <text x="52" y="156" font-size="14.5" font-weight="700" fill="#1f4f74">관측</text>
+    <text x="52" y="182" font-size="13" fill="#2f6f9f">카메라 V대의 이미지 패치</text>
+    <text x="52" y="204" font-size="13" fill="#2f6f9f">언어 토큰 L개</text>
+    <text x="52" y="226" font-size="13" fill="#2f6f9f">proprioception q [29]</text>
+    <text x="52" y="248" font-size="12.5" fill="#7a8698">관절각과 각속도입니다</text>
+
+    <line x1="236" y1="194" x2="266" y2="194" stroke="#7a8698" stroke-width="2" marker-end="url(#m4ahA)"/>
+
+    <!-- VLM 백본 -->
+    <rect x="270" y="130" width="146" height="128" rx="9" fill="#eef1f5" stroke="#4f5d75" stroke-width="2"/>
+    <text x="343" y="164" font-size="14.5" font-weight="700" fill="#2d3142" text-anchor="middle">VLM 백본</text>
+    <text x="343" y="192" font-size="12.5" fill="#4f5d75" text-anchor="middle">조건 토큰을 만듭니다</text>
+    <text x="343" y="214" font-size="12.5" fill="#4f5d75" text-anchor="middle">[B, V·패치 + L, d]</text>
+    <text x="343" y="242" font-size="12.5" font-weight="700" fill="#a8410f" text-anchor="middle">여기가 무겁습니다</text>
+
+    <!-- 아래: 액션 묶음 입력 -->
+    <rect x="36" y="300" width="380" height="130" rx="9" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.8"/>
+    <text x="52" y="326" font-size="14.5" font-weight="700" fill="#8a5518">적분 대상 만들기</text>
+    <text x="52" y="352" font-size="13" fill="#8a5518">액션 묶음 A ∈ [B, 50, 29]</text>
+    <text x="52" y="374" font-size="13" fill="#8a5518">x₀ ~ N(0,I), t ~ U(0,1)</text>
+    <text x="52" y="396" font-size="13" font-weight="700" fill="#8a5518">학습: x_t = (1-t)·x₀ + t·A</text>
+    <text x="52" y="416" font-size="12.5" fill="#8a5518">추론: x₀에서 시작해 오른쪽 루프만 돕니다</text>
+
+    <path d="M 416 330 L 440 330 L 440 204" fill="none" stroke="#7a8698" stroke-width="2"/>
+    <path d="M 440 186 L 440 171 L 466 171" fill="none" stroke="#7a8698" stroke-width="2" marker-end="url(#m4ahA)"/>
+
+    <!-- 오른쪽: 토큰화 -->
+    <rect x="470" y="130" width="230" height="82" rx="9" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="486" y="156" font-size="14" font-weight="700" fill="#2d3142">시간 방향 묶기</text>
+    <text x="486" y="180" font-size="12.5" fill="#4f5d75">2칸씩 묶어 토큰 25개</text>
+    <text x="486" y="200" font-size="12.5" fill="#4f5d75">Linear(2×29 → d) → [B, 25, d]</text>
+
+    <!-- 액션 전문가 -->
+    <rect x="470" y="234" width="230" height="180" rx="9" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2.2"/>
+    <text x="585" y="262" font-size="14.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">액션 전문가 N블록</text>
+    <text x="486" y="292" font-size="12.5" fill="#2c5b3c">Self-Attention  [B, 25, d]</text>
+    <text x="486" y="316" font-size="12.5" fill="#2c5b3c">Cross-Attention (조건 토큰)</text>
+    <text x="486" y="340" font-size="12.5" fill="#2c5b3c">MLP</text>
+    <text x="486" y="370" font-size="12.5" fill="#3f7d55">시각 t 주입은 두 갈래입니다</text>
+    <text x="486" y="390" font-size="12.5" fill="#3f7d55">adaLN(GR00T) 또는 MLP 접기(pi0)</text>
+
+    <line x1="585" y1="212" x2="585" y2="228" stroke="#7a8698" stroke-width="2" marker-end="url(#m4ahA)"/>
+    <line x1="416" y1="194" x2="452" y2="194" stroke="#7a8698" stroke-width="2"/>
+    <path d="M 452 194 L 452 316 L 466 316" fill="none" stroke="#7a8698" stroke-width="2" marker-end="url(#m4ahA)"/>
+
+    <!-- 출력 -->
+    <rect x="470" y="436" width="230" height="76" rx="9" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="486" y="462" font-size="14" font-weight="700" fill="#2d3142">되펼치기</text>
+    <text x="486" y="486" font-size="12.5" fill="#4f5d75">Linear(d → 2×29) → [B, 50, 29]</text>
+    <text x="486" y="504" font-size="12.5" fill="#4f5d75">추정 속도 v̂</text>
+    <line x1="585" y1="414" x2="585" y2="430" stroke="#7a8698" stroke-width="2" marker-end="url(#m4ahA)"/>
+
+    <!-- 적분 루프 되돌림 -->
+    <path d="M 700 474 L 744 474 L 744 240 L 704 240" fill="none" stroke="#3f7d55" stroke-width="2.6" marker-end="url(#m4ahG)"/>
+    <text x="754" y="352" font-size="13.5" font-weight="700" fill="#2c5b3c">x ← x + h·v̂</text>
+    <text x="754" y="372" font-size="13" fill="#3f7d55">h = 1/K, K회만 돕니다</text>
+    <text x="754" y="392" font-size="13" fill="#3f7d55">백본은 다시 돌지 않습니다</text>
+
+    <!-- 최종 출력 -->
+    <rect x="754" y="436" width="232" height="76" rx="9" fill="#fbeae4" stroke="#c4501f" stroke-width="2"/>
+    <text x="770" y="462" font-size="14" font-weight="700" fill="#a8410f">완성된 액션 묶음</text>
+    <text x="770" y="486" font-size="12.5" fill="#a8410f">[B, 50, 29]</text>
+    <text x="770" y="504" font-size="12.5" fill="#a8410f">K회를 다 돈 x가 곧 묶음입니다</text>
+    <line x1="700" y1="474" x2="748" y2="474" stroke="#c4501f" stroke-width="2.4"/>
+
+    <rect x="36" y="530" width="950" height="74" rx="8" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="56" y="554" font-size="13.5" fill="#4f5d75">주황 점선 왼쪽은 액션 묶음 하나당 한 번만 돌고 오른쪽만 K번 반복합니다. 무거운 쪽이 왼쪽에 있어야 예산이 맞습니다.</text>
+    <text x="56" y="573" font-size="13.5" fill="#4f5d75">이 경계가 오른쪽으로 넘어가면 무거운 백본이 K번 다시 돕니다. §8.2 숫자로는 K=4에서 2.6배, K=10에서 3.8배입니다.</text>
+    <text x="56" y="592" font-size="13.5" fill="#4f5d75">우리 스택이 어느 쪽인지는 아직 확인되지 않았습니다(M4-4).</text>
+  </g>
+</svg>

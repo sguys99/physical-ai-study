@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 530" width="900" height="530" role="img" aria-label="VP 경로와 직선 경로가 같은 두 점을 다른 모양으로 잇는다">
+  <rect x="0" y="0" width="900" height="530" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="42" font-size="21" font-weight="700" fill="#2d3142">두 스케줄은 같은 두 점을 다른 모양으로 잇습니다</text>
+    <text x="40" y="68" font-size="14.5" fill="#4f5d75">가로축이 잡음 계수 σ, 세로축이 신호 계수 α입니다</text>
+
+    <!-- 축 -->
+    <line x1="120" y1="450" x2="530" y2="450" stroke="#4f5d75" stroke-width="2"/>
+    <line x1="120" y1="450" x2="120" y2="80" stroke="#4f5d75" stroke-width="2"/>
+    <text x="530" y="476" font-size="15" font-weight="700" fill="#4f5d75" text-anchor="middle">σ</text>
+    <text x="98" y="86" font-size="15" font-weight="700" fill="#4f5d75" text-anchor="middle">α</text>
+    <text x="112" y="472" font-size="13" fill="#7a8698" text-anchor="middle">0</text>
+    <text x="480" y="472" font-size="13" fill="#7a8698" text-anchor="middle">1</text>
+    <text x="104" y="86" font-size="13" fill="#7a8698" text-anchor="end">1</text>
+
+    <!-- SNR = 1 대각선 -->
+    <line x1="120" y1="450" x2="480" y2="90" stroke="#7a8698" stroke-width="1.6" stroke-dasharray="6,5"/>
+    <text x="470" y="112" font-size="13" fill="#7a8698" text-anchor="end">α = σ 인 자리 (SNR = 1)</text>
+
+    <!-- VP 호 -->
+    <path d="M 120 90 A 360 360 0 0 1 480 450" fill="none" stroke="#2f6f9f" stroke-width="3.6"/>
+    <!-- RF 현 -->
+    <line x1="120" y1="90" x2="480" y2="450" stroke="#c4501f" stroke-width="3.6"/>
+
+    <!-- 양 끝점 -->
+    <circle cx="120" cy="90" r="7.5" fill="#2d3142"/>
+    <circle cx="480" cy="450" r="7.5" fill="#2d3142"/>
+    <text x="136" y="86" font-size="13.5" font-weight="700" fill="#2d3142">데이터 끝 (σ=0, α=1)</text>
+    <text x="470" y="440" font-size="13.5" font-weight="700" fill="#2d3142" text-anchor="end">노이즈 끝 (σ=1, α=0)</text>
+
+    <!-- 교점 -->
+    <circle cx="375" cy="195" r="6" fill="#2f6f9f"/>
+    <circle cx="300" cy="270" r="6" fill="#c4501f"/>
+    <text x="390" y="192" font-size="13" font-weight="700" fill="#1f4f74">VP는 여기서 SNR 1</text>
+    <text x="288" y="266" font-size="13" font-weight="700" fill="#a8410f" text-anchor="end">RF는 여기서 SNR 1</text>
+
+    <!-- 곡선 라벨 -->
+    <text x="332" y="126" font-size="15" font-weight="700" fill="#1f4f74">VP (α² + σ² = 1)</text>
+    <text x="186" y="252" font-size="15" font-weight="700" fill="#a8410f">RF (α + σ = 1)</text>
+
+    <!-- 설명 상자 -->
+    <rect x="570" y="120" width="300" height="176" rx="10" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="1.6"/>
+    <text x="590" y="148" font-size="14.5" font-weight="700" fill="#1f4f74">두 곡선의 차이</text>
+    <text x="590" y="176" font-size="13.5" fill="#2f6f9f">파란 곡선은 바깥으로 부푼 사분원이고</text>
+    <text x="590" y="196" font-size="13.5" fill="#2f6f9f">주황 직선은 두 끝점을 곧게 이은 것입니다.</text>
+    <text x="590" y="222" font-size="13.5" fill="#2f6f9f">각 점을 자기 길이로 나누면 주황 위의 점이</text>
+    <text x="590" y="242" font-size="13.5" fill="#2f6f9f">파란 곡선 위로 옮겨 갑니다. 나눗셈에</text>
+    <text x="590" y="262" font-size="13.5" fill="#2f6f9f">SNR은 변하지 않으므로 두 경로는</text>
+    <text x="590" y="282" font-size="13.5" font-weight="700" fill="#1f4f74">SNR 눈금에서는 같은 하나입니다.</text>
+
+    <rect x="570" y="320" width="300" height="98" rx="10" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.6"/>
+    <text x="590" y="348" font-size="14.5" font-weight="700" fill="#8a5518">그래서 무엇이 갈리는가</text>
+    <text x="590" y="374" font-size="13.5" fill="#8a5518">같은 SNR에 도달하는 시각이 다릅니다.</text>
+    <text x="590" y="394" font-size="13.5" fill="#8a5518">균등하게 시각을 뽑으면 구간별 학습</text>
+    <text x="590" y="410" font-size="13.5" fill="#8a5518">예산이 다르게 배분됩니다.</text>
+  </g>
+</svg>

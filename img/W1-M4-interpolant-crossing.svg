@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 500" width="940" height="500" role="img" aria-label="보간선이 교차하면 그 자리의 화살표가 제3의 방향이 된다">
+  <rect x="0" y="0" width="940" height="500" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m4xBold" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#3f7d55"/>
+    </marker>
+    <marker id="m4xCurve" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#c4501f"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="42" font-size="21" font-weight="700" fill="#2d3142">곧은 선 둘이 만나면 그 자리는 어느 쪽도 아닙니다</text>
+    <text x="40" y="68" font-size="14.5" fill="#4f5d75">조건부 경로는 직선인데 학습되는 속도장은 두 방향의 평균이 됩니다</text>
+
+    <!-- 시각 눈금 -->
+    <text x="120" y="120" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">t = 0</text>
+    <text x="740" y="120" font-size="14" font-weight="700" fill="#4f5d75" text-anchor="middle">t = 1</text>
+    <text x="120" y="140" font-size="12.5" fill="#7a8698" text-anchor="middle">노이즈</text>
+    <text x="740" y="140" font-size="12.5" fill="#7a8698" text-anchor="middle">데이터</text>
+
+    <!-- 보간선 두 개 -->
+    <line x1="120" y1="190" x2="740" y2="310" stroke="#9aa6b2" stroke-width="3"/>
+    <line x1="120" y1="310" x2="740" y2="190" stroke="#9aa6b2" stroke-width="3"/>
+
+    <!-- 끝점 -->
+    <circle cx="120" cy="190" r="9" fill="#2f6f9f"/>
+    <circle cx="120" cy="310" r="9" fill="#2f6f9f"/>
+    <circle cx="740" cy="190" r="9" fill="#b8762e"/>
+    <circle cx="740" cy="310" r="9" fill="#b8762e"/>
+    <text x="104" y="186" font-size="13" fill="#1f4f74" text-anchor="end">x₀ 첫째</text>
+    <text x="104" y="316" font-size="13" fill="#1f4f74" text-anchor="end">x₀ 둘째</text>
+    <text x="756" y="186" font-size="13" fill="#8a5518">x₁ 첫째</text>
+    <text x="756" y="316" font-size="13" fill="#8a5518">x₁ 둘째</text>
+
+    <!-- 교차점 -->
+    <circle cx="430" cy="250" r="8" fill="#3f7d55"/>
+    <line x1="430" y1="250" x2="560" y2="250" stroke="#3f7d55" stroke-width="4" marker-end="url(#m4xBold)"/>
+    <rect x="439" y="213" width="140" height="21" rx="4" fill="#f8f7f4"/>
+    <text x="446" y="228" font-size="14" font-weight="700" fill="#2c5b3c">두 방향의 사후평균</text>
+    <rect x="439" y="273" width="218" height="19" rx="4" fill="#f8f7f4"/>
+    <text x="446" y="286" font-size="13" fill="#3f7d55">어느 회색 선과도 다른 제3의 방향</text>
+
+    <!-- 실제 궤적 -->
+    <path d="M 120 400 C 300 400, 340 356, 430 356 C 540 356, 600 402, 736 402" fill="none" stroke="#c4501f" stroke-width="3.4" marker-end="url(#m4xCurve)"/>
+    <text x="150" y="392" font-size="13.5" font-weight="700" fill="#a8410f">학습된 속도장을 따라가면 궤적이 이렇게 휩니다</text>
+
+    <rect x="40" y="428" width="860" height="52" rx="8" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="58" y="452" font-size="13.5" fill="#4f5d75">회색 직선은 학습 데이터를 만들 때 그은 선이고 초록 화살표는 그 교차점에서 실제로 학습되는 방향입니다.</text>
+    <text x="58" y="471" font-size="13.5" fill="#4f5d75">교차하는 것은 이 회색 선들이지 미분방정식의 해가 아닙니다. 해는 서로 만날 수 없습니다.</text>
+  </g>
+</svg>
