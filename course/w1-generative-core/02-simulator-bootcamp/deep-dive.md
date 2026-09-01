@@ -43,10 +43,10 @@ Isaac Sim의 렌더링은 RT 코어를 요구합니다. **A100과 V100은 Isaac 
 
 본문 §3.2가 한 줄씩만 적은 각 단계에서 실제로 어느 필드가 채워지는지입니다.
 
-1. **순기구학**. `qpos`(관절 좌표)로부터 모든 body의 월드 포즈 `xpos`와 `xquat`를 계산합니다. 여기서 렌더링에 필요한 정보도 같이 확정됩니다.
+1. **순기구학**. `qpos`(관절 좌표)로부터 모든 body의 월드 포즈 `xpos[31, 3]`와 `xquat[31, 4]`를 계산합니다. 여기서 렌더링에 필요한 정보도 같이 확정됩니다.
 2. **질량행렬과 bias**. $M(q)$를 조립해 `data.M`에 넣고, 코리올리와 원심과 중력을 묶은 bias 항을 `qfrc_bias`에 계산합니다.
 3. **제약 탐지**. 충돌 검사로 접촉점을 찾고 관절 한계와 마찰과 등식 제약까지 모아 제약 야코비안 `efc_J`를 만듭니다. 이 단계에서 문제의 크기 `nefc`가 매 스텝 달라집니다.
-4. **액추에이터에서 solver로**. `ctrl`을 일반화력 `qfrc_actuator`로 변환한 뒤 제약을 만족시키는 제약력을 반복 최적화로 풉니다(`opt.iterations`회). G1 classic 모델은 Newton solver 100회입니다.
+4. **액추에이터에서 solver로**. `ctrl`을 일반화력 `qfrc_actuator`로 변환한 뒤 제약을 만족시키는 제약력을 반복 최적화로 풉니다(`opt.iterations`회). G1 classic 모델은 Newton solver 100회입니다. MJX 모델도 solver는 같은 Newton이고 반복 횟수만 5회로 줄어듭니다.
 5. **적분**. 얻어진 `qacc`로 `qvel`을 갱신하고 `qvel`로 `qpos`를 갱신합니다. 자유 관절의 쿼터니언 부분은 단순 덧셈이 아니라 지수사상으로 갱신됩니다(lesson §3.4).
 
 비용의 대부분이 3번과 4번에 있습니다. 접촉점 개수가 늘면 `nefc`가 커지고 solver가 푸는 문제의 크기가 그대로 커집니다. MJX가 처리량을 위해 `iterations`를 100에서 5로 가장 먼저 깎은 것이 이 구조 때문입니다.
@@ -223,6 +223,7 @@ LQR과 MPC 비용함수와의 대응은 lesson §7.5에 있습니다. 여기서 
 
 lesson 「회사 스택 연결」에서 존재만 알아둔 저장소의 세부입니다.
 
+- 지원 로봇은 `a2` `b2` `b2w` `g1` `go2` `go2w` `h1` `h1_2` `h2` `r1` 열 종이고 G1이 여기 들어 있습니다
 - 기본 브랜치는 `main`이고 README 파일명이 소문자 `readme.md`입니다
 - 최상위 구조는 `doc/` `example/` `simulate/` `simulate_python/` `terrain_tool/` `unitree_robots/`입니다
 - `simulate/`는 C++ 구현이고 권장 경로입니다. `simulate_python/`은 파이썬 버전으로 `config.py`, `unitree_mujoco.py`, `unitree_sdk2py_bridge.py`, `test/`로 구성됩니다
@@ -260,6 +261,8 @@ lesson §5.5의 $M_{\text{eff}}$ 역산표에 대한 보충입니다.
 역산값에는 `armature`(lesson §5.6의 갭 요인 2)도 포함돼 있습니다. 정확한 링크 관성만 뽑으려면 `mj_fullM`으로 $M(q)$를 직접 꺼내 보세요. 그 값은 자세에 따라 변하지만 `kv`는 컴파일 시점에 한 번 정해진 상수라는 점도 같이 확인할 만합니다.
 
 역산 절차를 한 번 더 적어둡니다. eq. 3 $k_v = 2\zeta\sqrt{k_p M_{\text{eff}}}$를 $M_{\text{eff}}$에 대해 풀면 $M_{\text{eff}} = (k_v / 2\zeta)^2 / k_p$이고, 임계감쇠라 $\zeta = 1$입니다. 팔꿈치는 $(9.42912002 \div 2)^2 \div 500 = 22.227 \div 500 \approx 0.044$, 어깨는 $(16.72533692 \div 2)^2 \div 500 = 69.934 \div 500 \approx 0.140$, 무릎은 $(15.84701068 \div 2)^2 \div 500 \approx 0.126$, 고관절은 $(43.01068276 \div 2)^2 \div 500 \approx 0.925$입니다.
+
+lesson §5.5의 `<position kp="500" dampratio="1" inheritrange="1"/>` 한 줄은 컴파일되면 `gainprm[0] = kp`, `biasprm = [0, -kp, -kv]`가 됩니다. 액추에이터가 내는 힘 $f = k_p(\texttt{ctrl} - q) - k_v \dot q$의 두 이득이 이 두 배열에서 나오고, `practice/02_g1_inspect.py`가 $k_p$를 `m.actuator_gainprm[aid, 0]`에서, $k_v$를 `-m.actuator_biasprm[aid, 2]`에서 읽는 근거도 이것입니다. `dampratio`는 파일에 그대로 남지 않고 컴파일 시점에 $k_v$로 환산돼 사라집니다.
 
 `inheritrange="1"` 덕분에 `ctrlrange`가 관절 `range`와 자동으로 같아집니다. lesson §5.4 표의 range를 그대로 명령 한계로 쓰면 됩니다.
 

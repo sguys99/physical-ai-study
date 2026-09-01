@@ -17,7 +17,7 @@
     <text x="66" y="316" font-size="15" fill="#1f3f70">opt.timestep = 0.002 초</text>
     <text x="66" y="344" font-size="15" fill="#1f3f70">opt.iterations = 100</text>
     <rect x="66" y="360" width="278" height="30" rx="4" fill="#c9d8ec"/>
-    <text x="205" y="380" font-size="14" font-weight="600" fill="#1f3f70" text-anchor="middle">약 몇 메가바이트. 한 번만 올립니다</text>
+    <text x="205" y="380" font-size="14" font-weight="600" fill="#1f3f70" text-anchor="middle">환경이 몇 개든 이것만 한 벌 올립니다</text>
 
     <!-- 화살표 -->
     <line x1="380" y1="254" x2="440" y2="254" stroke="#eb6c36" stroke-width="2.4"/>
@@ -39,7 +39,7 @@
     <text x="516" y="292" font-size="15" fill="#8a5518">ctrl[29]   넣어준 명령</text>
     <text x="516" y="320" font-size="15" fill="#8a5518">contact / efc_*   이번 스텝의 접촉</text>
     <rect x="516" y="332" width="388" height="16" rx="3" fill="#f0dcc0"/>
-    <text x="710" y="345" font-size="13" font-weight="600" fill="#8a5518" text-anchor="middle">4096개를 나란히 두면 수 기가바이트</text>
+    <text x="710" y="345" font-size="13" font-weight="600" fill="#8a5518" text-anchor="middle">환경이 4096개면 이 상자가 4096벌입니다</text>
 
     <!-- 아래: 왜 나눴나 -->
     <line x1="40" y1="432" x2="960" y2="432" stroke="#d9d7d2" stroke-width="1"/>

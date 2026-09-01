@@ -15,7 +15,8 @@
 
     <line x1="500" y1="194" x2="500" y2="226" stroke="#eb6c36" stroke-width="2.4"/>
     <polygon points="500,232 493,220 507,220" fill="#eb6c36"/>
-    <text x="516" y="218" font-size="14" fill="#c4501f">MjModel.from_xml_path 로 한 번 컴파일합니다. 여기서 nq, nv, nu 가 정해집니다</text>
+    <text x="516" y="210" font-size="14" fill="#c4501f">MjModel.from_xml_path 로 한 번 컴파일합니다.</text>
+    <text x="516" y="228" font-size="14" fill="#c4501f">여기서 nq, nv, nu 가 정해집니다</text>
 
     <!-- ② mjModel -->
     <rect x="60" y="236" width="880" height="86" rx="8" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1.8"/>
@@ -46,8 +47,8 @@
     <text x="86" y="546" font-size="14" fill="#4f5d75">먼저 ctrl[29] 에 목표 관절각을 넣습니다. 토크가 아니라 각도라는 점이 중요합니다.</text>
 
     <rect x="86" y="560" width="152" height="60" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1"/>
-    <text x="162" y="583" font-size="14" font-weight="600" fill="#2d3142" text-anchor="middle">순기구학</text>
-    <text x="162" y="604" font-size="13" fill="#4f5d75" text-anchor="middle">각도 → 링크 위치</text>
+    <text x="162" y="583" font-size="14" font-weight="600" fill="#2d3142" text-anchor="middle">링크 위치 구하기</text>
+    <text x="162" y="604" font-size="13" fill="#4f5d75" text-anchor="middle">각도에서 공간 좌표로</text>
 
     <rect x="250" y="560" width="152" height="60" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1"/>
     <text x="326" y="583" font-size="14" font-weight="600" fill="#2d3142" text-anchor="middle">관성과 중력</text>
@@ -67,7 +68,8 @@
 
     <line x1="500" y1="642" x2="500" y2="674" stroke="#eb6c36" stroke-width="2.4"/>
     <polygon points="500,680 493,668 507,668" fill="#eb6c36"/>
-    <text x="516" y="666" font-size="14" fill="#c4501f">몇 스텝에 한 번만 그림을 뜹니다. 25장을 초당 저장하려면 20스텝마다 한 번입니다</text>
+    <text x="516" y="656" font-size="14" fill="#c4501f">몇 스텝에 한 번만 그림을 뜹니다.</text>
+    <text x="516" y="674" font-size="14" fill="#c4501f">25장을 초당 저장하려면 20스텝마다 한 번입니다</text>
 
     <!-- ④ Renderer -->
     <rect x="60" y="684" width="880" height="72" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="1.8"/>

@@ -227,7 +227,7 @@ def select_ctrl_ids(m: mujoco.MjModel, group: str) -> list[int]:
 
 
 def actuator_gains(m: mujoco.MjModel) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """(kp, kv, M_eff). lesson §5.5 eq.(2): M_eff = (kv/2ζ)²/kp"""
+    """(kp, kv, M_eff). lesson §5.5 eq.(3): M_eff = (kv/2ζ)²/kp"""
     kp = m.actuator_gainprm[:, 0].copy()  # gainprm[0] = kp
     kv = -m.actuator_biasprm[:, 2].copy()  # biasprm = [0, -kp, -kv]
     m_eff = np.where(kp > 0, (kv / (2 * DAMPRATIO)) ** 2 / np.maximum(kp, 1e-12), np.nan)

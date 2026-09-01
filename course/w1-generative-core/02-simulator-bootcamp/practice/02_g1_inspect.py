@@ -322,10 +322,10 @@ def joint_rows(m: mujoco.MjModel) -> list[dict]:
         limited = bool(m.jnt_limited[jid])
         kp = kv = m_eff = None
         if aid is not None:
-            kp = float(m.actuator_gainprm[aid, 0])  # lesson §5.5: gainprm[0] = kp
+            kp = float(m.actuator_gainprm[aid, 0])  # deep-dive §11: gainprm[0] = kp
             kv = float(-m.actuator_biasprm[aid, 2])  # biasprm = [0, -kp, -kv]
             if kp > 0:
-                # eq.(2)  k_v = 2*zeta*sqrt(k_p * M_eff)  ->  M_eff = (k_v / (2*zeta))^2 / k_p
+                # eq.(3)  k_v = 2*zeta*sqrt(k_p * M_eff)  ->  M_eff = (k_v / (2*zeta))^2 / k_p
                 m_eff = (kv / (2.0 * DAMPRATIO)) ** 2 / kp
         body = int(m.jnt_bodyid[jid])
         rows.append(dict(

@@ -8,7 +8,7 @@
     <!-- 3층 스택 -->
     <rect x="60" y="104" width="470" height="76" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
     <text x="84" y="134" font-size="18" font-weight="700" fill="#2c5b3c">mujoco_playground</text>
-    <text x="84" y="160" font-size="14" fill="#3f7d55">환경, 보상, 커리큘럼, 학습 스크립트를 얹은 스위트</text>
+    <text x="84" y="160" font-size="14" fill="#3f7d55">환경과 보상과 학습 스크립트를 얹은 모음집</text>
     <rect x="392" y="118" width="122" height="48" rx="5" fill="#ffffff" stroke="#3f7d55" stroke-width="1"/>
     <text x="453" y="139" font-size="13" fill="#2c5b3c" text-anchor="middle">G1 보행 태스크</text>
     <text x="453" y="157" font-size="13" fill="#2c5b3c" text-anchor="middle">여기 들어 있습니다</text>
@@ -60,7 +60,7 @@
 
     <rect x="514" y="442" width="446" height="76" rx="6" fill="#f4f2ef" stroke="#a7a29a" stroke-width="1.2"/>
     <text x="538" y="470" font-size="15" font-weight="600" fill="#3d382f">Isaac Sim 과 Isaac Lab</text>
-    <text x="538" y="496" font-size="14" fill="#5c564e">업계 표준이지만 광선추적 전용 하드웨어를 요구합니다</text>
+    <text x="538" y="496" font-size="14" fill="#5c564e">대량 병렬에 강하지만 광선추적 전용 하드웨어를 요구합니다</text>
 
     <text x="40" y="546" font-size="14" fill="#7a8399">회사 학습 인프라가 오른쪽 아래일 가능성이 있어 첫 주에 팀 표준을 확인해야 합니다.</text>
   </g>

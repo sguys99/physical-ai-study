@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" role="img" aria-label="관절 하나에 붙는 네 개의 주소">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" role="img" aria-label="관절 하나가 배열 세 곳에서 서로 다른 칸에 있는 구조">
   <rect x="0" y="0" width="1000" height="600" fill="#f8f7f4"/>
   <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
 
@@ -82,10 +82,10 @@
 
     <!-- 결론 박스 -->
     <rect x="40" y="436" width="920" height="76" rx="8" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.6"/>
-    <text x="64" y="466" font-size="17" font-weight="700" fill="#c4501f">왼쪽 무릎 하나에 주소가 네 개 붙습니다</text>
-    <text x="64" y="494" font-size="15" fill="#8a4a22">관절 번호 4  ·  자세 배열 10번 칸  ·  속도 배열 9번 칸  ·  명령 배열 3번 칸</text>
+    <text x="64" y="466" font-size="17" font-weight="700" fill="#c4501f">왼쪽 무릎 하나가 배열 세 곳에서 서로 다른 칸에 있습니다</text>
+    <text x="64" y="494" font-size="15" fill="#8a4a22">관절 번호는 4번이고, 자세 배열 10번 칸, 속도 배열 9번 칸, 명령 배열 3번 칸입니다</text>
 
-    <text x="40" y="548" font-size="14" fill="#4f5d75">왼쪽에서 세 번째 관절(0부터 세어 3번)이라고 할 때, 자세는 3 + 7, 속도는 3 + 6, 명령은 3 + 0 입니다.</text>
+    <text x="40" y="548" font-size="14" fill="#4f5d75">왼쪽에서 네 번째 관절(0부터 세어 3번)이라고 할 때, 자세는 3 + 7, 속도는 3 + 6, 명령은 3 + 0 입니다.</text>
     <text x="40" y="572" font-size="14" fill="#7a8399">그래서 숫자를 직접 적지 않고 이름으로 물어보는 습관이 필요합니다.</text>
   </g>
 </svg>
