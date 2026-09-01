@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 520" width="1020" height="520" role="img" aria-label="디노이징 횟수가 청크 길이와 반응 지연으로 번역되는 경로">
+  <rect x="0" y="0" width="1020" height="520" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="44" font-size="22" font-weight="700" fill="#2d3142">디노이징 횟수는 그대로 반응 지연이 됩니다</text>
+    <text x="40" y="72" font-size="15" fill="#4f5d75">1회에 3 ms, 백본 60 ms, 통신 20 ms, 하위 제어 50 Hz라고 두고 잰 값입니다</text>
+
+    <text x="52" y="126" font-size="14" font-weight="700" fill="#4f5d75">디노이징 횟수</text>
+    <text x="196" y="126" font-size="14" font-weight="700" fill="#4f5d75">추론 시간</text>
+    <text x="336" y="126" font-size="14" font-weight="700" fill="#4f5d75">청크 길이</text>
+    <text x="480" y="126" font-size="14" font-weight="700" fill="#4f5d75">눈을 감고 있는 최악의 구간 (시간 축 그대로)</text>
+
+    <!-- 행 1: 1회 -->
+    <rect x="44" y="146" width="126" height="50" rx="7" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="107" y="177" font-size="18" font-weight="700" fill="#2c5b3c" text-anchor="middle">1회</text>
+    <text x="196" y="177" font-size="15" fill="#2c5b3c">63 ms</text>
+    <text x="336" y="177" font-size="15" fill="#2c5b3c">8 스텝</text>
+    <rect x="480" y="158" width="9" height="26" rx="3" fill="#3f7d55"/>
+    <text x="497" y="177" font-size="14" font-weight="700" fill="#2c5b3c">160 ms</text>
+
+    <!-- 행 2: 10회 -->
+    <rect x="44" y="212" width="126" height="50" rx="7" fill="#eef4ee" stroke="#6a9c7c" stroke-width="2"/>
+    <text x="107" y="243" font-size="18" font-weight="700" fill="#2c5b3c" text-anchor="middle">10회</text>
+    <text x="196" y="243" font-size="15" fill="#3f7d55">90 ms</text>
+    <text x="336" y="243" font-size="15" fill="#3f7d55">10 스텝</text>
+    <rect x="480" y="224" width="11" height="26" rx="3" fill="#6a9c7c"/>
+    <text x="499" y="243" font-size="14" font-weight="700" fill="#3f7d55">200 ms</text>
+
+    <!-- 행 3: 250회 -->
+    <rect x="44" y="278" width="126" height="50" rx="7" fill="#f8f3ea" stroke="#b8762e" stroke-width="2.4"/>
+    <text x="107" y="309" font-size="18" font-weight="700" fill="#8a5518" text-anchor="middle">250회</text>
+    <text x="196" y="309" font-size="15" fill="#8a5518">810 ms</text>
+    <text x="336" y="309" font-size="15" font-weight="700" fill="#8a5518">82 스텝</text>
+    <rect x="480" y="290" width="93" height="26" rx="3" fill="#c4501f"/>
+    <text x="583" y="309" font-size="14" font-weight="700" fill="#a8410f">1,640 ms</text>
+
+    <!-- 행 4: 1000회 -->
+    <rect x="44" y="344" width="126" height="50" rx="7" fill="#fbeae4" stroke="#c4501f" stroke-width="2.4"/>
+    <text x="107" y="375" font-size="18" font-weight="700" fill="#a8410f" text-anchor="middle">1000회</text>
+    <text x="196" y="375" font-size="15" fill="#a8410f">3,060 ms</text>
+    <text x="336" y="375" font-size="15" font-weight="700" fill="#a8410f">307 스텝</text>
+    <rect x="480" y="356" width="350" height="26" rx="3" fill="#8f2f10"/>
+    <text x="655" y="374" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">6,140 ms</text>
+
+    <!-- 200 ms 문턱선 -->
+    <line x1="491" y1="142" x2="491" y2="410" stroke="#2f6f9f" stroke-width="2.2" stroke-dasharray="6,4"/>
+    <rect x="500" y="416" width="470" height="70" rx="8" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="1.6"/>
+    <text x="516" y="440" font-size="14" font-weight="700" fill="#1f4f74">파란 세로선이 200 ms 문턱입니다</text>
+    <text x="516" y="461" font-size="13" fill="#2f6f9f">발이 미끄러지고 자세가 무너지기까지 걸리는 시간이고,</text>
+    <text x="516" y="479" font-size="13" fill="#2f6f9f">막대가 이 선을 넘으면 손쓸 시간이 남지 않습니다</text>
+
+    <text x="44" y="440" font-size="13.5" fill="#4f5d75">막대 길이는 시간에 비례합니다.</text>
+    <text x="44" y="460" font-size="13.5" fill="#4f5d75">위의 두 줄이 거의 보이지 않는 것과</text>
+    <text x="44" y="480" font-size="13.5" fill="#4f5d75">맨 아래 줄의 길이 차이가 이 그림의 전부입니다.</text>
+  </g>
+</svg>

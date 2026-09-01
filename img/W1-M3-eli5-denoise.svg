@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 420" width="1020" height="420" role="img" aria-label="지우는 연습을 시켜서 그리는 법을 가르치는 방식">
+  <rect x="0" y="0" width="1020" height="420" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="44" font-size="22" font-weight="700" fill="#2d3142">망가뜨리는 법을 먼저 정하고, 되돌리는 법만 가르칩니다</text>
+    <text x="40" y="72" font-size="15" fill="#4f5d75">위 줄은 사람이 정한 규칙이고, 아래 줄만 기계가 배웁니다</text>
+
+    <!-- 위 줄: 망가뜨리기 -->
+    <text x="52" y="120" font-size="15" font-weight="700" fill="#8a5518">망가뜨리기</text>
+    <g>
+      <rect x="52" y="136" width="120" height="100" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+      <circle cx="112" cy="180" r="26" fill="#3f7d55"/>
+      <text x="112" y="222" font-size="13" fill="#2c5b3c" text-anchor="middle">깨끗한 그림</text>
+
+      <rect x="212" y="136" width="120" height="100" rx="8" fill="#eef4ee" stroke="#6a9c7c" stroke-width="2"/>
+      <circle cx="272" cy="180" r="26" fill="#6a9c7c" opacity="0.8"/>
+      <g fill="#8a97ad"><circle cx="240" cy="158" r="2.5"/><circle cx="300" cy="168" r="2.5"/><circle cx="258" cy="212" r="2.5"/><circle cx="292" cy="200" r="2.5"/><circle cx="250" cy="190" r="2.5"/></g>
+      <text x="272" y="222" font-size="13" fill="#3f7d55" text-anchor="middle">조금 지저분</text>
+
+      <rect x="372" y="136" width="120" height="100" rx="8" fill="#f8f3ea" stroke="#b8762e" stroke-width="2"/>
+      <circle cx="432" cy="180" r="24" fill="#c9924b" opacity="0.5"/>
+      <g fill="#8a97ad"><circle cx="398" cy="152" r="2.5"/><circle cx="462" cy="162" r="2.5"/><circle cx="412" cy="214" r="2.5"/><circle cx="456" cy="204" r="2.5"/><circle cx="404" cy="186" r="2.5"/><circle cx="444" cy="148" r="2.5"/><circle cx="470" cy="196" r="2.5"/><circle cx="424" cy="166" r="2.5"/></g>
+      <text x="432" y="222" font-size="13" fill="#8a5518" text-anchor="middle">반쯤 뭉개짐</text>
+
+      <rect x="532" y="136" width="120" height="100" rx="8" fill="#e9eaef" stroke="#5c6478" stroke-width="2"/>
+      <g fill="#8a97ad"><circle cx="556" cy="152" r="2.5"/><circle cx="622" cy="162" r="2.5"/><circle cx="570" cy="214" r="2.5"/><circle cx="616" cy="204" r="2.5"/><circle cx="564" cy="186" r="2.5"/><circle cx="604" cy="148" r="2.5"/><circle cx="630" cy="196" r="2.5"/><circle cx="584" cy="166" r="2.5"/><circle cx="596" cy="188" r="2.5"/><circle cx="546" cy="200" r="2.5"/><circle cx="638" cy="176" r="2.5"/><circle cx="580" cy="146" r="2.5"/></g>
+      <text x="592" y="222" font-size="13" fill="#2d3142" text-anchor="middle">완전한 모래알</text>
+    </g>
+    <path d="M 176 186 L 206 186" stroke="#c4501f" stroke-width="2.4"/><polygon points="210,186 200,180 200,192" fill="#c4501f"/>
+    <path d="M 336 186 L 366 186" stroke="#c4501f" stroke-width="2.4"/><polygon points="370,186 360,180 360,192" fill="#c4501f"/>
+    <path d="M 496 186 L 526 186" stroke="#c4501f" stroke-width="2.4"/><polygon points="530,186 520,180 520,192" fill="#c4501f"/>
+
+    <rect x="686" y="136" width="290" height="100" rx="9" fill="#fdf6ec" stroke="#c9924b" stroke-width="1.8"/>
+    <text x="706" y="164" font-size="14" font-weight="700" fill="#8a5518">이 줄에는 배울 것이 없습니다</text>
+    <text x="706" y="190" font-size="13.5" fill="#b8762e">얼마나 지저분하게 만들지를</text>
+    <text x="706" y="211" font-size="13.5" fill="#b8762e">사람이 미리 표로 정해둡니다</text>
+
+    <!-- 아래 줄: 되돌리기 -->
+    <text x="52" y="284" font-size="15" font-weight="700" fill="#1f4f74">되돌리기</text>
+    <path d="M 592 300 L 112 300" stroke="#2f6f9f" stroke-width="2.8"/>
+    <polygon points="106,300 118,293 118,307" fill="#2f6f9f"/>
+    <g fill="#2f6f9f">
+      <circle cx="512" cy="300" r="5"/><circle cx="432" cy="300" r="5"/><circle cx="352" cy="300" r="5"/><circle cx="272" cy="300" r="5"/><circle cx="192" cy="300" r="5"/>
+    </g>
+    <text x="352" y="332" font-size="14" font-weight="700" fill="#1f4f74" text-anchor="middle">한 번에 조금씩, 여러 번 되돌립니다</text>
+    <text x="352" y="356" font-size="13.5" fill="#2f6f9f" text-anchor="middle">파란 점 하나가 되돌리기 한 번이고, 그때마다 기계에게 한 번 물어봅니다</text>
+
+    <rect x="686" y="270" width="290" height="100" rx="9" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="1.8"/>
+    <text x="706" y="298" font-size="14" font-weight="700" fill="#1f4f74">기계가 배우는 것은 하나뿐</text>
+    <text x="706" y="324" font-size="13.5" fill="#2f6f9f">지금 이 그림에 섞여 있는</text>
+    <text x="706" y="345" font-size="13.5" fill="#2f6f9f">지저분함이 무엇인지 맞히기</text>
+    <text x="706" y="364" font-size="12.5" fill="#2f6f9f">맞히면 빼면 되니까요</text>
+  </g>
+</svg>

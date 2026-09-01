@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 620" width="1020" height="620" role="img" aria-label="같은 블록에 액션 청크를 넣었을 때의 입출력">
+  <rect x="0" y="0" width="1020" height="620" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="42" font-size="22" font-weight="700" fill="#2d3142">같은 블록입니다. 들어가고 나오는 것만 바뀝니다</text>
+    <text x="40" y="70" font-size="15" fill="#4f5d75">가운데 회색 상자 안은 앞 그림과 완전히 같고, 파란 화살표 하나만 새로 붙습니다</text>
+
+    <!-- 입력 -->
+    <rect x="40" y="100" width="330" height="86" rx="9" fill="#f8f3ea" stroke="#b8762e" stroke-width="2"/>
+    <text x="205" y="128" font-size="15" font-weight="700" fill="#8a5518" text-anchor="middle">노이즈가 섞인 액션 청크</text>
+    <text x="205" y="152" font-size="14" fill="#b8762e" text-anchor="middle">[배치, 청크 길이 32, 관절 29]</text>
+    <text x="205" y="174" font-size="12.5" fill="#b8762e" text-anchor="middle">32는 W1-M1 §4 부등식에서, 29는 W1-M2 실측 nu=29에서</text>
+
+    <line x1="205" y1="188" x2="205" y2="212" stroke="#b8762e" stroke-width="2.2"/>
+    <polygon points="205,218 199,206 211,206" fill="#b8762e"/>
+
+    <rect x="40" y="222" width="330" height="68" rx="8" fill="#fdf6ec" stroke="#c9924b" stroke-width="1.8"/>
+    <text x="205" y="243" font-size="14" font-weight="700" fill="#8a5518" text-anchor="middle">시간축을 두 칸씩 묶어 토큰으로</text>
+    <text x="205" y="263" font-size="13.5" fill="#b8762e" text-anchor="middle">32 ÷ 2 = 토큰 16개, 폭은 d</text>
+    <text x="205" y="282" font-size="12.5" fill="#b8762e" text-anchor="middle">+ 1D 시간 위치 인코딩</text>
+
+    <line x1="205" y1="292" x2="205" y2="312" stroke="#b8762e" stroke-width="2.2"/>
+    <polygon points="205,318 199,306 211,306" fill="#b8762e"/>
+
+    <!-- 블록 본체 -->
+    <rect x="40" y="324" width="330" height="176" rx="10" fill="#eef1f6" stroke="#5c6478" stroke-width="2.4"/>
+    <text x="205" y="352" font-size="15" font-weight="700" fill="#2d3142" text-anchor="middle">블록 N개</text>
+    <rect x="62" y="366" width="286" height="34" rx="6" fill="#ffffff" stroke="#8a97ad" stroke-width="1.6"/>
+    <text x="205" y="389" font-size="13.5" fill="#4f5d75" text-anchor="middle">Self-Attention</text>
+    <rect x="62" y="408" width="286" height="34" rx="6" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="2.2"/>
+    <text x="205" y="431" font-size="13.5" font-weight="700" fill="#1f4f74" text-anchor="middle">Cross-Attention  ← 새로 붙는 자리</text>
+    <rect x="62" y="450" width="286" height="34" rx="6" fill="#ffffff" stroke="#8a97ad" stroke-width="1.6"/>
+    <text x="205" y="473" font-size="13.5" fill="#4f5d75" text-anchor="middle">MLP</text>
+
+    <line x1="205" y1="502" x2="205" y2="526" stroke="#5c6478" stroke-width="2.2"/>
+    <polygon points="205,532 199,520 211,520" fill="#5c6478"/>
+
+    <rect x="40" y="538" width="330" height="62" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="205" y="562" font-size="14" font-weight="700" fill="#2c5b3c" text-anchor="middle">다시 펼쳐 [배치, 32, 29]로</text>
+    <text x="205" y="584" font-size="13" fill="#3f7d55" text-anchor="middle">예측 노이즈 또는 속도장. 이 과정을 NFE회 반복합니다</text>
+
+    <!-- 오른쪽 조건들 -->
+    <rect x="430" y="324" width="280" height="70" rx="8" fill="#f8f3ea" stroke="#b8762e" stroke-width="2"/>
+    <text x="570" y="350" font-size="14" font-weight="700" fill="#8a5518" text-anchor="middle">확산 스텝 t</text>
+    <text x="570" y="374" font-size="13" fill="#b8762e" text-anchor="middle">앞 그림의 여섯 계수 경로 그대로</text>
+    <line x1="430" y1="359" x2="386" y2="383" stroke="#b8762e" stroke-width="2.2"/>
+    <polygon points="380,386 391,378 394,389" fill="#b8762e"/>
+
+    <rect x="430" y="410" width="280" height="118" rx="8" fill="#e8f0f7" stroke="#2f6f9f" stroke-width="2.2"/>
+    <text x="570" y="436" font-size="14" font-weight="700" fill="#1f4f74" text-anchor="middle">관측 토큰</text>
+    <text x="570" y="460" font-size="13" fill="#2f6f9f" text-anchor="middle">카메라 여러 대의 이미지 패치</text>
+    <text x="570" y="481" font-size="13" fill="#2f6f9f" text-anchor="middle">언어 토큰</text>
+    <text x="570" y="502" font-size="13" fill="#2f6f9f" text-anchor="middle">관절 각도와 속도 같은 자기 상태</text>
+    <text x="570" y="520" font-size="12.5" fill="#2f6f9f" text-anchor="middle">길이가 상황마다 달라집니다</text>
+    <line x1="430" y1="425" x2="358" y2="425" stroke="#2f6f9f" stroke-width="2.4"/>
+    <polygon points="352,425 364,418 364,432" fill="#2f6f9f"/>
+
+    <!-- 오른쪽 설명 박스 -->
+    <rect x="750" y="100" width="230" height="184" rx="9" fill="#ffffff" stroke="#8a97ad" stroke-width="1.6"/>
+    <text x="770" y="128" font-size="15" font-weight="700" fill="#2d3142">숫자로 보면</text>
+    <text x="770" y="158" font-size="13.5" fill="#4f5d75">이미지 쪽 잠재는 4,096칸</text>
+    <text x="770" y="180" font-size="13.5" fill="#4f5d75">액션 청크는 32 × 29 = 928칸</text>
+    <text x="770" y="208" font-size="13.5" fill="#4f5d75">이미지 토큰은 256개</text>
+    <text x="770" y="230" font-size="13.5" fill="#4f5d75">액션 토큰은 16개</text>
+    <text x="770" y="262" font-size="13.5" font-weight="700" fill="#2c5b3c">한 번 계산하기는 훨씬 쌉니다</text>
+
+    <rect x="750" y="300" width="230" height="130" rx="9" fill="#fbeae4" stroke="#c4501f" stroke-width="2"/>
+    <text x="770" y="328" font-size="15" font-weight="700" fill="#a8410f">그런데 예산은 반대입니다</text>
+    <text x="770" y="356" font-size="13.5" fill="#c4501f">이미지에서는 50에서 250회를</text>
+    <text x="770" y="377" font-size="13.5" fill="#c4501f">돌려도 사람이 기다리면 됩니다</text>
+    <text x="770" y="404" font-size="13.5" font-weight="700" fill="#a8410f">액션에서는 1에서 10회입니다</text>
+    <text x="770" y="424" font-size="13" fill="#c4501f">넘기면 로봇이 넘어집니다</text>
+
+    <text x="430" y="566" font-size="13.5" fill="#4f5d75">GR00T N1과 N1.5가 이 배치입니다.</text>
+    <text x="430" y="587" font-size="13.5" fill="#4f5d75">pi0는 블록 계보가 다릅니다. 표에서 구분해 봅니다.</text>
+  </g>
+</svg>

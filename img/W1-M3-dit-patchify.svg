@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 430" width="1020" height="430" role="img" aria-label="patchify가 잠재 격자를 토큰열로 바꾸는 과정">
+  <rect x="0" y="0" width="1020" height="430" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="44" font-size="22" font-weight="700" fill="#2d3142">격자를 잘라 줄로 세우는 것이 patchify입니다</text>
+    <text x="40" y="72" font-size="15" fill="#4f5d75">자르는 칸의 크기 p 하나가 토큰 개수와 연산량을 동시에 정합니다</text>
+
+    <!-- 왼쪽: 32x32 잠재 -->
+    <text x="52" y="120" font-size="15" font-weight="700" fill="#4f5d75">잠재 격자 32 × 32</text>
+    <rect x="52" y="134" width="176" height="176" fill="#eef1f6" stroke="#5c6478" stroke-width="2"/>
+    <g stroke="#8a97ad" stroke-width="1">
+      <line x1="96" y1="134" x2="96" y2="310"/><line x1="140" y1="134" x2="140" y2="310"/><line x1="184" y1="134" x2="184" y2="310"/>
+      <line x1="52" y1="178" x2="228" y2="178"/><line x1="52" y1="222" x2="228" y2="222"/><line x1="52" y1="266" x2="228" y2="266"/>
+    </g>
+    <rect x="52" y="134" width="44" height="44" fill="#f8dcc4" stroke="#c4501f" stroke-width="2.4"/>
+    <text x="140" y="336" font-size="13.5" fill="#4f5d75" text-anchor="middle">주황 칸 하나가 p × p 패치입니다</text>
+
+    <!-- 화살표 -->
+    <line x1="240" y1="222" x2="300" y2="222" stroke="#eb6c36" stroke-width="2.6"/>
+    <polygon points="306,222 294,215 294,229" fill="#eb6c36"/>
+    <text x="272" y="208" font-size="13" fill="#c4501f" text-anchor="middle">선형 사영</text>
+
+    <!-- 가운데: 토큰열 -->
+    <text x="316" y="120" font-size="15" font-weight="700" fill="#4f5d75">길이 T 짜리 토큰열</text>
+    <g>
+      <rect x="316" y="182" width="34" height="80" rx="5" fill="#f8dcc4" stroke="#c4501f" stroke-width="2"/>
+      <rect x="356" y="182" width="34" height="80" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1.6"/>
+      <rect x="396" y="182" width="34" height="80" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1.6"/>
+      <rect x="436" y="182" width="34" height="80" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1.6"/>
+      <text x="500" y="228" font-size="20" fill="#8a97ad">…</text>
+      <rect x="522" y="182" width="34" height="80" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1.6"/>
+    </g>
+    <text x="436" y="290" font-size="13.5" fill="#4f5d75" text-anchor="middle">각 토큰의 폭이 d = 1152입니다</text>
+    <text x="436" y="336" font-size="13.5" fill="#4f5d75" text-anchor="middle">토큰 개수 = (32 ÷ p)² 이고 여기부터는 그냥 Transformer입니다</text>
+
+    <!-- 오른쪽: p 별 비교 -->
+    <rect x="612" y="128" width="368" height="196" rx="9" fill="#ffffff" stroke="#8a97ad" stroke-width="1.6"/>
+    <text x="636" y="158" font-size="15" font-weight="700" fill="#2d3142">p를 줄이면 무엇이 어떻게 되나</text>
+
+    <text x="636" y="192" font-size="14" font-weight="700" fill="#4f5d75">p = 8</text>
+    <text x="716" y="192" font-size="14" fill="#4f5d75">토큰 16개</text>
+    <rect x="836" y="180" width="14" height="16" rx="2" fill="#8a97ad"/>
+
+    <text x="636" y="228" font-size="14" font-weight="700" fill="#4f5d75">p = 4</text>
+    <text x="716" y="228" font-size="14" fill="#4f5d75">토큰 64개</text>
+    <rect x="836" y="216" width="35" height="16" rx="2" fill="#6a9c7c"/>
+    <text x="880" y="228" font-size="13" fill="#3f7d55">29.1 Gflops</text>
+
+    <text x="636" y="264" font-size="14" font-weight="700" fill="#8a5518">p = 2</text>
+    <text x="716" y="264" font-size="14" font-weight="700" fill="#8a5518">토큰 256개</text>
+    <rect x="836" y="252" width="120" height="16" rx="2" fill="#c4501f"/>
+    <text x="880" y="286" font-size="13" font-weight="700" fill="#a8410f">118.6 Gflops</text>
+
+    <text x="636" y="312" font-size="13" fill="#4f5d75">막대는 연산량입니다. 파라미터 수가 아닙니다</text>
+
+    <rect x="612" y="342" width="368" height="60" rx="8" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.6"/>
+    <text x="632" y="366" font-size="13.5" font-weight="700" fill="#8a5518">p를 절반으로 줄이면 토큰이 4배가 됩니다</text>
+    <text x="632" y="387" font-size="13" fill="#b8762e">연산량도 29.1에서 118.6으로 약 4배가 됩니다</text>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" width="1020" height="400" role="img" aria-label="그림에서는 기다리면 되지만 로봇에서는 넘어집니다">
+  <rect x="0" y="0" width="1020" height="400" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="44" font-size="22" font-weight="700" fill="#2d3142">같은 기다림인데 한쪽에서만 사고가 납니다</text>
+    <text x="40" y="72" font-size="15" fill="#4f5d75">되돌리기를 250번 하면 1초 조금 못 되는 시간이 걸립니다. 그 1초의 뜻이 다릅니다</text>
+
+    <!-- 위: 그림 생성 -->
+    <rect x="40" y="104" width="940" height="112" rx="10" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="66" y="136" font-size="16" font-weight="700" fill="#2c5b3c">그림을 만들 때</text>
+    <circle cx="120" cy="180" r="20" fill="#3f7d55"/>
+    <text x="120" y="186" font-size="18" fill="#ffffff" text-anchor="middle">☺</text>
+    <rect x="164" y="164" width="560" height="32" rx="6" fill="#c8ddcd"/>
+    <text x="444" y="186" font-size="14" font-weight="700" fill="#2c5b3c" text-anchor="middle">사람이 화면을 보며 기다립니다</text>
+    <text x="748" y="186" font-size="15" font-weight="700" fill="#2c5b3c">아무 일도 일어나지 않습니다</text>
+
+    <!-- 아래: 로봇 -->
+    <rect x="40" y="236" width="940" height="128" rx="10" fill="#fbeae4" stroke="#c4501f" stroke-width="2.4"/>
+    <text x="66" y="268" font-size="16" font-weight="700" fill="#a8410f">로봇을 움직일 때</text>
+    <circle cx="120" cy="316" r="20" fill="#c4501f"/>
+    <text x="120" y="323" font-size="18" fill="#ffffff" text-anchor="middle">!</text>
+
+    <rect x="164" y="300" width="560" height="32" rx="6" fill="#f3c8b6"/>
+    <text x="444" y="322" font-size="14" font-weight="700" fill="#a8410f" text-anchor="middle">로봇은 그동안 눈을 감고 옛 명령만 반복합니다</text>
+
+    <line x1="220" y1="288" x2="220" y2="344" stroke="#2f6f9f" stroke-width="2.6" stroke-dasharray="6,4"/>
+    <text x="228" y="356" font-size="13" font-weight="700" fill="#1f4f74">발이 미끄러진 뒤 여기까지가 손쓸 수 있는 시간</text>
+
+    <text x="748" y="316" font-size="15" font-weight="700" fill="#a8410f">그 사이에 넘어집니다</text>
+
+    <text x="40" y="392" font-size="13.5" fill="#4f5d75">파란 점선의 왼쪽만이 안전한 구간입니다. 주황 막대가 그 선을 훌쩍 넘어간 것이 이 모듈이 붙잡는 문제입니다.</text>
+  </g>
+</svg>

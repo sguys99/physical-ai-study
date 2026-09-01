@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" width="1020" height="400" role="img" aria-label="같은 부품에 다른 재료를 넣는 그림">
+  <rect x="0" y="0" width="1020" height="400" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="44" font-size="22" font-weight="700" fill="#2d3142">가운데 부품은 그대로이고 재료만 바뀝니다</text>
+    <text x="40" y="72" font-size="15" fill="#4f5d75">그림을 만들던 부품에 팔다리 명령을 넣으면 그대로 돌아갑니다</text>
+
+    <!-- 위 경로 -->
+    <rect x="40" y="106" width="200" height="96" rx="9" fill="#eef1f6" stroke="#5c6478" stroke-width="2"/>
+    <text x="140" y="140" font-size="15" font-weight="700" fill="#2d3142" text-anchor="middle">그림 한 장</text>
+    <text x="140" y="166" font-size="13.5" fill="#4f5d75" text-anchor="middle">가로 세로로 잘라</text>
+    <text x="140" y="186" font-size="13.5" fill="#4f5d75" text-anchor="middle">256조각으로</text>
+    <line x1="244" y1="154" x2="334" y2="154" stroke="#5c6478" stroke-width="2.4"/>
+    <polygon points="340,154 328,147 328,161" fill="#5c6478"/>
+
+    <!-- 가운데 공통 부품 -->
+    <rect x="348" y="106" width="300" height="188" rx="11" fill="#f8f3ea" stroke="#b8762e" stroke-width="3"/>
+    <text x="498" y="140" font-size="17" font-weight="700" fill="#8a5518" text-anchor="middle">똑같은 부품</text>
+    <rect x="376" y="158" width="244" height="34" rx="6" fill="#ffffff" stroke="#c9924b" stroke-width="1.6"/>
+    <text x="498" y="181" font-size="13.5" fill="#8a5518" text-anchor="middle">조각끼리 서로를 봅니다</text>
+    <rect x="376" y="200" width="244" height="34" rx="6" fill="#ffffff" stroke="#c9924b" stroke-width="1.6"/>
+    <text x="498" y="223" font-size="13.5" fill="#8a5518" text-anchor="middle">조각마다 한 번 더 계산합니다</text>
+    <rect x="376" y="242" width="244" height="34" rx="6" fill="#fdf6ec" stroke="#c4501f" stroke-width="2"/>
+    <text x="498" y="265" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">조건은 이 두 계산의 손잡이로</text>
+
+    <line x1="656" y1="154" x2="746" y2="154" stroke="#5c6478" stroke-width="2.4"/>
+    <polygon points="752,154 740,147 740,161" fill="#5c6478"/>
+    <rect x="760" y="106" width="220" height="96" rx="9" fill="#eef1f6" stroke="#5c6478" stroke-width="2"/>
+    <text x="870" y="140" font-size="15" font-weight="700" fill="#2d3142" text-anchor="middle">그림 한 장</text>
+    <text x="870" y="172" font-size="13.5" fill="#4f5d75" text-anchor="middle">노이즈를 걷어낸 결과</text>
+
+    <!-- 아래 경로 -->
+    <rect x="40" y="246" width="200" height="110" rx="9" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="140" y="280" font-size="15" font-weight="700" fill="#2c5b3c" text-anchor="middle">앞으로 32스텝치</text>
+    <text x="140" y="304" font-size="13.5" fill="#3f7d55" text-anchor="middle">관절 29개의 목표 각도</text>
+    <text x="140" y="330" font-size="13.5" fill="#3f7d55" text-anchor="middle">시간 순서로 잘라 16조각으로</text>
+    <line x1="244" y1="250" x2="334" y2="250" stroke="#3f7d55" stroke-width="2.4"/>
+    <polygon points="340,250 328,243 328,257" fill="#3f7d55"/>
+
+    <line x1="656" y1="250" x2="746" y2="250" stroke="#3f7d55" stroke-width="2.4"/>
+    <polygon points="752,250 740,243 740,257" fill="#3f7d55"/>
+    <rect x="760" y="222" width="220" height="110" rx="9" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="870" y="256" font-size="15" font-weight="700" fill="#2c5b3c" text-anchor="middle">움직일 순서표</text>
+    <text x="870" y="284" font-size="13.5" fill="#3f7d55" text-anchor="middle">아래층 제어기가 받아</text>
+    <text x="870" y="306" font-size="13.5" fill="#3f7d55" text-anchor="middle">한 칸씩 꺼내 씁니다</text>
+
+    <text x="40" y="386" font-size="13.5" fill="#4f5d75">위아래 두 길이 같은 주황 상자를 통과합니다. 이것이 요즘 로봇 모델들이 하나같이 같은 부품을 쓰는 이유입니다.</text>
+  </g>
+</svg>
