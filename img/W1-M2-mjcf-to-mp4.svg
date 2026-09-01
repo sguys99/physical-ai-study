@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 780" width="1000" height="780" role="img" aria-label="모델 파일에서 mp4까지 가는 다섯 칸">
+  <rect x="0" y="0" width="1000" height="780" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">모델 파일 하나가 영상 파일이 되기까지</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">원 번호 ①에서 ④까지가 실습 코드와 랩 문서에서 부르는 이름입니다</text>
+
+    <!-- ① MJCF -->
+    <rect x="60" y="100" width="880" height="94" rx="8" fill="#e9e4dc" stroke="#a7a29a" stroke-width="1.6"/>
+    <circle cx="90" cy="128" r="14" fill="#5c564e"/>
+    <text x="90" y="133" font-size="15" font-weight="700" fill="#f8f7f4" text-anchor="middle">1</text>
+    <text x="116" y="133" font-size="17" font-weight="700" fill="#3d382f">모델 파일 (MJCF, 확장자는 xml)</text>
+    <text x="116" y="160" font-size="14" fill="#5c564e">scene.xml 이 g1.xml 을 불러오고, g1.xml 이 다시 메시 파일들을 불러옵니다</text>
+    <text x="116" y="182" font-size="14" fill="#5c564e">바닥과 조명은 scene.xml 에, 로봇 본체는 g1.xml 에 적혀 있습니다</text>
+
+    <line x1="500" y1="194" x2="500" y2="226" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="500,232 493,220 507,220" fill="#eb6c36"/>
+    <text x="516" y="218" font-size="14" fill="#c4501f">MjModel.from_xml_path 로 한 번 컴파일합니다. 여기서 nq, nv, nu 가 정해집니다</text>
+
+    <!-- ② mjModel -->
+    <rect x="60" y="236" width="880" height="86" rx="8" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1.8"/>
+    <circle cx="90" cy="264" r="14" fill="#1f3f70"/>
+    <text x="90" y="269" font-size="15" font-weight="700" fill="#f8f7f4" text-anchor="middle">2</text>
+    <text x="116" y="269" font-size="17" font-weight="700" fill="#1f3f70">mjModel — 안 변하는 상수 묶음</text>
+    <text x="116" y="296" font-size="14" fill="#2e5aa8">nq=36  nv=35  nu=29  nbody=31  njnt=30  ngeom=72  ·  timestep 0.002 초  ·  kp 500</text>
+    <text x="116" y="314" font-size="13" fill="#4f78ad">환경을 몇 개 굴리든 이것은 하나만 있으면 됩니다</text>
+
+    <line x1="500" y1="322" x2="500" y2="354" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="500,360 493,348 507,348" fill="#eb6c36"/>
+    <text x="516" y="346" font-size="14" fill="#c4501f">MjData(m) 으로 환경 개수만큼 만듭니다</text>
+
+    <!-- ③ mjData -->
+    <rect x="60" y="364" width="880" height="86" rx="8" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.8"/>
+    <circle cx="90" cy="392" r="14" fill="#8a5518"/>
+    <text x="90" y="397" font-size="15" font-weight="700" fill="#f8f7f4" text-anchor="middle">3</text>
+    <text x="116" y="397" font-size="17" font-weight="700" fill="#8a5518">mjData — 매 스텝 바뀌는 상태</text>
+    <text x="116" y="424" font-size="14" fill="#b8762e">qpos[36]  qvel[35]  qacc[35]  ctrl[29]  time  ·  contact 와 efc 는 접촉 개수만큼 늘었다 줄었다 합니다</text>
+    <text x="116" y="442" font-size="13" fill="#c9954f">sensordata[12] = 관성 센서 4개 × 3차원</text>
+
+    <line x1="500" y1="450" x2="500" y2="482" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="500,488 493,476 507,476" fill="#eb6c36"/>
+
+    <!-- 스텝 루프 -->
+    <rect x="60" y="492" width="880" height="150" rx="8" fill="#ffffff" stroke="#4f5d75" stroke-width="1.8" stroke-dasharray="6,4"/>
+    <text x="86" y="520" font-size="17" font-weight="700" fill="#2d3142">스텝 루프 — 한 바퀴가 0.002 초입니다</text>
+    <text x="86" y="546" font-size="14" fill="#4f5d75">먼저 ctrl[29] 에 목표 관절각을 넣습니다. 토크가 아니라 각도라는 점이 중요합니다.</text>
+
+    <rect x="86" y="560" width="152" height="60" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1"/>
+    <text x="162" y="583" font-size="14" font-weight="600" fill="#2d3142" text-anchor="middle">순기구학</text>
+    <text x="162" y="604" font-size="13" fill="#4f5d75" text-anchor="middle">각도 → 링크 위치</text>
+
+    <rect x="250" y="560" width="152" height="60" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1"/>
+    <text x="326" y="583" font-size="14" font-weight="600" fill="#2d3142" text-anchor="middle">관성과 중력</text>
+    <text x="326" y="604" font-size="13" fill="#4f5d75" text-anchor="middle">M 과 qfrc_bias</text>
+
+    <rect x="414" y="560" width="152" height="60" rx="5" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="490" y="583" font-size="14" font-weight="600" fill="#c4501f" text-anchor="middle">접촉 찾기</text>
+    <text x="490" y="604" font-size="13" fill="#8a4a22" text-anchor="middle">어디가 닿았나</text>
+
+    <rect x="578" y="560" width="152" height="60" rx="5" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="654" y="583" font-size="14" font-weight="600" fill="#c4501f" text-anchor="middle">접촉력 풀기</text>
+    <text x="654" y="604" font-size="13" fill="#8a4a22" text-anchor="middle">100번 반복</text>
+
+    <rect x="742" y="560" width="172" height="60" rx="5" fill="#eef1f6" stroke="#8a97ad" stroke-width="1"/>
+    <text x="828" y="583" font-size="14" font-weight="600" fill="#2d3142" text-anchor="middle">적분</text>
+    <text x="828" y="604" font-size="13" fill="#4f5d75" text-anchor="middle">다음 자세와 속도</text>
+
+    <line x1="500" y1="642" x2="500" y2="674" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="500,680 493,668 507,668" fill="#eb6c36"/>
+    <text x="516" y="666" font-size="14" fill="#c4501f">몇 스텝에 한 번만 그림을 뜹니다. 25장을 초당 저장하려면 20스텝마다 한 번입니다</text>
+
+    <!-- ④ Renderer -->
+    <rect x="60" y="684" width="880" height="72" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="1.8"/>
+    <circle cx="90" cy="712" r="14" fill="#2c5b3c"/>
+    <text x="90" y="717" font-size="15" font-weight="700" fill="#f8f7f4" text-anchor="middle">4</text>
+    <text x="116" y="717" font-size="17" font-weight="700" fill="#2c5b3c">Renderer — 창을 띄우지 않고 그림만 뽑습니다</text>
+    <text x="116" y="742" font-size="14" fill="#3f7d55">Renderer(m, 240, 320) 은 높이와 너비 순서이고, 결과는 (240, 320, 3) 짜리 숫자 배열입니다. 이것을 모아 mp4 로 저장합니다</text>
+
+  </g>
+</svg>

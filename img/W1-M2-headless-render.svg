@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" width="1000" height="470" role="img" aria-label="화면 없는 컴퓨터에서 결과를 파일로 남기는 방법">
+  <rect x="0" y="0" width="1000" height="470" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">모니터가 없는 컴퓨터에서 로봇을 눈으로 보는 법</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">위쪽은 안 되는 길이고 아래쪽이 되는 길입니다</text>
+
+    <!-- 안 되는 길 -->
+    <rect x="40" y="102" width="920" height="118" rx="8" fill="#f4f2ef" stroke="#c3c0ba" stroke-width="1.4" stroke-dasharray="6,4"/>
+    <text x="64" y="132" font-size="16" font-weight="700" fill="#8f8a82">되지 않는 길 — 창을 띄워서 보기</text>
+
+    <rect x="70" y="146" width="180" height="56" rx="6" fill="#ffffff" stroke="#c3c0ba"/>
+    <text x="160" y="180" font-size="15" fill="#8f8a82" text-anchor="middle">계산한다</text>
+    <line x1="254" y1="174" x2="304" y2="174" stroke="#c3c0ba" stroke-width="2"/>
+    <polygon points="308,174 298,168 298,180" fill="#c3c0ba"/>
+    <rect x="312" y="146" width="180" height="56" rx="6" fill="#ffffff" stroke="#c3c0ba"/>
+    <text x="402" y="180" font-size="15" fill="#8f8a82" text-anchor="middle">창을 연다</text>
+    <line x1="496" y1="174" x2="546" y2="174" stroke="#c3c0ba" stroke-width="2"/>
+    <rect x="554" y="146" width="180" height="56" rx="6" fill="#f7e9e6" stroke="#c46b5a" stroke-width="1.6"/>
+    <text x="644" y="180" font-size="15" font-weight="600" fill="#a3402c" text-anchor="middle">열 창이 없어 실패</text>
+    <text x="756" y="170" font-size="14" fill="#8f8a82">멀리 있는 컴퓨터에는</text>
+    <text x="756" y="190" font-size="14" fill="#8f8a82">모니터가 달려 있지 않습니다</text>
+
+    <!-- 되는 길 -->
+    <rect x="40" y="240" width="920" height="140" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="1.8"/>
+    <text x="64" y="270" font-size="16" font-weight="700" fill="#2c5b3c">되는 길 — 창 없이 그림만 받아 파일로 저장하기</text>
+
+    <rect x="70" y="286" width="168" height="62" rx="6" fill="#ffffff" stroke="#3f7d55"/>
+    <text x="154" y="313" font-size="15" fill="#2c5b3c" text-anchor="middle">계산한다</text>
+    <text x="154" y="334" font-size="13" fill="#3f7d55" text-anchor="middle">스무 번에 한 번만</text>
+    <line x1="242" y1="317" x2="286" y2="317" stroke="#3f7d55" stroke-width="2.2"/>
+    <polygon points="290,317 280,311 280,323" fill="#3f7d55"/>
+
+    <rect x="294" y="286" width="168" height="62" rx="6" fill="#ffffff" stroke="#3f7d55"/>
+    <text x="378" y="313" font-size="15" fill="#2c5b3c" text-anchor="middle">그림을 그린다</text>
+    <text x="378" y="334" font-size="13" fill="#3f7d55" text-anchor="middle">창 없이 속으로만</text>
+    <line x1="466" y1="317" x2="510" y2="317" stroke="#3f7d55" stroke-width="2.2"/>
+    <polygon points="514,317 504,311 504,323" fill="#3f7d55"/>
+
+    <rect x="518" y="286" width="168" height="62" rx="6" fill="#ffffff" stroke="#3f7d55"/>
+    <text x="602" y="313" font-size="15" fill="#2c5b3c" text-anchor="middle">숫자 덩어리로 받는다</text>
+    <text x="602" y="334" font-size="13" fill="#3f7d55" text-anchor="middle">세로 240 가로 320</text>
+    <line x1="690" y1="317" x2="734" y2="317" stroke="#3f7d55" stroke-width="2.2"/>
+    <polygon points="738,317 728,311 728,323" fill="#3f7d55"/>
+
+    <rect x="742" y="286" width="188" height="62" rx="6" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.8"/>
+    <text x="836" y="313" font-size="15" font-weight="600" fill="#c4501f" text-anchor="middle">영상 파일로 저장</text>
+    <text x="836" y="334" font-size="13" fill="#8a4a22" text-anchor="middle">내려받아 봅니다</text>
+
+    <!-- 이점 -->
+    <text x="40" y="418" font-size="15" fill="#2d3142">창으로 본 것은 지나가면 사라지지만 파일은 남습니다. 한 달 뒤에도 같은 장면을 다시 볼 수 있습니다.</text>
+    <text x="40" y="446" font-size="14" fill="#7a8399">이 선택 하나로 실행하는 컴퓨터와 보는 컴퓨터가 갈라지고, 그 덕분에 결과를 남에게 그대로 보여줄 수 있습니다.</text>
+  </g>
+</svg>

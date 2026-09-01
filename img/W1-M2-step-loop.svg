@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="1000" height="480" role="img" aria-label="시뮬레이터가 반복하는 한 바퀴">
+  <rect x="0" y="0" width="1000" height="480" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">시뮬레이터는 아주 짧은 미래를 계속 이어 붙입니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">이 한 바퀴가 0.002초입니다. 1초를 보려면 오백 번 돌립니다</text>
+
+    <!-- 원형 흐름 -->
+    <rect x="60" y="120" width="200" height="86" rx="8" fill="#f8f3ea" stroke="#b8762e" stroke-width="2"/>
+    <text x="160" y="152" font-size="16" font-weight="700" fill="#8a5518" text-anchor="middle">지금 상태</text>
+    <text x="160" y="178" font-size="14" fill="#b8762e" text-anchor="middle">관절이 얼마나 굽었고</text>
+    <text x="160" y="196" font-size="14" fill="#b8762e" text-anchor="middle">얼마나 빨리 움직이는가</text>
+
+    <line x1="264" y1="163" x2="322" y2="163" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="326,163 316,157 316,169" fill="#eb6c36"/>
+
+    <rect x="330" y="120" width="200" height="86" rx="8" fill="#eef1f6" stroke="#8a97ad" stroke-width="2"/>
+    <text x="430" y="152" font-size="16" font-weight="700" fill="#2d3142" text-anchor="middle">힘을 모읍니다</text>
+    <text x="430" y="178" font-size="14" fill="#4f5d75" text-anchor="middle">중력, 모터가 미는 힘,</text>
+    <text x="430" y="196" font-size="14" fill="#4f5d75" text-anchor="middle">바닥이 발을 떠받치는 힘</text>
+
+    <line x1="534" y1="163" x2="592" y2="163" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="596,163 586,157 586,169" fill="#eb6c36"/>
+
+    <rect x="600" y="120" width="200" height="86" rx="8" fill="#eef1f6" stroke="#8a97ad" stroke-width="2"/>
+    <text x="700" y="152" font-size="16" font-weight="700" fill="#2d3142" text-anchor="middle">얼마나 빨라질지</text>
+    <text x="700" y="178" font-size="14" fill="#4f5d75" text-anchor="middle">무거운 곳은 덜 빨라지고</text>
+    <text x="700" y="196" font-size="14" fill="#4f5d75" text-anchor="middle">가벼운 곳은 더 빨라집니다</text>
+
+    <line x1="804" y1="163" x2="862" y2="163" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="866,163 856,157 856,169" fill="#eb6c36"/>
+
+    <rect x="806" y="228" width="134" height="76" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="873" y="258" font-size="16" font-weight="700" fill="#2c5b3c" text-anchor="middle">조금 뒤 상태</text>
+    <text x="873" y="284" font-size="14" fill="#3f7d55" text-anchor="middle">0.002초 뒤</text>
+    <path d="M 866 163 L 906 163 L 906 222" fill="none" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="906,228 900,216 912,216" fill="#eb6c36"/>
+
+    <path d="M 806 266 L 160 266 L 160 212" fill="none" stroke="#c4501f" stroke-width="2.4" stroke-dasharray="6,4"/>
+    <polygon points="160,206 154,218 166,218" fill="#c4501f"/>
+    <text x="480" y="290" font-size="15" font-weight="600" fill="#c4501f" text-anchor="middle">이 결과가 다음 바퀴의 「지금 상태」가 됩니다</text>
+
+    <!-- 아래: 새로 얹히는 두 가지 -->
+    <line x1="40" y1="332" x2="960" y2="332" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="364" font-size="17" font-weight="700" fill="#2d3142">공 하나를 떨어뜨리는 것과 다른 점은 둘뿐입니다</text>
+
+    <rect x="40" y="382" width="446" height="76" rx="6" fill="#ffffff" stroke="#c3c0ba" stroke-width="1.2"/>
+    <text x="64" y="410" font-size="15" font-weight="600" fill="#2d3142">덩어리가 서른 개쯤 이어져 있습니다</text>
+    <text x="64" y="436" font-size="14" fill="#4f5d75">무릎을 굽히면 발끝이 어디로 가는지가 자세마다 달라집니다</text>
+
+    <rect x="514" y="382" width="446" height="76" rx="6" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="538" y="410" font-size="15" font-weight="600" fill="#c4501f">발이 땅에 닿습니다</text>
+    <text x="538" y="436" font-size="14" fill="#8a4a22">닿는 순간 새 힘이 생기고 떼면 사라집니다. 여기가 제일 비쌉니다</text>
+  </g>
+</svg>

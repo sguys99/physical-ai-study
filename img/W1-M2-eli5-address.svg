@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" width="1000" height="430" role="img" aria-label="무릎 하나에 붙는 서로 다른 칸 번호">
+  <rect x="0" y="0" width="1000" height="430" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">같은 무릎인데 목록마다 번호가 다릅니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">목록 세 개가 모두 몸통부터 시작하는데, 몸통이 차지하는 칸 수가 목록마다 다릅니다</text>
+
+    <!-- 자세 목록 -->
+    <text x="52" y="134" font-size="16" font-weight="700" fill="#2d3142">자세 목록</text>
+    <rect x="200" y="110" width="230" height="40" rx="4" fill="#e9e4dc" stroke="#a7a29a" stroke-width="1.2"/>
+    <text x="315" y="135" font-size="14" fill="#5c564e" text-anchor="middle">몸통이 7칸</text>
+    <rect x="434" y="110" width="200" height="40" rx="4" fill="#eef1f6" stroke="#8a97ad"/>
+    <text x="534" y="135" font-size="14" fill="#4f5d75" text-anchor="middle">다리 관절 셋</text>
+    <rect x="638" y="110" width="90" height="40" rx="4" fill="#fdf1e9" stroke="#eb6c36" stroke-width="2"/>
+    <text x="683" y="135" font-size="15" font-weight="700" fill="#c4501f" text-anchor="middle">무릎</text>
+    <text x="748" y="135" font-size="16" font-weight="700" fill="#c4501f">→ 10번 칸</text>
+
+    <!-- 속도 목록 -->
+    <text x="52" y="204" font-size="16" font-weight="700" fill="#2d3142">속도 목록</text>
+    <rect x="200" y="180" width="196" height="40" rx="4" fill="#e9e4dc" stroke="#a7a29a" stroke-width="1.2"/>
+    <text x="298" y="205" font-size="14" fill="#5c564e" text-anchor="middle">몸통이 6칸</text>
+    <rect x="400" y="180" width="200" height="40" rx="4" fill="#eef1f6" stroke="#8a97ad"/>
+    <text x="500" y="205" font-size="14" fill="#4f5d75" text-anchor="middle">다리 관절 셋</text>
+    <rect x="604" y="180" width="90" height="40" rx="4" fill="#fdf1e9" stroke="#eb6c36" stroke-width="2"/>
+    <text x="649" y="205" font-size="15" font-weight="700" fill="#c4501f" text-anchor="middle">무릎</text>
+    <text x="714" y="205" font-size="16" font-weight="700" fill="#c4501f">→ 9번 칸</text>
+
+    <!-- 명령 목록 -->
+    <text x="52" y="274" font-size="16" font-weight="700" fill="#2d3142">명령 목록</text>
+    <rect x="200" y="250" width="30" height="40" rx="4" fill="#f4f2ef" stroke="#c3c0ba" stroke-dasharray="4,3"/>
+    <text x="246" y="275" font-size="14" fill="#8f8a82">몸통은 0칸</text>
+    <rect x="368" y="250" width="200" height="40" rx="4" fill="#eef1f6" stroke="#8a97ad"/>
+    <text x="468" y="275" font-size="14" fill="#4f5d75" text-anchor="middle">다리 관절 셋</text>
+    <rect x="572" y="250" width="90" height="40" rx="4" fill="#fdf1e9" stroke="#eb6c36" stroke-width="2"/>
+    <text x="617" y="275" font-size="15" font-weight="700" fill="#c4501f" text-anchor="middle">무릎</text>
+    <text x="682" y="275" font-size="16" font-weight="700" fill="#c4501f">→ 3번 칸</text>
+
+    <!-- 설명 -->
+    <line x1="40" y1="320" x2="960" y2="320" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="352" font-size="15" fill="#2d3142">몸통은 공중에 떠 있어서 어디에 있고 어느 쪽을 보는지를 적어둬야 합니다. 그래서 앞자리를 먹습니다.</text>
+    <text x="40" y="380" font-size="15" fill="#2d3142">그런데 몸통에는 모터가 없습니다. 명령 목록에서만 몸통 자리가 아예 없는 이유입니다.</text>
+    <text x="40" y="410" font-size="14" fill="#7a8399">숫자를 직접 적어 넣는 대신 이름으로 물어보면 이 계산을 프로그램이 대신 해줍니다.</text>
+  </g>
+</svg>

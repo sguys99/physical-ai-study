@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" role="img" aria-label="관절 하나에 붙는 네 개의 주소">
+  <rect x="0" y="0" width="1000" height="600" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">같은 무릎인데 배열마다 칸 번호가 다릅니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">맨 앞을 차지한 몸통이 배열마다 다른 칸 수를 먹기 때문입니다</text>
+
+    <!-- 열 라벨 -->
+    <text x="52" y="126" font-size="15" font-weight="600" fill="#4f5d75">배열 이름</text>
+    <text x="230" y="126" font-size="15" font-weight="600" fill="#4f5d75">앞자리를 차지하는 몸통</text>
+    <text x="620" y="126" font-size="15" font-weight="600" fill="#4f5d75">그다음부터 관절이 차례로</text>
+
+    <!-- qpos -->
+    <text x="52" y="176" font-size="16" font-weight="700" fill="#2d3142">qpos</text>
+    <text x="52" y="198" font-size="13" fill="#7a8399">자세</text>
+    <rect x="230" y="152" width="266" height="44" rx="4" fill="#e9e4dc" stroke="#a7a29a" stroke-width="1.2"/>
+    <text x="363" y="179" font-size="14" fill="#5c564e" text-anchor="middle">7칸 (위치 3 + 회전 4)</text>
+    <g>
+      <rect x="500" y="152" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="526" y="179" font-size="13" fill="#4f5d75" text-anchor="middle">7</text>
+      <rect x="554" y="152" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="580" y="179" font-size="13" fill="#4f5d75" text-anchor="middle">8</text>
+      <rect x="608" y="152" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="634" y="179" font-size="13" fill="#4f5d75" text-anchor="middle">9</text>
+      <rect x="662" y="152" width="52" height="44" rx="3" fill="#fdf1e9" stroke="#eb6c36" stroke-width="2"/>
+      <text x="688" y="179" font-size="14" font-weight="700" fill="#c4501f" text-anchor="middle">10</text>
+      <rect x="716" y="152" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="742" y="179" font-size="13" fill="#4f5d75" text-anchor="middle">11</text>
+      <text x="790" y="179" font-size="14" fill="#7a8399">…</text>
+    </g>
+
+    <!-- qvel -->
+    <text x="52" y="252" font-size="16" font-weight="700" fill="#2d3142">qvel</text>
+    <text x="52" y="274" font-size="13" fill="#7a8399">속도</text>
+    <rect x="230" y="228" width="228" height="44" rx="4" fill="#e9e4dc" stroke="#a7a29a" stroke-width="1.2"/>
+    <text x="344" y="255" font-size="14" fill="#5c564e" text-anchor="middle">6칸 (선속도 3 + 각속도 3)</text>
+    <g>
+      <rect x="500" y="228" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="526" y="255" font-size="13" fill="#4f5d75" text-anchor="middle">6</text>
+      <rect x="554" y="228" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="580" y="255" font-size="13" fill="#4f5d75" text-anchor="middle">7</text>
+      <rect x="608" y="228" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="634" y="255" font-size="13" fill="#4f5d75" text-anchor="middle">8</text>
+      <rect x="662" y="228" width="52" height="44" rx="3" fill="#fdf1e9" stroke="#eb6c36" stroke-width="2"/>
+      <text x="688" y="255" font-size="14" font-weight="700" fill="#c4501f" text-anchor="middle">9</text>
+      <rect x="716" y="228" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="742" y="255" font-size="13" fill="#4f5d75" text-anchor="middle">10</text>
+      <text x="790" y="255" font-size="14" fill="#7a8399">…</text>
+    </g>
+
+    <!-- ctrl -->
+    <text x="52" y="328" font-size="16" font-weight="700" fill="#2d3142">ctrl</text>
+    <text x="52" y="350" font-size="13" fill="#7a8399">명령</text>
+    <rect x="230" y="304" width="266" height="44" rx="4" fill="#f4f2ef" stroke="#c3c0ba" stroke-width="1.2" stroke-dasharray="5,4"/>
+    <text x="363" y="331" font-size="14" fill="#8f8a82" text-anchor="middle">0칸 (몸통에는 모터가 없습니다)</text>
+    <g>
+      <rect x="500" y="304" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="526" y="331" font-size="13" fill="#4f5d75" text-anchor="middle">0</text>
+      <rect x="554" y="304" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="580" y="331" font-size="13" fill="#4f5d75" text-anchor="middle">1</text>
+      <rect x="608" y="304" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="634" y="331" font-size="13" fill="#4f5d75" text-anchor="middle">2</text>
+      <rect x="662" y="304" width="52" height="44" rx="3" fill="#fdf1e9" stroke="#eb6c36" stroke-width="2"/>
+      <text x="688" y="331" font-size="14" font-weight="700" fill="#c4501f" text-anchor="middle">3</text>
+      <rect x="716" y="304" width="52" height="44" rx="3" fill="#eef1f6" stroke="#8a97ad"/>
+      <text x="742" y="331" font-size="13" fill="#4f5d75" text-anchor="middle">4</text>
+      <text x="790" y="331" font-size="14" fill="#7a8399">…</text>
+    </g>
+
+    <!-- 관절 이름 줄 -->
+    <line x1="500" y1="368" x2="800" y2="368" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="526" y="392" font-size="12" fill="#7a8399" text-anchor="middle">엉덩</text>
+    <text x="526" y="408" font-size="12" fill="#7a8399" text-anchor="middle">앞뒤</text>
+    <text x="580" y="392" font-size="12" fill="#7a8399" text-anchor="middle">엉덩</text>
+    <text x="580" y="408" font-size="12" fill="#7a8399" text-anchor="middle">좌우</text>
+    <text x="634" y="392" font-size="12" fill="#7a8399" text-anchor="middle">엉덩</text>
+    <text x="634" y="408" font-size="12" fill="#7a8399" text-anchor="middle">비틀기</text>
+    <text x="688" y="392" font-size="13" font-weight="700" fill="#c4501f" text-anchor="middle">왼쪽</text>
+    <text x="688" y="408" font-size="13" font-weight="700" fill="#c4501f" text-anchor="middle">무릎</text>
+    <text x="742" y="392" font-size="12" fill="#7a8399" text-anchor="middle">발목</text>
+    <text x="742" y="408" font-size="12" fill="#7a8399" text-anchor="middle">앞뒤</text>
+
+    <!-- 결론 박스 -->
+    <rect x="40" y="436" width="920" height="76" rx="8" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.6"/>
+    <text x="64" y="466" font-size="17" font-weight="700" fill="#c4501f">왼쪽 무릎 하나에 주소가 네 개 붙습니다</text>
+    <text x="64" y="494" font-size="15" fill="#8a4a22">관절 번호 4  ·  자세 배열 10번 칸  ·  속도 배열 9번 칸  ·  명령 배열 3번 칸</text>
+
+    <text x="40" y="548" font-size="14" fill="#4f5d75">왼쪽에서 세 번째 관절(0부터 세어 3번)이라고 할 때, 자세는 3 + 7, 속도는 3 + 6, 명령은 3 + 0 입니다.</text>
+    <text x="40" y="572" font-size="14" fill="#7a8399">그래서 숫자를 직접 적지 않고 이름으로 물어보는 습관이 필요합니다.</text>
+  </g>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520" role="img" aria-label="정책 한 스텝 동안 물리가 열 번 도는 타이밍">
+  <rect x="0" y="0" width="1000" height="520" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">정책이 한 번 명령할 동안 물리는 열 번 계산합니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">G1JoystickFlatTerrain 의 실제 설정으로 그린 것입니다. 정책 0.02초, 물리 0.002초</text>
+
+    <!-- 정책 띠 -->
+    <text x="40" y="128" font-size="15" font-weight="700" fill="#2d3142">정책 신경망</text>
+    <text x="40" y="150" font-size="13" fill="#7a8399">1초에 50번</text>
+    <rect x="180" y="112" width="330" height="50" rx="5" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="2"/>
+    <text x="345" y="143" font-size="15" font-weight="600" fill="#1f3f70" text-anchor="middle">명령 한 번 (0.02초 동안 그대로)</text>
+    <rect x="516" y="112" width="330" height="50" rx="5" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="2"/>
+    <text x="681" y="143" font-size="15" font-weight="600" fill="#1f3f70" text-anchor="middle">다음 명령</text>
+
+    <line x1="510" y1="106" x2="510" y2="330" stroke="#eb6c36" stroke-width="1.2" stroke-dasharray="4,4"/>
+    <line x1="180" y1="106" x2="180" y2="330" stroke="#eb6c36" stroke-width="1.2" stroke-dasharray="4,4"/>
+    <line x1="846" y1="106" x2="846" y2="330" stroke="#eb6c36" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+    <!-- 물리 띠 -->
+    <text x="40" y="212" font-size="15" font-weight="700" fill="#2d3142">물리 계산</text>
+    <text x="40" y="234" font-size="13" fill="#7a8399">1초에 500번</text>
+    <g>
+      <rect x="180" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="213" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="246" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="279" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="312" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="345" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="378" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="411" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="444" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="477" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+    </g>
+    <g>
+      <rect x="516" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="549" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="582" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="615" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="648" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="681" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="714" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="747" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="780" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+      <rect x="813" y="196" width="29" height="46" rx="3" fill="#f8f3ea" stroke="#b8762e" stroke-width="1.2"/>
+    </g>
+    <text x="345" y="266" font-size="14" font-weight="600" fill="#8a5518" text-anchor="middle">칸 10개 = n_substeps</text>
+    <text x="681" y="266" font-size="14" font-weight="600" fill="#8a5518" text-anchor="middle">칸 10개 = n_substeps</text>
+
+    <!-- 관측 -->
+    <text x="40" y="308" font-size="15" font-weight="700" fill="#2d3142">관측 조립</text>
+    <circle cx="510" cy="300" r="9" fill="#3f7d55"/>
+    <circle cx="846" cy="300" r="9" fill="#3f7d55"/>
+    <text x="530" y="305" font-size="14" fill="#2c5b3c">열 칸이 끝난 뒤에야 정책이 새 관측을 봅니다</text>
+
+    <!-- 시간축 -->
+    <line x1="180" y1="344" x2="900" y2="344" stroke="#4f5d75" stroke-width="1.2"/>
+    <line x1="180" y1="344" x2="180" y2="354" stroke="#7a8399"/>
+    <line x1="510" y1="344" x2="510" y2="354" stroke="#7a8399"/>
+    <line x1="846" y1="344" x2="846" y2="354" stroke="#7a8399"/>
+    <text x="180" y="374" font-size="14" fill="#4f5d75" text-anchor="middle">0 ms</text>
+    <text x="510" y="374" font-size="14" fill="#4f5d75" text-anchor="middle">20 ms</text>
+    <text x="846" y="374" font-size="14" fill="#4f5d75" text-anchor="middle">40 ms</text>
+
+    <!-- 아래 요약 -->
+    <line x1="40" y1="404" x2="960" y2="404" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="436" font-size="15" fill="#2d3142">한 판(에피소드)은 정책 스텝 1000번입니다. 그러면 물리는 10000번 돌고, 시뮬 속 시간으로 20초가 흐릅니다.</text>
+    <text x="40" y="464" font-size="15" fill="#2d3142">칸 10개는 0.02 나누기 0.002 로 나온 값입니다. 정책 주기를 물리 주기로 나눈 것뿐입니다.</text>
+    <text x="40" y="496" font-size="14" fill="#7a8399">주황 점선은 정책이 명령을 바꾸는 순간이고, 초록 점은 정책이 새 관측을 받는 순간입니다. 두 순간이 같습니다.</text>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" role="img" aria-label="mjModel 하나와 mjData 여럿으로 나뉜 구조">
+  <rect x="0" y="0" width="1000" height="620" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">안 변하는 것 하나와 매 스텝 변하는 것 여럿</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">왼쪽은 컴파일하고 나면 그대로이고, 오른쪽은 한 스텝마다 통째로 바뀝니다</text>
+
+    <!-- 왼쪽: mjModel -->
+    <rect x="40" y="104" width="330" height="300" rx="8" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="2"/>
+    <text x="205" y="136" font-size="19" font-weight="700" fill="#1f3f70" text-anchor="middle">mjModel</text>
+    <text x="205" y="160" font-size="14" fill="#2e5aa8" text-anchor="middle">상수 · 읽기 전용 · 전체에 딱 1개</text>
+    <line x1="66" y1="176" x2="344" y2="176" stroke="#9fb4d4" stroke-width="1"/>
+    <text x="66" y="204" font-size="15" fill="#1f3f70">nq = 36   nv = 35   nu = 29</text>
+    <text x="66" y="232" font-size="15" fill="#1f3f70">body_mass   링크 31개의 질량</text>
+    <text x="66" y="260" font-size="15" fill="#1f3f70">jnt_range   관절 가동범위</text>
+    <text x="66" y="288" font-size="15" fill="#1f3f70">actuator_gainprm   kp = 500</text>
+    <text x="66" y="316" font-size="15" fill="#1f3f70">opt.timestep = 0.002 초</text>
+    <text x="66" y="344" font-size="15" fill="#1f3f70">opt.iterations = 100</text>
+    <rect x="66" y="360" width="278" height="30" rx="4" fill="#c9d8ec"/>
+    <text x="205" y="380" font-size="14" font-weight="600" fill="#1f3f70" text-anchor="middle">약 몇 메가바이트. 한 번만 올립니다</text>
+
+    <!-- 화살표 -->
+    <line x1="380" y1="254" x2="440" y2="254" stroke="#eb6c36" stroke-width="2.4"/>
+    <polygon points="440,254 430,248 430,260" fill="#eb6c36"/>
+    <text x="410" y="240" font-size="14" fill="#c4501f" text-anchor="middle">공유</text>
+
+    <!-- 오른쪽: mjData 여러 개 -->
+    <g>
+      <rect x="470" y="128" width="440" height="252" rx="8" fill="#efe7dc" stroke="#c08a4a" stroke-width="1.4"/>
+      <rect x="480" y="118" width="440" height="252" rx="8" fill="#f2ece3" stroke="#c08a4a" stroke-width="1.4"/>
+      <rect x="490" y="108" width="440" height="252" rx="8" fill="#f8f3ea" stroke="#b8762e" stroke-width="2"/>
+    </g>
+    <text x="710" y="140" font-size="19" font-weight="700" fill="#8a5518" text-anchor="middle">mjData</text>
+    <text x="710" y="164" font-size="14" fill="#b8762e" text-anchor="middle">상태와 중간 계산량 · 환경 개수 N만큼</text>
+    <line x1="516" y1="180" x2="904" y2="180" stroke="#dcc09a" stroke-width="1"/>
+    <text x="516" y="208" font-size="15" fill="#8a5518">qpos[36]   지금 자세</text>
+    <text x="516" y="236" font-size="15" fill="#8a5518">qvel[35]   지금 속도</text>
+    <text x="516" y="264" font-size="15" fill="#8a5518">qacc[35]   방금 구한 가속도</text>
+    <text x="516" y="292" font-size="15" fill="#8a5518">ctrl[29]   넣어준 명령</text>
+    <text x="516" y="320" font-size="15" fill="#8a5518">contact / efc_*   이번 스텝의 접촉</text>
+    <rect x="516" y="332" width="388" height="16" rx="3" fill="#f0dcc0"/>
+    <text x="710" y="345" font-size="13" font-weight="600" fill="#8a5518" text-anchor="middle">4096개를 나란히 두면 수 기가바이트</text>
+
+    <!-- 아래: 왜 나눴나 -->
+    <line x1="40" y1="432" x2="960" y2="432" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="466" font-size="17" font-weight="700" fill="#2d3142">나눠 두었기 때문에 가능해지는 것</text>
+
+    <rect x="40" y="484" width="290" height="96" rx="6" fill="#ffffff" stroke="#c3c0ba" stroke-width="1.2"/>
+    <text x="60" y="512" font-size="15" font-weight="600" fill="#2d3142">병렬 학습</text>
+    <text x="60" y="538" font-size="14" fill="#4f5d75">로봇 생김새를 4096번</text>
+    <text x="60" y="560" font-size="14" fill="#4f5d75">복사하지 않아도 됩니다</text>
+
+    <rect x="355" y="484" width="290" height="96" rx="6" fill="#ffffff" stroke="#c3c0ba" stroke-width="1.2"/>
+    <text x="375" y="512" font-size="15" font-weight="600" fill="#2d3142">저장과 재현</text>
+    <text x="375" y="538" font-size="14" fill="#4f5d75">모델 파일과 상태만 있으면</text>
+    <text x="375" y="560" font-size="14" fill="#4f5d75">같은 장면을 다시 만듭니다</text>
+
+    <rect x="670" y="484" width="290" height="96" rx="6" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="690" y="512" font-size="15" font-weight="600" fill="#c4501f">규칙을 깨는 예외</text>
+    <text x="690" y="538" font-size="14" fill="#8a4a22">환경마다 질량과 마찰을</text>
+    <text x="690" y="560" font-size="14" fill="#8a4a22">다르게 주려면 왼쪽도 N개로</text>
+
+    <text x="40" y="606" font-size="14" fill="#7a8399">수치는 mujoco_menagerie 의 G1 scene.xml 을 실제로 불러 읽은 값입니다.</text>
+  </g>
+</svg>

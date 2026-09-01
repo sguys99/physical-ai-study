@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" role="img" aria-label="엔진과 벡터화 구현과 학습 스위트로 이어지는 세 층">
+  <rect x="0" y="0" width="1000" height="560" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+
+    <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">셋은 경쟁 상대가 아니라 위아래로 쌓인 한 줄입니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">아래가 물리를 계산하고, 가운데가 그것을 그래픽카드용으로 다시 쓴 것이고, 위가 학습 레시피입니다</text>
+
+    <!-- 3층 스택 -->
+    <rect x="60" y="104" width="470" height="76" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="2"/>
+    <text x="84" y="134" font-size="18" font-weight="700" fill="#2c5b3c">mujoco_playground</text>
+    <text x="84" y="160" font-size="14" fill="#3f7d55">환경, 보상, 커리큘럼, 학습 스크립트를 얹은 스위트</text>
+    <rect x="392" y="118" width="122" height="48" rx="5" fill="#ffffff" stroke="#3f7d55" stroke-width="1"/>
+    <text x="453" y="139" font-size="13" fill="#2c5b3c" text-anchor="middle">G1 보행 태스크</text>
+    <text x="453" y="157" font-size="13" fill="#2c5b3c" text-anchor="middle">여기 들어 있습니다</text>
+
+    <rect x="60" y="192" width="470" height="76" rx="8" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="2"/>
+    <text x="84" y="222" font-size="18" font-weight="700" fill="#1f3f70">MJX</text>
+    <text x="84" y="248" font-size="14" fill="#2e5aa8">같은 물리를 JAX 로 다시 쓴 것. 환경 수천 개를 한꺼번에</text>
+    <rect x="392" y="206" width="122" height="48" rx="5" fill="#ffffff" stroke="#2e5aa8" stroke-width="1"/>
+    <text x="453" y="227" font-size="13" fill="#1f3f70" text-anchor="middle">정확도를 낮추고</text>
+    <text x="453" y="245" font-size="13" fill="#1f3f70" text-anchor="middle">속도를 얻습니다</text>
+
+    <rect x="60" y="280" width="470" height="76" rx="8" fill="#e9e4dc" stroke="#a7a29a" stroke-width="2"/>
+    <text x="84" y="310" font-size="18" font-weight="700" fill="#3d382f">MuJoCo (classic)</text>
+    <text x="84" y="336" font-size="14" fill="#5c564e">엔진 본체. 설치 한 줄, 화면 없이도 그림을 뽑습니다</text>
+    <rect x="392" y="294" width="122" height="48" rx="5" fill="#ffffff" stroke="#a7a29a" stroke-width="1"/>
+    <text x="453" y="315" font-size="13" fill="#3d382f" text-anchor="middle">모델 읽기와</text>
+    <text x="453" y="333" font-size="13" fill="#3d382f" text-anchor="middle">디버깅의 자리</text>
+
+    <!-- 오른쪽: 학습과 검증의 갈림 -->
+    <text x="580" y="132" font-size="17" font-weight="700" fill="#2d3142">쓰는 순서는 갈렸다 다시 만납니다</text>
+
+    <rect x="580" y="152" width="170" height="58" rx="6" fill="#dfe6f0" stroke="#2e5aa8" stroke-width="1.6"/>
+    <text x="665" y="177" font-size="14" font-weight="600" fill="#1f3f70" text-anchor="middle">MJX 에서 학습</text>
+    <text x="665" y="197" font-size="13" fill="#2e5aa8" text-anchor="middle">0.004초 · 5회 반복</text>
+
+    <line x1="750" y1="181" x2="796" y2="181" stroke="#eb6c36" stroke-width="2.2"/>
+    <polygon points="800,181 790,175 790,187" fill="#eb6c36"/>
+
+    <rect x="806" y="152" width="150" height="58" rx="6" fill="#e9e4dc" stroke="#a7a29a" stroke-width="1.6"/>
+    <text x="881" y="177" font-size="14" font-weight="600" fill="#3d382f" text-anchor="middle">classic 에서 재검증</text>
+    <text x="881" y="197" font-size="13" fill="#5c564e" text-anchor="middle">0.002초 · 100회</text>
+
+    <line x1="665" y1="212" x2="665" y2="248" stroke="#c3c0ba" stroke-width="1.4" stroke-dasharray="4,4"/>
+    <line x1="881" y1="212" x2="881" y2="248" stroke="#c3c0ba" stroke-width="1.4" stroke-dasharray="4,4"/>
+    <rect x="580" y="252" width="376" height="52" rx="6" fill="#fdf1e9" stroke="#eb6c36" stroke-width="1.6"/>
+    <text x="768" y="273" font-size="14" font-weight="700" fill="#c4501f" text-anchor="middle">두 곳의 물리 설정이 다른 것이 요점입니다</text>
+    <text x="768" y="293" font-size="13" fill="#8a4a22" text-anchor="middle">같은 엔진으로 다시 돌리는 것은 검증이라고 부르지 않습니다</text>
+
+    <rect x="580" y="316" width="376" height="40" rx="6" fill="#ffffff" stroke="#c3c0ba" stroke-width="1.2"/>
+    <text x="768" y="341" font-size="14" fill="#4f5d75" text-anchor="middle">그다음이 실기입니다. 이 과정에서는 여기까지 가지 않습니다</text>
+
+    <!-- 아래 비교 -->
+    <line x1="40" y1="392" x2="960" y2="392" stroke="#d9d7d2" stroke-width="1"/>
+    <text x="40" y="424" font-size="17" font-weight="700" fill="#2d3142">이 과정에서 다루지 않는 것</text>
+
+    <rect x="40" y="442" width="446" height="76" rx="6" fill="#ffffff" stroke="#c3c0ba" stroke-width="1.2"/>
+    <text x="64" y="470" font-size="15" font-weight="600" fill="#2d3142">Genesis</text>
+    <text x="64" y="496" font-size="14" fill="#4f5d75">이름과 역할만 알아둡니다. 대안 후보입니다</text>
+
+    <rect x="514" y="442" width="446" height="76" rx="6" fill="#f4f2ef" stroke="#a7a29a" stroke-width="1.2"/>
+    <text x="538" y="470" font-size="15" font-weight="600" fill="#3d382f">Isaac Sim 과 Isaac Lab</text>
+    <text x="538" y="496" font-size="14" fill="#5c564e">업계 표준이지만 광선추적 전용 하드웨어를 요구합니다</text>
+
+    <text x="40" y="546" font-size="14" fill="#7a8399">회사 학습 인프라가 오른쪽 아래일 가능성이 있어 첫 주에 팀 표준을 확인해야 합니다.</text>
+  </g>
+</svg>
