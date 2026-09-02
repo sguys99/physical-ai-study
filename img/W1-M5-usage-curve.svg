@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" role="img" aria-label="코드북을 키울 때 두 방식의 사용률이 갈리는 모양">
-  <rect x="0" y="0" width="900" height="470" fill="#f8f7f4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" role="img" aria-label="코드북을 키울 때 두 방식의 사용률이 갈리는 모양">
+  <rect x="0" y="0" width="900" height="500" fill="#f8f7f4"/>
   <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
     <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">목록을 키우면 두 방식이 갈라집니다</text>
     <text x="36" y="66" font-size="14.5" fill="#4f5d75">같은 데이터와 같은 인코더로 목록 크기만 바꿔 잰 값입니다</text>
@@ -13,10 +13,13 @@
     <line x1="120" y1="110" x2="800" y2="110" stroke="#e2e4e8" stroke-width="1"/>
     <line x1="120" y1="235" x2="800" y2="235" stroke="#e2e4e8" stroke-width="1"/>
 
-    <text x="200" y="386" font-size="13" fill="#4f5d75" text-anchor="middle">코드 240개</text>
-    <text x="450" y="386" font-size="13" fill="#4f5d75" text-anchor="middle">코드 1,000개</text>
-    <text x="700" y="386" font-size="13" fill="#4f5d75" text-anchor="middle">코드 4,000개</text>
-    <text x="450" y="412" font-size="13.5" font-weight="700" fill="#2d3142" text-anchor="middle">목록 크기</text>
+    <text x="200" y="384" font-size="13" fill="#2c5b3c" text-anchor="middle">FSQ 코드 240개</text>
+    <text x="450" y="384" font-size="13" fill="#2c5b3c" text-anchor="middle">FSQ 코드 1,000개</text>
+    <text x="700" y="384" font-size="13" fill="#2c5b3c" text-anchor="middle">FSQ 코드 4,375개</text>
+    <text x="200" y="404" font-size="13" fill="#a8410f" text-anchor="middle">VQ 코드 256개</text>
+    <text x="450" y="404" font-size="13" fill="#a8410f" text-anchor="middle">VQ 코드 1,024개</text>
+    <text x="700" y="404" font-size="13" fill="#a8410f" text-anchor="middle">VQ 코드 4,096개</text>
+    <text x="450" y="430" font-size="13.5" font-weight="700" fill="#2d3142" text-anchor="middle">목록 크기 (쌍마다 개수가 정확히 같지는 않습니다)</text>
     <text x="36" y="92" font-size="13.5" font-weight="700" fill="#2d3142">사용률</text>
 
     <polyline points="200,110 450,118 700,180" fill="none" stroke="#3f7d55" stroke-width="3.4"/>
@@ -26,7 +29,7 @@
     <text x="200" y="98" font-size="13" font-weight="700" fill="#2c5b3c" text-anchor="middle">100%</text>
     <text x="450" y="106" font-size="13" font-weight="700" fill="#2c5b3c" text-anchor="middle">96.8%</text>
     <text x="716" y="176" font-size="13" font-weight="700" fill="#2c5b3c">71.9%</text>
-    <text x="716" y="196" font-size="13" fill="#2c5b3c">고정 격자</text>
+    <text x="716" y="196" font-size="13" fill="#2c5b3c">FSQ (고정 격자)</text>
 
     <polyline points="200,151 450,307 700,349" fill="none" stroke="#c4501f" stroke-width="3.4"/>
     <circle cx="200" cy="151" r="7" fill="#c4501f"/>
@@ -35,12 +38,12 @@
     <text x="200" y="172" font-size="13" font-weight="700" fill="#a8410f" text-anchor="middle">83.6%</text>
     <text x="450" y="329" font-size="13" font-weight="700" fill="#a8410f" text-anchor="middle">21.1%</text>
     <text x="716" y="332" font-size="13" font-weight="700" fill="#a8410f">4.5%</text>
-    <text x="716" y="350" font-size="13" fill="#a8410f">학습되는 목록</text>
+    <text x="716" y="350" font-size="13" fill="#a8410f">VQ (학습되는 목록)</text>
 
     <line x1="686" y1="180" x2="686" y2="349" stroke="#4f5d75" stroke-width="1.6" stroke-dasharray="5 4"/>
     <text x="678" y="268" font-size="13.5" font-weight="700" fill="#2d3142" text-anchor="end">약 16배</text>
 
-    <rect x="36" y="426" width="828" height="30" rx="6" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
-    <text x="56" y="446" font-size="13" fill="#4f5d75">집필 환경 실측(RTX 3080, 2026-08-02). 초록 선이 내려가는 것은 죽어서가 아니라 데이터가 그만큼 다양하지 않아서입니다.</text>
+    <rect x="36" y="452" width="828" height="30" rx="6" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="56" y="472" font-size="13" fill="#4f5d75">집필 환경 실측(RTX 3080, 2026-08-02). 초록 선이 내려가는 것은 죽어서가 아니라 데이터가 그만큼 다양하지 않아서입니다.</text>
   </g>
 </svg>

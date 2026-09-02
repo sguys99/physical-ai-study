@@ -24,7 +24,7 @@
       <rect x="510" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
       <text x="577" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">반올림</text>
       <rect x="670" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
-      <text x="737" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">자릿수 열거</text>
+      <text x="737" y="147" font-size="12.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">mixed-radix 열거</text>
       <rect x="830" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
       <text x="897" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">디코더</text>
     </g>
@@ -79,19 +79,20 @@
     </g>
     <g font-size="12.5" fill="#4f5d75" text-anchor="middle">
       <text x="97" y="434">x : R^[16, 29]</text>
-      <text x="257" y="434">z : R^[d=512]</text>
+      <text x="257" y="434">z : R^[d=64]</text>
       <text x="417" y="434">k = argmin ‖z − C_j‖</text>
-      <text x="577" y="434">z_q = C_k : R^[512]</text>
+      <text x="577" y="434">z_q = C_k : R^[64]</text>
       <text x="737" y="434">k : 0 .. 1023</text>
       <text x="897" y="434">x̂ : R^[16, 29]</text>
     </g>
 
     <rect x="316" y="456" width="362" height="72" rx="8" fill="#f6d9c6" stroke="#a8410f" stroke-width="2.6"/>
     <text x="497" y="480" font-size="13.5" font-weight="700" fill="#7a3a10" text-anchor="middle">이 경로에만 있는 상자</text>
-    <text x="497" y="500" font-size="12.5" fill="#7a3a10" text-anchor="middle">코드북 C : R^[1024, 512] = 524,288개 파라미터</text>
+    <text x="497" y="500" font-size="12.5" fill="#7a3a10" text-anchor="middle">코드북 C : R^[1024, 64] = 65,536개 파라미터</text>
     <text x="497" y="518" font-size="12.5" fill="#7a3a10" text-anchor="middle">지수이동평균 버퍼와 사용 횟수 카운터가 함께 붙습니다</text>
     <line x1="440" y1="456" x2="434" y2="445" stroke="#c4501f" stroke-width="1.8" marker-end="url(#m5arrR)"/>
     <line x1="560" y1="456" x2="566" y2="445" stroke="#c4501f" stroke-width="1.8" marker-end="url(#m5arrR)"/>
+    <text x="694" y="474" font-size="12" fill="#8a5518">왼쪽 숫자는 실습 설계값이고,</text>
     <text x="694" y="492" font-size="12" fill="#8a5518">논문 예시인 코드 4,096개에</text>
     <text x="694" y="510" font-size="12" fill="#8a5518">차원 512면 약 2M개입니다</text>
 
