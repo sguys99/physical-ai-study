@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 440" width="920" height="440" role="img" aria-label="목록을 만들어 쓰는 방법과 눈금에 반올림하는 방법">
+  <rect x="0" y="0" width="920" height="440" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+    <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">목록을 만들어 쓰는 방법과, 목록을 없애는 방법</text>
+    <text x="36" y="66" font-size="14.5" fill="#4f5d75">두 판을 비교하세요. 왼쪽에는 점들이 흩어져 있고 오른쪽에는 눈금이 반듯합니다</text>
+
+    <rect x="40" y="98" width="400" height="252" rx="12" fill="#ffffff" stroke="#c4501f" stroke-width="1.8"/>
+    <text x="240" y="126" font-size="15" font-weight="700" fill="#a8410f" text-anchor="middle">목록을 학습으로 만드는 방법</text>
+    <g fill="#c4501f">
+      <circle cx="110" cy="180" r="6"/><circle cx="168" cy="164" r="6"/><circle cx="232" cy="196" r="6"/>
+      <circle cx="300" cy="170" r="6"/><circle cx="360" cy="204" r="6"/>
+      <circle cx="132" cy="248" r="6"/><circle cx="204" cy="264" r="6"/><circle cx="268" cy="240" r="6"/>
+      <circle cx="336" cy="272" r="6"/><circle cx="150" cy="308" r="6"/><circle cx="290" cy="312" r="6"/>
+    </g>
+    <text x="240" y="342" font-size="13" fill="#4f5d75" text-anchor="middle">점 하나가 목록의 한 항목이고 자리를 학습으로 정합니다</text>
+
+    <rect x="480" y="98" width="400" height="252" rx="12" fill="#ffffff" stroke="#3f7d55" stroke-width="1.8"/>
+    <text x="680" y="126" font-size="15" font-weight="700" fill="#2c5b3c" text-anchor="middle">눈금에 반올림하는 방법</text>
+    <g stroke="#cfd8d2" stroke-width="1.2">
+      <line x1="560" y1="150" x2="800" y2="150"/><line x1="560" y1="200" x2="800" y2="200"/>
+      <line x1="560" y1="250" x2="800" y2="250"/><line x1="560" y1="300" x2="800" y2="300"/>
+      <line x1="560" y1="150" x2="560" y2="300"/><line x1="620" y1="150" x2="620" y2="300"/>
+      <line x1="680" y1="150" x2="680" y2="300"/><line x1="740" y1="150" x2="740" y2="300"/>
+      <line x1="800" y1="150" x2="800" y2="300"/>
+    </g>
+    <g fill="#3f7d55">
+      <circle cx="560" cy="150" r="5"/><circle cx="620" cy="150" r="5"/><circle cx="680" cy="150" r="5"/><circle cx="740" cy="150" r="5"/><circle cx="800" cy="150" r="5"/>
+      <circle cx="560" cy="200" r="5"/><circle cx="620" cy="200" r="5"/><circle cx="680" cy="200" r="5"/><circle cx="740" cy="200" r="5"/><circle cx="800" cy="200" r="5"/>
+      <circle cx="560" cy="250" r="5"/><circle cx="620" cy="250" r="5"/><circle cx="680" cy="250" r="5"/><circle cx="740" cy="250" r="5"/><circle cx="800" cy="250" r="5"/>
+      <circle cx="560" cy="300" r="5"/><circle cx="620" cy="300" r="5"/><circle cx="680" cy="300" r="5"/><circle cx="740" cy="300" r="5"/><circle cx="800" cy="300" r="5"/>
+    </g>
+    <text x="680" y="342" font-size="13" fill="#4f5d75" text-anchor="middle">눈금 자리는 처음부터 정해져 있고 바뀌지 않습니다</text>
+
+    <rect x="40" y="368" width="840" height="52" rx="10" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="60" y="390" font-size="13.5" fill="#4f5d75">왼쪽은 점을 좋은 자리로 옮기는 일이 숙제이고, 오른쪽은 그 숙제가 아예 없습니다.</text>
+    <text x="60" y="410" font-size="13.5" fill="#4f5d75">대신 오른쪽은 눈금 자리를 데이터에 맞춰 조정할 수 없습니다. 공짜가 아닙니다.</text>
+  </g>
+</svg>

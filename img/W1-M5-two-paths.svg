@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 660" width="1000" height="660" role="img" aria-label="코드북이 있는 경로와 없는 경로를 텐서 모양까지 채워 나란히 그린 그림">
+  <rect x="0" y="0" width="1000" height="660" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m5arrN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f5d75"/>
+    </marker>
+    <marker id="m5arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c4501f"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+    <text x="30" y="38" font-size="21" font-weight="700" fill="#2d3142">같은 입력, 같은 출력, 가운데만 다른 두 경로</text>
+    <text x="30" y="64" font-size="14.5" fill="#4f5d75">위아래 여섯 칸이 서로 같은 자리입니다. 아래쪽에만 매달려 있는 상자 하나를 찾아보세요</text>
+
+    <text x="30" y="102" font-size="15" font-weight="700" fill="#2c5b3c">코드북이 없는 경로</text>
+
+    <g>
+      <rect x="30" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
+      <text x="97" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">입력 묶음</text>
+      <rect x="190" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
+      <text x="257" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">인코더</text>
+      <rect x="350" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
+      <text x="417" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">바운딩</text>
+      <rect x="510" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
+      <text x="577" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">반올림</text>
+      <rect x="670" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
+      <text x="737" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">자릿수 열거</text>
+      <rect x="830" y="116" width="134" height="50" rx="8" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.8"/>
+      <text x="897" y="147" font-size="13.5" font-weight="700" fill="#2c5b3c" text-anchor="middle">디코더</text>
+    </g>
+    <g stroke="#4f5d75" stroke-width="1.8" marker-end="url(#m5arrN)">
+      <line x1="164" y1="141" x2="184" y2="141"/><line x1="324" y1="141" x2="344" y2="141"/>
+      <line x1="484" y1="141" x2="504" y2="141"/><line x1="644" y1="141" x2="664" y2="141"/>
+      <line x1="804" y1="141" x2="824" y2="141"/>
+    </g>
+    <g font-size="12.5" fill="#4f5d75" text-anchor="middle">
+      <text x="97" y="186">x : R^[16, 29]</text>
+      <text x="257" y="186">z : R^[d=4]</text>
+      <text x="417" y="186">f(z) : R^[4]</text>
+      <text x="577" y="186">ẑ : Z^[4]</text>
+      <text x="737" y="186">idx : 0 .. 999</text>
+      <text x="897" y="186">x̂ : R^[16, 29]</text>
+    </g>
+    <g font-size="12.5" fill="#8a5518" text-anchor="middle">
+      <text x="97" y="204">16프레임 × 관절 29</text>
+      <text x="417" y="204">⌊L/2⌋·tanh</text>
+      <text x="577" y="204">직통 추정기</text>
+      <text x="737" y="204">L = [8, 5, 5, 5]</text>
+      <text x="737" y="222">ẑ₁ ∈ 0..7,  ẑ₂..₄ ∈ 0..4</text>
+    </g>
+    <text x="180" y="224" font-size="12.5" fill="#8a5518">코드 수 8 × 5 × 5 × 5 = 1,000, 토큰 하나가 9.97 비트</text>
+
+    <rect x="30" y="238" width="934" height="52" rx="8" fill="#ffffff" stroke="#3f7d55" stroke-width="1.4"/>
+    <text x="48" y="260" font-size="13" fill="#2c5b3c">손실 = ‖x − x̂‖²   (항이 하나입니다)</text>
+    <text x="48" y="280" font-size="13" fill="#4f5d75">학습되는 것은 인코더와 디코더뿐입니다. 코드북 없음, 보조 손실 없음, 부가 장치 없음.</text>
+
+    <line x1="30" y1="312" x2="964" y2="312" stroke="#c9ccd4" stroke-width="1.6"/>
+
+    <text x="30" y="350" font-size="15" font-weight="700" fill="#a8410f">코드북이 있는 경로</text>
+
+    <g>
+      <rect x="30" y="364" width="134" height="50" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+      <text x="97" y="395" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">입력 묶음</text>
+      <rect x="190" y="364" width="134" height="50" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+      <text x="257" y="395" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">인코더</text>
+      <rect x="350" y="364" width="134" height="50" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+      <text x="417" y="395" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">최근접 찾기</text>
+      <rect x="510" y="364" width="134" height="50" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+      <text x="577" y="395" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">코드워드 대체</text>
+      <rect x="670" y="364" width="134" height="50" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+      <text x="737" y="395" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">토큰 번호</text>
+      <rect x="830" y="364" width="134" height="50" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+      <text x="897" y="395" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">디코더</text>
+    </g>
+    <g stroke="#4f5d75" stroke-width="1.8" marker-end="url(#m5arrN)">
+      <line x1="164" y1="389" x2="184" y2="389"/><line x1="324" y1="389" x2="344" y2="389"/>
+      <line x1="484" y1="389" x2="504" y2="389"/><line x1="644" y1="389" x2="664" y2="389"/>
+      <line x1="804" y1="389" x2="824" y2="389"/>
+    </g>
+    <g font-size="12.5" fill="#4f5d75" text-anchor="middle">
+      <text x="97" y="434">x : R^[16, 29]</text>
+      <text x="257" y="434">z : R^[d=512]</text>
+      <text x="417" y="434">k = argmin ‖z − C_j‖</text>
+      <text x="577" y="434">z_q = C_k : R^[512]</text>
+      <text x="737" y="434">k : 0 .. 1023</text>
+      <text x="897" y="434">x̂ : R^[16, 29]</text>
+    </g>
+
+    <rect x="316" y="456" width="362" height="72" rx="8" fill="#f6d9c6" stroke="#a8410f" stroke-width="2.6"/>
+    <text x="497" y="480" font-size="13.5" font-weight="700" fill="#7a3a10" text-anchor="middle">이 경로에만 있는 상자</text>
+    <text x="497" y="500" font-size="12.5" fill="#7a3a10" text-anchor="middle">코드북 C : R^[1024, 512] = 524,288개 파라미터</text>
+    <text x="497" y="518" font-size="12.5" fill="#7a3a10" text-anchor="middle">지수이동평균 버퍼와 사용 횟수 카운터가 함께 붙습니다</text>
+    <line x1="440" y1="456" x2="434" y2="445" stroke="#c4501f" stroke-width="1.8" marker-end="url(#m5arrR)"/>
+    <line x1="560" y1="456" x2="566" y2="445" stroke="#c4501f" stroke-width="1.8" marker-end="url(#m5arrR)"/>
+    <text x="694" y="492" font-size="12" fill="#8a5518">논문 예시인 코드 4,096개에</text>
+    <text x="694" y="510" font-size="12" fill="#8a5518">차원 512면 약 2M개입니다</text>
+
+    <rect x="30" y="544" width="934" height="72" rx="8" fill="#ffffff" stroke="#c4501f" stroke-width="1.4"/>
+    <text x="48" y="566" font-size="13" fill="#a8410f">손실 = ‖x − x̂‖²  +  ‖sg[z] − C_k‖²  +  β‖z − sg[C_k]‖²   (항이 셋입니다)</text>
+    <text x="48" y="586" font-size="13" fill="#4f5d75">필요하면 여기에 재초기화, random restart, 사용 분포 항, 저차원 사영이 더 붙습니다.</text>
+    <text x="48" y="606" font-size="13" fill="#4f5d75">위 경로에서 비어 있던 자리가 전부 이 줄에 모여 있습니다.</text>
+
+    <text x="30" y="640" font-size="13" fill="#4f5d75">두 경로의 구조적 차이는 매달린 상자 하나뿐이고, 나머지는 전부 그 상자에서 파생됩니다.</text>
+  </g>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480" role="img" aria-label="액션을 표현하는 세 가지 방식과 각각이 내놓는 것">
+  <rect x="0" y="0" width="960" height="480" fill="#f8f7f4"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+    <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">같은 명령 하나를 세 가지 방식으로 내보내면</text>
+    <text x="36" y="66" font-size="14.5" fill="#4f5d75">오른쪽에 나오는 것이 실수인지 정수인지, 그리고 몇 개인지를 보세요</text>
+
+    <rect x="36" y="120" width="150" height="230" rx="10" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.6"/>
+    <text x="111" y="200" font-size="15" font-weight="700" fill="#2d3142" text-anchor="middle">입력</text>
+    <text x="111" y="228" font-size="13.5" fill="#4f5d75" text-anchor="middle">관절 29개짜리</text>
+    <text x="111" y="248" font-size="13.5" fill="#4f5d75" text-anchor="middle">명령 한 프레임</text>
+    <text x="111" y="276" font-size="13" fill="#8a5518" text-anchor="middle">실수 29개</text>
+
+    <line x1="186" y1="165" x2="246" y2="165" stroke="#9aa6b2" stroke-width="2"/>
+    <line x1="186" y1="235" x2="246" y2="235" stroke="#9aa6b2" stroke-width="2"/>
+    <line x1="186" y1="305" x2="246" y2="305" stroke="#9aa6b2" stroke-width="2"/>
+    <polygon points="246,165 238,161 238,169" fill="#9aa6b2"/>
+    <polygon points="246,235 238,231 238,239" fill="#9aa6b2"/>
+    <polygon points="246,305 238,301 238,309" fill="#9aa6b2"/>
+
+    <text x="252" y="147" font-size="15" font-weight="700" fill="#2b5280">연속 회귀</text>
+    <g fill="#3d6ea8">
+      <rect x="404" y="152" width="22" height="26" rx="3"/><rect x="430" y="152" width="22" height="26" rx="3"/>
+      <rect x="456" y="152" width="22" height="26" rx="3"/><rect x="482" y="152" width="22" height="26" rx="3"/>
+      <rect x="508" y="152" width="22" height="26" rx="3"/><rect x="534" y="152" width="22" height="26" rx="3"/>
+      <rect x="560" y="152" width="22" height="26" rx="3"/><rect x="586" y="152" width="22" height="26" rx="3"/>
+      <rect x="612" y="152" width="22" height="26" rx="3"/><rect x="638" y="152" width="22" height="26" rx="3"/>
+    </g>
+    <text x="252" y="172" font-size="13" fill="#4f5d75">실수를 그대로</text>
+    <text x="670" y="171" font-size="13.5" fill="#2b5280">…  실수 29개</text>
+
+    <text x="252" y="217" font-size="15" font-weight="700" fill="#a8410f">차원별 이산화</text>
+    <g fill="#c4501f">
+      <rect x="404" y="222" width="22" height="26" rx="3"/><rect x="430" y="222" width="22" height="26" rx="3"/>
+      <rect x="456" y="222" width="22" height="26" rx="3"/><rect x="482" y="222" width="22" height="26" rx="3"/>
+      <rect x="508" y="222" width="22" height="26" rx="3"/><rect x="534" y="222" width="22" height="26" rx="3"/>
+      <rect x="560" y="222" width="22" height="26" rx="3"/><rect x="586" y="222" width="22" height="26" rx="3"/>
+      <rect x="612" y="222" width="22" height="26" rx="3"/><rect x="638" y="222" width="22" height="26" rx="3"/>
+    </g>
+    <text x="252" y="242" font-size="13" fill="#4f5d75">차원마다 따로</text>
+    <text x="670" y="241" font-size="13.5" fill="#a8410f">…  정수 29개</text>
+
+    <text x="252" y="287" font-size="15" font-weight="700" fill="#2c5b3c">벡터 양자화</text>
+    <rect x="404" y="292" width="48" height="26" rx="3" fill="#3f7d55"/>
+    <text x="428" y="311" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">번호</text>
+    <text x="252" y="312" font-size="13" fill="#4f5d75">통째로 하나</text>
+    <text x="464" y="311" font-size="13.5" fill="#2c5b3c">정수 1개</text>
+
+    <rect x="404" y="332" width="256" height="34" rx="6" fill="#e6efe9" stroke="#3f7d55" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="532" y="354" font-size="13" fill="#2c5b3c" text-anchor="middle">준비물: 미리 정해진 대표값 목록</text>
+
+    <rect x="36" y="392" width="888" height="60" rx="8" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="56" y="416" font-size="13.5" fill="#4f5d75">위 두 방식은 준비물이 없는 대신 내보낼 것이 많고, 맨 아래 방식은 내보낼 것이 하나인 대신 목록을 미리 만들어 둬야 합니다.</text>
+    <text x="56" y="438" font-size="13.5" fill="#4f5d75">그 목록을 어떻게 만드는가가 본문 §4와 §5에서 갈라지는 지점입니다.</text>
+  </g>
+</svg>

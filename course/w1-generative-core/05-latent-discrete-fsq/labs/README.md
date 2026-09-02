@@ -433,7 +433,7 @@ MUJOCO_GL=egl python 02_fsq_vs_vq_g1.py --synergies 0 --no-render
 
 ## Step 3 — 사용률 비교 ★★ 이 랩의 본체 (55분)
 
-검증하는 lesson 절: [§4.1 codebook collapse](../lesson.md) · [§5.2 왜 원천 차단되는가](../lesson.md) · [§5.5 공정하게 읽기](../lesson.md) · [§8 오해 1·2번](../lesson.md) · [퀴즈 8번](../lesson.md).
+검증하는 lesson 절: [§4.1 codebook collapse](../lesson.md) · [§5.2 왜 원천 차단되는가](../lesson.md) · [§5.5 공정하게 읽기](../lesson.md) · [「흔한 오해」 1·2번](../lesson.md) · [퀴즈 8번](../lesson.md).
 
 **여기가 통과 기준 G3이고, Step 5 논증의 근거가 전부 여기서 나옵니다.** 실행은 3분, 해석이 50분입니다.
 

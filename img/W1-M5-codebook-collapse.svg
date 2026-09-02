@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" width="960" height="470" role="img" aria-label="코드워드가 뽑히지 않아 죽는 고리와 그 결과">
+  <rect x="0" y="0" width="960" height="470" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m5arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c4501f"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+    <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">한 번 빠지면 나올 길이 없는 고리</text>
+    <text x="36" y="66" font-size="14.5" fill="#4f5d75">왼쪽 화살표를 한 바퀴 따라가 보세요. 들어가는 입구는 있는데 나오는 출구가 없습니다</text>
+
+    <rect x="36" y="96" width="430" height="290" rx="10" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+    <text x="56" y="124" font-size="15" font-weight="700" fill="#a8410f">고리</text>
+
+    <rect x="86" y="146" width="150" height="52" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+    <text x="161" y="177" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">한 번도 안 뽑힘</text>
+
+    <rect x="266" y="240" width="150" height="52" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+    <text x="341" y="264" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">기울기를</text>
+    <text x="341" y="283" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">한 방울도 못 받음</text>
+
+    <rect x="86" y="308" width="150" height="52" rx="8" fill="#fbeee6" stroke="#c4501f" stroke-width="1.8"/>
+    <text x="161" y="332" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">초기값 자리에</text>
+    <text x="161" y="351" font-size="13.5" font-weight="700" fill="#a8410f" text-anchor="middle">그대로 머무름</text>
+
+    <path d="M 236 176 L 300 176 L 330 232" fill="none" stroke="#c4501f" stroke-width="2.4" marker-end="url(#m5arrO)"/>
+    <path d="M 341 292 L 341 340 L 244 340" fill="none" stroke="#c4501f" stroke-width="2.4" marker-end="url(#m5arrO)"/>
+    <path d="M 110 308 L 72 260 L 110 204" fill="none" stroke="#c4501f" stroke-width="2.4" marker-end="url(#m5arrO)"/>
+
+    <text x="60" y="376" font-size="12.5" fill="#8a5518">들어가는 입구는 있는데 나오는 출구가 없습니다</text>
+
+    <rect x="496" y="96" width="428" height="290" rx="10" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+    <text x="516" y="124" font-size="15" font-weight="700" fill="#2d3142">그 결과, 목록이 커질수록</text>
+    <text x="516" y="146" font-size="12.5" fill="#4f5d75">칸 하나가 코드워드이고 색이 찬 칸만 실제로 쓰인 것입니다</text>
+
+    <text x="516" y="184" font-size="13" font-weight="700" fill="#4f5d75">작은 목록</text>
+    <g>
+      <rect x="606" y="168" width="20" height="20" rx="3" fill="#c4501f"/><rect x="630" y="168" width="20" height="20" rx="3" fill="#c4501f"/>
+      <rect x="654" y="168" width="20" height="20" rx="3" fill="#c4501f"/><rect x="678" y="168" width="20" height="20" rx="3" fill="#c4501f"/>
+      <rect x="702" y="168" width="20" height="20" rx="3" fill="#c4501f"/><rect x="726" y="168" width="20" height="20" rx="3" fill="#c4501f"/>
+      <rect x="750" y="168" width="20" height="20" rx="3" fill="#c4501f"/><rect x="774" y="168" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="798" y="168" width="20" height="20" rx="3" fill="#c4501f"/><rect x="822" y="168" width="20" height="20" rx="3" fill="#c4501f"/>
+    </g>
+    <text x="852" y="184" font-size="13" fill="#2d3142">대부분 쓰임</text>
+
+    <text x="516" y="242" font-size="13" font-weight="700" fill="#4f5d75">중간 목록</text>
+    <g>
+      <rect x="606" y="212" width="20" height="20" rx="3" fill="#c4501f"/><rect x="630" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="654" y="212" width="20" height="20" rx="3" fill="#c4501f"/><rect x="678" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="702" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="726" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="750" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="774" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="798" y="212" width="20" height="20" rx="3" fill="#c4501f"/><rect x="822" y="212" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="606" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="630" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="654" y="236" width="20" height="20" rx="3" fill="#c4501f"/><rect x="678" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="702" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="726" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="750" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="774" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="798" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="822" y="236" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+    </g>
+    <text x="852" y="236" font-size="13" fill="#2d3142">절반 넘게 빔</text>
+
+    <text x="516" y="326" font-size="13" font-weight="700" fill="#4f5d75">큰 목록</text>
+    <g>
+      <rect x="606" y="284" width="20" height="20" rx="3" fill="#c4501f"/><rect x="630" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="654" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="678" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="702" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="726" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="750" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="774" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="798" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="822" y="284" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="606" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="630" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="654" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="678" y="308" width="20" height="20" rx="3" fill="#c4501f"/>
+      <rect x="702" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="726" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="750" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="774" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="798" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="822" y="308" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="606" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="630" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="654" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="678" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="702" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="726" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="750" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="774" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+      <rect x="798" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/><rect x="822" y="332" width="20" height="20" rx="3" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.4"/>
+    </g>
+    <text x="852" y="332" font-size="13" fill="#2d3142">거의 다 빔</text>
+
+    <rect x="36" y="398" width="888" height="46" rx="8" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="56" y="427" font-size="13.5" fill="#4f5d75">목록을 키울수록 빈 칸의 비율이 늘어납니다. 표현할 자리를 늘렸는데 늘린 만큼 못 쓰는 것이 이 방식의 고질입니다.</text>
+  </g>
+</svg>

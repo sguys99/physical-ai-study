@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" width="920" height="420" role="img" aria-label="숫자 뭉치를 번호 하나로 바꿔 내려보내는 그림">
+  <rect x="0" y="0" width="920" height="420" fill="#f8f7f4"/>
+  <defs>
+    <marker id="m5eA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f5d75"/>
+    </marker>
+  </defs>
+  <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
+    <text x="36" y="40" font-size="21" font-weight="700" fill="#2d3142">숫자 한 뭉치 대신 번호 하나를 내려보냅니다</text>
+    <text x="36" y="66" font-size="14.5" fill="#4f5d75">왼쪽과 오른쪽이 같은 뜻입니다. 아래로 흘러가는 것의 크기만 다릅니다</text>
+
+    <rect x="40" y="110" width="330" height="180" rx="12" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="205" y="140" font-size="15" font-weight="700" fill="#2b5280" text-anchor="middle">지금까지 하던 방식</text>
+    <g fill="#dbe6f2" stroke="#3d6ea8" stroke-width="1.2">
+      <rect x="66" y="158" width="40" height="24" rx="4"/><rect x="112" y="158" width="40" height="24" rx="4"/>
+      <rect x="158" y="158" width="40" height="24" rx="4"/><rect x="204" y="158" width="40" height="24" rx="4"/>
+      <rect x="250" y="158" width="40" height="24" rx="4"/><rect x="296" y="158" width="40" height="24" rx="4"/>
+      <rect x="66" y="188" width="40" height="24" rx="4"/><rect x="112" y="188" width="40" height="24" rx="4"/>
+      <rect x="158" y="188" width="40" height="24" rx="4"/><rect x="204" y="188" width="40" height="24" rx="4"/>
+      <rect x="250" y="188" width="40" height="24" rx="4"/><rect x="296" y="188" width="40" height="24" rx="4"/>
+      <rect x="66" y="218" width="40" height="24" rx="4"/><rect x="112" y="218" width="40" height="24" rx="4"/>
+      <rect x="158" y="218" width="40" height="24" rx="4"/><rect x="204" y="218" width="40" height="24" rx="4"/>
+      <rect x="250" y="218" width="40" height="24" rx="4"/><rect x="296" y="218" width="40" height="24" rx="4"/>
+    </g>
+    <text x="205" y="266" font-size="13.5" fill="#4f5d75" text-anchor="middle">관절 하나마다 소수점 붙은 숫자 하나</text>
+
+    <rect x="550" y="110" width="330" height="180" rx="12" fill="#ffffff" stroke="#c9ccd4" stroke-width="1.6"/>
+    <text x="715" y="140" font-size="15" font-weight="700" fill="#2c5b3c" text-anchor="middle">이 모듈에서 배우는 방식</text>
+    <rect x="655" y="176" width="120" height="56" rx="8" fill="#3f7d55"/>
+    <text x="715" y="213" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle">108</text>
+    <text x="715" y="266" font-size="13.5" fill="#4f5d75" text-anchor="middle">정해진 목록에서 고른 번호 하나</text>
+
+    <line x1="386" y1="200" x2="534" y2="200" stroke="#4f5d75" stroke-width="2.4" marker-end="url(#m5eA)"/>
+    <text x="460" y="188" font-size="13.5" font-weight="700" fill="#2d3142" text-anchor="middle">바꿔 담기</text>
+
+    <rect x="40" y="316" width="840" height="76" rx="10" fill="#eef1f5" stroke="#9aa6b2" stroke-width="1.4"/>
+    <text x="60" y="344" font-size="13.5" fill="#4f5d75">번호 하나로 줄이면 아래쪽에 넘길 것이 아주 가벼워지고, 잘못된 값이 넘어갈 일도 없어집니다.</text>
+    <text x="60" y="366" font-size="13.5" fill="#4f5d75">대신 목록에 없는 움직임은 아예 표현할 수 없습니다. 그 목록을 어떻게 만들 것인가가 이 모듈의 이야기입니다.</text>
+  </g>
+</svg>
