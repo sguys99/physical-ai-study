@@ -14,7 +14,9 @@ Physical AI 온보딩 4주 스터디의 학습자료 저작 + 실습 저장소�
 ```
 docs/
   physical-ai-4week-master-plan.md   # SSOT — 커리큘럼 전체 설계 (수정 시 사용자 승인 필요)
-  course-plan.md                     # 집필 현황 SSOT — 토픽별 산출물 체크박스 + 작성 표준·규약
+  course-plan.md                     # 집필 규약 SSOT — 작성 표준·규약 (§1~§4, §6~§8)
+  course-status.md                   # 집필 현황 — §0 대시보드 + §5 모듈별 체크박스
+  course-plan-log.md                 # 진행 메모 §9 — 규약이 왜 그렇게 정해졌는지의 기록
   progress.md                        # 학습 실행 로그 — 무엇을 돌렸나·막힌 지점·소요시간·GPU 비용
 course/
   w1-generative-core/                # 주차 = Phase
@@ -173,7 +175,7 @@ W1~W2는 로컬로 완결됩니다. 클라우드는 W3 대규모 병렬 학습�
 - 시간 부족 시 컷 순서는 마스터 플랜 §12. **끝까지 지킬 것: FSQ 구현(W1-M5), LeRobot 완주(W2-M2), G1 보행 학습+sim2sim(W3), 캡스톤 문서(W4-M5).**
 - 마스터 플랜은 SSOT입니다. 수정이 필요해 보이면 먼저 제안하고 승인받을 것.
 - 용어는 마스터 플랜 §3 용어 사전과 일치시킬 것. 새 용어는 `notes/glossary.md`에 추가.
-- 토픽 하나를 끝내면 `docs/course-plan.md`의 해당 체크박스를 갱신할 것. **집필 절차·규약은 전부 이 문서가 SSOT다** (문서 구조 §3.7 · 용어 도입 §3.8 · 이해 사다리 §3.9 · 시각자료 §3.2 · frontmatter §3.1 · 분량 §4 · jupytext §3.4 · 미검증 배지 §3.5). 집필은 `/pai-course-author <모듈ID>`로 호출하고, 끝나면 `bash scripts/lint-lesson.sh <파일>`로 검사.
+- 토픽 하나를 끝내면 `docs/course-status.md`의 해당 체크박스를 갱신할 것. **집필 절차·규약은 전부 `docs/course-plan.md`가 SSOT다** (문서 구조 §3.7 · 용어 도입 §3.8 · 이해 사다리 §3.9 · 시각자료 §3.2 · frontmatter §3.1 · 분량 §4 · jupytext §3.4 · 미검증 배지 §3.5). 집필은 `/pai-course-author <모듈ID>`로 호출하고, 끝나면 `bash scripts/lint-lesson.sh <파일>`로 검사.
 - 실습을 돌린 날은 `docs/progress.md`에 실행 로그(돌린 것·막힌 지점·소요시간·GPU 비용)를 남길 것. 여기 쌓인 실측값이 다음 주 자료의 입력이 된다.
 - 원칙: **환경이 안 돌아가는 상태로 다음 주로 넘어가지 않는다.** 셋업이 막히면 이론 진도보다 셋업 해결이 우선.
 

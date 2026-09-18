@@ -961,7 +961,7 @@ GPU: (로컬이면 모델명 + 총 사용 시간 / CPU 단독이면 "CPU 단독"
 - [ ] **G5 ★★** — excalidraw 워크시트를 **lesson을 닫은 채** 채웠고, ⑤ 5.2의 **A군 6개를 전부 맞혔다** *(⑤)*
 - [ ] **G6 ★★** — ⑥에 체크포인트 2번을 **수식 칸·실용 칸으로 나눠** 썼고, **실용 칸의 모든 주장에 자기 실측 숫자**가 붙어 있으며, **유보 조항 2개 이상**을 넣었다 *(⑥)*
 - [ ] **G7** — ⑦ 7.1에 **팀 질문 둘을 고르고 이유를 썼다**
-- [ ] **G8** — `docs/progress.md` · `notes/glossary.md` · `notes/questions-for-team.md` · `docs/course-plan.md` 갱신
+- [ ] **G8** — `docs/progress.md` · `notes/glossary.md` · `notes/questions-for-team.md` · `docs/course-status.md` 갱신
 - [ ] **[P1]** `notes/papers/`에 Flow Matching(2210.02747) 또는 Rectified Flow(2209.03003) 2-pass 노트 착수
 
 > ⑥ 6.2의 다섯 근거에 **숫자가 안 적혀 있으면 G6은 미완입니다.** 숫자 없는 "FM이 빠르다"는 lesson 요약을 옮겨 적은 것이지 자기 답이 아닙니다.

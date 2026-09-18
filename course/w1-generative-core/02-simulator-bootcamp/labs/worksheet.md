@@ -641,7 +641,7 @@ lesson **「셀프 체크 퀴즈」**를 풀고 그 절의 **`<details>` 정답*
 - [ ] `notes/questions-for-team.md`에 M2 질문 **4개 이상**(lesson 「팀에 물어볼 것」에서 3 + 본인 1)
 - [ ] `notes/glossary.md`에 용어 5개
 - [ ] `docs/progress.md`에 실행 로그
-- [ ] `docs/course-plan.md`의 W1-M2 체크박스 갱신
+- [ ] `docs/course-status.md`의 W1-M2 체크박스 갱신
 
 ### 🔴 마지막
 

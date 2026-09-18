@@ -781,7 +781,7 @@ GPU 비용: 로컬이므로 $0
 - [ ] **G6 ★**, excalidraw를 **lesson을 닫은 채** 채웠고, **A군 6개**를 맞혔다 *(⑤ 5.2)*
 - [ ] **G7 ★★**, ⑥에 **§3.6 표를 자기 숫자로** 다시 채웠고, ⑦에 **완료 기준 한 문단**을 썼다 *(⑥, ⑦)*
 - [ ] **G8**, ⑧ 8.1에 **팀 질문 둘을 고르고 이유를 썼다**
-- [ ] **G9**, `docs/progress.md`, `notes/glossary.md`, `notes/questions-for-team.md`, `docs/course-plan.md` 갱신
+- [ ] **G9**, `docs/progress.md`, `notes/glossary.md`, `notes/questions-for-team.md`, `docs/course-status.md` 갱신
 - [ ] **G10**, **`outputs/train/act_w2m1_smoke`를 지웠다**(1.2 GB) 또는 남겨둘 이유를 적었다
 - [ ] **[P1]** `notes/papers/`에 ACT(2304.13705) 2-pass 노트 착수
 

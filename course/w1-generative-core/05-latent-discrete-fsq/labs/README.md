@@ -1083,9 +1083,9 @@ FSQ(arXiv:2309.15505)는 [CLAUDE.md](../../../../CLAUDE.md)와 마스터플랜�
 **이 실습 덕분에 3-pass에서 빠르게 지나갈 수 있는 곳**: §3.1 수식(Step 1에서 구현) · §3.2 Table 1(Step 1에서 검산) · Fig 2 비교표(Step 3에서 실측) · Fig 3(Step 3.5에서 축소 재현).
 **반대로 이 실습이 안 다룬 곳이 정독 대상입니다**: MaskGIT·UViM 실험 설정 전체 · §4의 ablation · 부록 A.1의 일반형 $f$ 유도 · 신경압축 계열(Ballé/Theis/Mentzer/Agustsson) 인용 맥락.
 
-### 6.6 `docs/course-plan.md` 체크박스
+### 6.6 `docs/course-status.md` 체크박스
 
-[`../../../../docs/course-plan.md`](../../../../docs/course-plan.md)의 W1-M5 산출물 체크박스를 갱신합니다.
+[`../../../../docs/course-status.md`](../../../../docs/course-status.md)의 W1-M5 산출물 체크박스를 갱신합니다.
 
 ---
 

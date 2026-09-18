@@ -1096,9 +1096,9 @@ g1_sin_arms.mp4          g1_sin_legs.mp4          joints_g1.csv
 
 **+ 본인이 이 랩을 돌면서 새로 생긴 질문**을 최소 1개 추가하세요. 워크시트 ⑨에 후보를 모아두었다가 옮깁니다.
 
-### 6.5 `docs/course-plan.md` 체크박스
+### 6.5 `docs/course-status.md` 체크박스
 
-[`../../../../docs/course-plan.md`](../../../../docs/course-plan.md)의 W1-M2 산출물 체크박스를 갱신합니다.
+[`../../../../docs/course-status.md`](../../../../docs/course-status.md)의 W1-M2 산출물 체크박스를 갱신합니다.
 
 ### 6.6 🔴 인스턴스 정지했는가
 

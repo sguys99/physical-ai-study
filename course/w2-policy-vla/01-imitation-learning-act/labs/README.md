@@ -1152,7 +1152,7 @@ $$T_{\text{replan}} + \tau_{\text{infer}} + \tau_{\text{comm}} \;\le\; \frac{\te
 
 > **Step 6을 하고 나면 `W2M1-4`(카메라 구성)를 자기 언어로 던질 수 있습니다.** 카메라를 늘려도 파라미터가 안 느는데 토큰은 선형으로 는다는 것을 직접 봤기 때문입니다.
 
-**④ [`../../../../docs/course-plan.md`](../../../../docs/course-plan.md) 체크박스.** W2-M1 산출물 중 **5번(실행검증)** 을 갱신합니다.
+**④ [`../../../../docs/course-status.md`](../../../../docs/course-status.md) 체크박스.** W2-M1 산출물 중 **5번(실행검증)** 을 갱신합니다.
 
 ---
 

@@ -368,4 +368,4 @@ lesson **「셀프 체크 퀴즈」**를 풀고 **그 `<details>` 정답**과 �
 - [ ] `notes/questions-for-team.md`에 새 질문 3개 이상
 - [ ] `notes/glossary.md`에 용어 5개
 - [ ] `docs/progress.md`에 실행 로그
-- [ ] `docs/course-plan.md`의 W1-M1 산출물 5번(실행검증) 체크박스 갱신
+- [ ] `docs/course-status.md`의 W1-M1 산출물 5번(실행검증) 체크박스 갱신

@@ -5,13 +5,14 @@ description: Physical AI 온보딩 4주 스터디의 모듈 교육자료를 집�
 
 # pai-course-author (Physical AI 모듈 교육자료 집필)
 
-> 집필 현황 SSOT는 `docs/course-plan.md`, 커리큘럼 SSOT는 `docs/physical-ai-4week-master-plan.md`입니다.
+> 집필 규약 SSOT는 `docs/course-plan.md`, 집필 현황은 `docs/course-status.md`, 커리큘럼 SSOT는 `docs/physical-ai-4week-master-plan.md`입니다.
+> 규약이 왜 그렇게 정해졌는지의 기록(§9)은 `docs/course-plan-log.md`에 있고, 집필 중에는 필요할 때만 펼쳐 보세요.
 > 이 스킬은 두 문서를 연결해 모듈 하나를 산출물 4종(`eli5.md`, `lesson.md`, `practice/`, `labs/`)으로 구현합니다.
 > 본문에서 덜어낸 심화가 있으면 `deep-dive.md`가 다섯 번째로 붙습니다.
 
 ## Phase 0. 대상 모듈 확정
 
-인자로 받은 모듈 ID(`W1-M3` 형식)를 아래 표로 폴더 경로에 매핑합니다. 인자가 없으면 `docs/course-plan.md`에서 **체크박스가 비어 있는 가장 앞선 모듈**을 제안하고 확인받습니다.
+인자로 받은 모듈 ID(`W1-M3` 형식)를 아래 표로 폴더 경로에 매핑합니다. 인자가 없으면 `docs/course-status.md`에서 **체크박스가 비어 있는 가장 앞선 모듈**을 제안하고 확인받습니다.
 
 | 모듈 | 경로 | Tier | 우선순위 |
 |---|---|---|---|
@@ -171,7 +172,7 @@ grep -rn "eq\.\|tag{" {target_dir}/labs/ {target_dir}/practice/   # 수식 번�
 - **§0 목차 표의 절별 읽는 시간은 회귀식을 절에 그대로 쓰지 마세요.** 상수항 19.5분은 문서 단위라
   절마다 더하면 합이 몇 배로 부풀어 오릅니다. 위 추정 기준으로 절별 초독 시간을 셈해 배분하고,
   **합이 `est_reading_min`과 맞게** 반올림을 조정합니다
-- `docs/course-plan.md` §5에서 이 모듈의 **윤문 체크박스를 `[ ]`로 되돌립니다.**
+- `docs/course-status.md` §5에서 이 모듈의 **윤문 체크박스를 `[ ]`로 되돌립니다.**
   구 본문에 대한 윤문 기록은 재집필본에 해당하지 않습니다. "재집필본 기준으로 미실시" 주석을 답니다
 
 **윤문(Phase 5)은 재집필 직후에 돌리지 않습니다**
@@ -317,9 +318,9 @@ bash scripts/lint-lesson.sh <target_dir>/lesson.md
 
 ## Phase 7. 마무리
 
-1. `docs/course-plan.md`의 해당 모듈 체크박스를 `[x]`로 갱신 (5번 실행검증은 학습자 몫이므로 비워둠)
+1. `docs/course-status.md`의 해당 모듈 체크박스를 `[x]`로 갱신 (5번 실행검증은 학습자 몫이므로 비워둠)
    - **재집필이면 윤문 체크박스를 `[ ]`로 되돌립니다.** 구 본문에 대한 윤문 기록은 재집필본에 해당하지 않습니다. 갱신만 하고 해제를 잊으면 다음 세션이 윤문을 건너뜁니다
-2. §0 대시보드의 완료 카운트와 "마지막 갱신" 날짜 갱신
+2. `docs/course-status.md` §0 대시보드의 완료 카운트와 "마지막 갱신" 날짜 갱신
 3. lesson에서 나온 팀 질문을 `notes/questions-for-team.md`에 적립
 4. **절 끝 되짚기 표를 `notes/glossary.md`로 롤업**합니다. 되짚기 표는 `| 용어 | 이 절에서 나온 뜻 |` 2열이고 glossary는 `| 용어 | 정의 | 비유 / 메모 | 모듈 |` 4열입니다. 용어와 뜻을 앞 두 열로 옮기고 `모듈` 열에 모듈 ID를 채웁니다. **`비유 / 메모` 열에는 비유를 새로 만들지 말고 빈 칸 표시(`—`)를 넣습니다.** §3.9로 비유 열이 없어졌으므로 채울 원본이 없고, 보충할 메모가 실제로 있을 때만 그 자리에 씁니다. 이미 있는 용어는 중복 등재하지 말고, 관점이 다르면 기존 항목에 병기합니다 (`action chunking`의 W1-M1↔W2-M1 선례)
 5. 커밋 메시지를 **제안하고 멈춥니다** (예: `:white_check_mark: W1-M3 diffusion-ddpm-dit 완료`).

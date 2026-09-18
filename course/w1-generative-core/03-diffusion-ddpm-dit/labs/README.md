@@ -852,9 +852,9 @@ lesson [「팀에 물어볼 것」](../lesson.md)의 6문항 중 **본인이 실
 
 > **Step 7을 하고 나면 「팀에 물어볼 것」의 2번 질문("objective가 DDPM 계열인가 Flow Matching 계열인가? 추론 시 NFE는 몇이고 1회 forward는 몇 ms인가?")을 자기 언어로 던질 수 있습니다.** 그 세 숫자가 §8.3 표를 실수로 닫는 데 필요하다는 것을 직접 계산해 봤기 때문입니다.
 
-### 8.5 `docs/course-plan.md` 체크박스
+### 8.5 `docs/course-status.md` 체크박스
 
-[`../../../../docs/course-plan.md`](../../../../docs/course-plan.md)의 W1-M3 산출물 체크박스 중 **5번(실행검증)** 을 갱신합니다.
+[`../../../../docs/course-status.md`](../../../../docs/course-status.md)의 W1-M3 산출물 체크박스 중 **5번(실행검증)** 을 갱신합니다.
 
 ---
 
