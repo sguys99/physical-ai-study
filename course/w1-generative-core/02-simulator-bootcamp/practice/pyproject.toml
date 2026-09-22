@@ -1,0 +1,60 @@
+# W1-M2 practice 의존성 — uv 프로젝트
+#
+# 설치는 이 디렉토리에서 `uv sync` 한 줄입니다.
+# 가상환경(.venv) 생성, 파이썬 3.12 확보, uv.lock에 적힌 버전 그대로 설치까지 uv가 한 번에 합니다.
+# 아래 직접 의존성 핀은 집필 환경에서 실제로 설치·실행 검증한 값입니다 (Python 3.12.12, 2026-08-01).
+# mujoco-mjx[warp] 한 줄만 2026-09-22 uv 이관 때 추가됐습니다 (사유는 해당 줄의 주석).
+#
+# ⚠️ 파이썬 3.12 이상이 필요합니다. jax가 requires-python >= 3.12 이기 때문입니다.
+#    같은 디렉토리의 .python-version에 3.12를 적어뒀으므로, 시스템 파이썬이 3.11 이하여도
+#    uv가 3.12를 알아서 내려받습니다. 직접 venv를 만들 필요가 없습니다.
+# ⚠️ 01~03은 CPU만으로 완주합니다. 04(playground)도 CPU에서 스모크는 통과하지만
+#    본 학습(W3-M1)에는 GPU가 필요합니다 — 맨 아래 [dependency-groups] 참조.
+
+[project]
+name = "w1-m2-simulator-bootcamp"
+version = "0.1.0"
+description = "W1-M2 시뮬레이터 부트캠프 실습 의존성"
+requires-python = ">=3.12"
+
+dependencies = [
+    # --- 물리 엔진과 렌더링 ---
+    "mujoco==3.11.0",       # 물리 + 오프스크린 렌더러. pyopengl(3.1.10)을 함께 끌어온다
+    "numpy==2.5.1",         # mujoco가 함께 설치
+
+    # --- 영상·그림 저장 (뷰어 금지, 결과는 전부 파일로) ---
+    "imageio==2.37.4",      # mp4 저장 (기본 경로)
+    "imageio-ffmpeg",       # ffmpeg 바이너리 동봉 — 시스템에 ffmpeg가 없어도 mp4가 써진다
+    "mediapy==1.2.7",       # mp4 저장 폴백. MuJoCo 공식 예제가 쓰는 라이브러리
+    "matplotlib==3.11.1",   # 궤적·추종 오차 그래프 (Agg 백엔드 고정)
+
+    # --- RL 환경 스위트 (04에서만 사용) ---
+    # ⚠️ 이름 함정: PyPI 배포명은 `playground`, import 이름은 `mujoco_playground`입니다.
+    #    `uv add mujoco_playground`는 존재하지 않는 패키지입니다 (lesson §7.1).
+    #    이 한 줄이 jax(CPU 빌드) + mujoco-mjx(3.11.0)를 함께 끌어옵니다.
+    "playground==0.2.0",
+
+    # ⚠️ playground의 의존성은 `warp-lang>=1.11`로 상한이 열려 있어, 그냥 두면 최신 warp를 받습니다.
+    #    mujoco-mjx 3.11.0은 `warp` extra에 `warp-lang==1.14.0`을 못박아 두었고, 그보다 새 warp에는
+    #    mjx가 참조하는 내부 심볼이 없어 04가 mjx.put_model(impl="warp")에서 죽습니다.
+    #    extra를 명시해 mjx가 지정한 조합을 그대로 받습니다 (uv.lock에 warp-lang 1.14.0으로 잠깁니다).
+    "mujoco-mjx[warp]==3.11.0",
+
+    # --- 노트북 동기화 (.py <-> .ipynb) ---
+    "jupytext==1.19.5",
+]
+
+# 이 디렉토리는 배포할 패키지가 아니라 실습 스크립트 모음입니다.
+# package = false 여야 uv가 "이 프로젝트 자신"을 빌드·설치하려 들지 않습니다.
+[tool.uv]
+package = false
+
+# GPU 인스턴스에서 04의 본 학습 경로 (W3-M1)
+#   uv sync --group cuda
+#   export JAX_DEFAULT_MATMUL_PRECISION=highest    # Ampere 계열 공식 권장
+# 기본 dependencies는 CPU JAX를 설치합니다. 이 그룹이 같은 버전의 GPU 빌드로 덮어씁니다.
+# 마커를 직접 답니다. jax의 cuda12 extra는 nvidia-* 의존성에만 리눅스 마커가 붙어 있어서,
+# 마커 없이 두면 맥이나 윈도우에서 이 명령이 "휠이 없다"며 실패합니다(리눅스 전용 휠이므로).
+# 마커를 달아두면 리눅스가 아닌 곳에서는 아무것도 설치하지 않고 조용히 통과합니다.
+[dependency-groups]
+cuda = ["jax[cuda12]==0.11.0 ; sys_platform == 'linux'"]
