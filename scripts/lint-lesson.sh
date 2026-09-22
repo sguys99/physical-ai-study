@@ -585,6 +585,58 @@ print(prose.count('—'), prose.count('·'))
 PY
 }
 
+# ── 사물 은유·관용구 직역 스캔 (H군·I군 공용) ─────────────────────
+# '줄번호<TAB>어구<TAB>문맥'을 출력합니다. lesson.md와 eli5.md 둘 다에 대고 부릅니다.
+#
+# §3.11 「서술어는 기술 문서의 평이한 말로」(2026-09-22 신설, 근거는 §9.22). W1-M2 eli5에서
+# 학습자가 "영어를 직역한 것처럼 어색해서 이해가 안 된다"고 지목한 어구가 전부 집필 초안에서
+# 나왔고, 윤문의 plain-language 가드는 반대 방향(문학체)만 보고 있었습니다.
+#
+# ⚠️ **목록은 실제로 관찰된 어구로 좁게 잡았습니다.** 넓히면 오탐이 납니다.
+#  - `잡아먹다`(시간을 잡아먹는)와 `~에게 명령`(로봇에게 명령)은 정상 용법이 저장소에 있어 뺐습니다
+#  - `뽑다`와 `굴리다`도 `샘플을 뽑다`, `주사위를 굴리다`가 정상이라 뺐습니다. 이 둘은 육안입니다
+#  - 코드펜스, 표 행, frontmatter는 제외합니다. SVG 안은 보지 않습니다(§9.21의 알려진 구멍)
+idiom_scan() {
+  python3 - "$1" <<'PY'
+import re, sys
+
+IDIOMS = [
+    (r'(앞자리|자리|칸)(을|를|도|만)? ?먹',            '칸을 먹다 → 차지하다'),
+    (r'걸려 넘어지',                                  '걸려 넘어지는 지점 → 막히는 곳'),
+    (r'(되지 않는 |되는 )길(이|을|과|은|입니다|이고)',   '되는 길/안 되는 길 → 실제로 쓰는 방법/실패하는 방법'),
+    (r'하루를 날리',                                  '하루를 날리다 → 허비하다'),
+    (r'부품이 나가',                                  '부품이 나가다 → 고장나다'),
+    (r'손에 잡히는',                                  '손에 잡히는 → 구체적인'),
+    (r'(원칙|규칙)이 하나 붙',                          '원칙이 하나 붙다 → 원칙이 하나 있다'),
+    (r'하나가 더 붙',                                  '하나가 더 붙다 → 하나 더 있다'),
+    (r'붙들고 있는 계산',                              '계산을 붙들다 → 시간을 쓰다'),
+]
+RX = [(re.compile(p), why) for p, why in IDIOMS]
+
+lines = open(sys.argv[1], encoding='utf-8').read().split('\n')
+fence = False
+fm = False
+for i, l in enumerate(lines, 1):
+    s = l.strip()
+    if i == 1 and s == '---':
+        fm = True
+        continue
+    if fm:
+        if s == '---':
+            fm = False
+        continue
+    if s.startswith('```'):
+        fence = not fence
+        continue
+    if fence or s.startswith('|'):
+        continue
+    for rx, why in RX:
+        if rx.search(l):
+            print("%d\t%s\t%s" % (i, why, s[:90]))
+            break
+PY
+}
+
 # ── 워크드 예제 스캔 (H군) ───────────────────────────────────────
 # 번호 붙은 본문 대절 중 **수식이나 계산이 나오는 절**만 골라
 # '시작줄<TAB>제목<TAB>워크드예제줄(없으면 0)'을 출력합니다.
@@ -1684,6 +1736,18 @@ PYCELL
     printf '%s\n' "$st_msg" | show_hits 5 "$st_n"
   fi
 
+  # 사물 은유·관용구 직역 (WARN) — §3.11 「서술어는 기술 문서의 평이한 말로」(2026-09-22)
+  # 관찰된 어구 목록에 걸리는 것만 잡습니다. 목록 밖은 육안입니다
+  local id_n id_msg
+  id_msg=$(idiom_scan "$f" | awk -F'\t' '{printf "L%s  [%s] %s\n", $1, $2, $3}')
+  id_n=$(printf '%s\n' "$id_msg" | awk 'NF{n++} END{print n+0}')
+  if [[ "$id_n" -eq 0 ]]; then
+    c_pass "사물 은유·관용구 직역 어구 없음 (관찰 목록 기준)"
+  else
+    c_warn "사물 은유·관용구 직역 어구 ${id_n}곳 — §3.11: 서술어는 한국 기술 문서에서 그대로 쓰는 말로 씁니다. 칸을 먹다는 차지하다로, 걸려 넘어지는 지점은 막히는 곳으로, 되는 길은 실제로 쓰는 방법으로"
+    printf '%s\n' "$id_msg" | show_hits 5 "$id_n"
+  fi
+
   # ── I. 3층 문서 §2.1 ───────────────────────────────────────
   # 검사 대상은 lesson.md와 같은 디렉토리의 eli5.md입니다.
   #
@@ -1813,6 +1877,18 @@ PYCELL
     else
       c_fail "eli5 설명 회피·「이미 안다」 문장 ${e_dodge_n}건 — §3.9: eli5는 아무 용어도 모르는 사람이 읽는 층입니다. 여기서 설명을 건너뛰면 갈 곳이 없습니다"
       printf '%s\n' "$e_dodge_msg" | show_hits 3 "$e_dodge_n"
+    fi
+
+    # 8b. 사물 은유·관용구 직역 (§3.11, WARN). idiom_scan()을 eli5에 대고 부릅니다.
+    #     eli5는 이 유형이 가장 잘 생기는 층입니다(§9.22)
+    local e_id_n e_id_msg
+    e_id_msg=$(idiom_scan "$eli5" | awk -F'\t' '{printf "L%s  [%s] %s\n", $1, $2, $3}')
+    e_id_n=$(printf '%s\n' "$e_id_msg" | awk 'NF{n++} END{print n+0}')
+    if [[ "$e_id_n" -eq 0 ]]; then
+      c_pass "eli5 사물 은유·관용구 직역 어구 없음 (관찰 목록 기준)"
+    else
+      c_warn "eli5 사물 은유·관용구 직역 어구 ${e_id_n}곳 — §3.11: 쉬운 말은 구어 은유가 아니라 기술 문서에서 그대로 쓰는 서술어입니다. 그림 라벨과 캡션도 같은 기준입니다"
+      printf '%s\n' "$e_id_msg" | show_hits 3 "$e_id_n"
     fi
 
     # 9. 표 (§2.1, WARN). eli5는 그림과 이야기의 층이고 표는 대조의 도구입니다.
