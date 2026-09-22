@@ -3,11 +3,11 @@
   <g font-family="'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo','Nanum Gothic',sans-serif">
 
     <text x="40" y="46" font-size="22" font-weight="700" fill="#2d3142">모니터가 없는 컴퓨터에서 로봇을 눈으로 보는 법</text>
-    <text x="40" y="74" font-size="15" fill="#4f5d75">위쪽은 안 되는 길이고 아래쪽이 되는 길입니다</text>
+    <text x="40" y="74" font-size="15" fill="#4f5d75">위쪽은 실패하는 방법이고 아래쪽이 실제로 쓰는 방법입니다</text>
 
-    <!-- 안 되는 길 -->
+    <!-- 실패하는 방법 -->
     <rect x="40" y="102" width="920" height="118" rx="8" fill="#f4f2ef" stroke="#c3c0ba" stroke-width="1.4" stroke-dasharray="6,4"/>
-    <text x="64" y="132" font-size="16" font-weight="700" fill="#8f8a82">되지 않는 길 — 창을 띄워서 보기</text>
+    <text x="64" y="132" font-size="16" font-weight="700" fill="#8f8a82">실패하는 방법 — 창을 띄워서 보기</text>
 
     <rect x="70" y="146" width="180" height="56" rx="6" fill="#ffffff" stroke="#c3c0ba"/>
     <text x="160" y="180" font-size="15" fill="#8f8a82" text-anchor="middle">계산한다</text>
@@ -21,9 +21,9 @@
     <text x="756" y="170" font-size="14" fill="#8f8a82">멀리 있는 컴퓨터에는</text>
     <text x="756" y="190" font-size="14" fill="#8f8a82">모니터가 달려 있지 않습니다</text>
 
-    <!-- 되는 길 -->
+    <!-- 실제로 쓰는 방법 -->
     <rect x="40" y="240" width="920" height="140" rx="8" fill="#e7f0e9" stroke="#3f7d55" stroke-width="1.8"/>
-    <text x="64" y="270" font-size="16" font-weight="700" fill="#2c5b3c">되는 길 — 창 없이 그림만 받아 파일로 저장하기</text>
+    <text x="64" y="270" font-size="16" font-weight="700" fill="#2c5b3c">실제로 쓰는 방법 — 창 없이 그림만 받아 파일로 저장하기</text>
 
     <rect x="70" y="286" width="168" height="62" rx="6" fill="#ffffff" stroke="#3f7d55"/>
     <text x="154" y="313" font-size="15" fill="#2c5b3c" text-anchor="middle">계산한다</text>
@@ -38,7 +38,7 @@
     <polygon points="514,317 504,311 504,323" fill="#3f7d55"/>
 
     <rect x="518" y="286" width="168" height="62" rx="6" fill="#ffffff" stroke="#3f7d55"/>
-    <text x="602" y="313" font-size="15" fill="#2c5b3c" text-anchor="middle">숫자 덩어리로 받는다</text>
+    <text x="602" y="313" font-size="15" fill="#2c5b3c" text-anchor="middle">숫자 배열로 받는다</text>
     <text x="602" y="334" font-size="13" fill="#3f7d55" text-anchor="middle">세로 240 가로 320</text>
     <line x1="690" y1="317" x2="734" y2="317" stroke="#3f7d55" stroke-width="2.2"/>
     <polygon points="738,317 728,311 728,323" fill="#3f7d55"/>
