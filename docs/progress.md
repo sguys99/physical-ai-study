@@ -711,6 +711,57 @@ W1-M2부터 W1-M5까지 넷의 **절 끝 되짚기 표 33개 168행이 아직 `n
 
 ---
 
+## W1-M2 설치 경로 이관 (requirements.txt → uv sync) 검증 실행
+
+**모듈 블록이 아니라 유지보수 회차 블록입니다.** 위 W1-M2 모듈 블록(2026-08-01 WSL2 실측)은 그대로 유효하고 이 블록이 대체하지 않습니다. 이번에 바꾼 것은 **설치 경로 하나**이고, 실습 스크립트의 로직은 건드리지 않았습니다.
+
+**일자**: 2026-09-22 · 대상: `course/w1-generative-core/02-simulator-bootcamp/` (practice · labs · lesson · worksheet)
+
+**바꾼 것**
+
+- `practice/requirements.txt` 삭제 → `practice/pyproject.toml` + `practice/uv.lock` + `practice/.python-version`(3.12)
+- 직접 의존성 핀은 requirements.txt와 **동일**(mujoco 3.11.0 · numpy 2.5.1 · imageio 2.37.4 · mediapy 1.2.7 · matplotlib 3.11.1 · playground 0.2.0 · jupytext 1.19.5). 달라진 것은 전이 의존성이 이제 잠긴다는 점
+- GPU JAX는 `[dependency-groups] cuda` 로 이관 — `pip install -U "jax[cuda12]"` → `uv sync --group cuda`
+- 문서 반영: `practice/README.md` §1.1, `labs/README.md`(0.6 표 · 1.1 판정표 · 1.2 · 1.3 · 5.3 · E4 · E7 · E9 · Step 5 예상출력), `lesson.md` §6.3·§7.1 명령 블록, `labs/worksheet.md` 6.4
+
+**검증 환경**
+
+| 항목 | 값 |
+|---|---|
+| OS | **macOS 26 (arm64)** — 집필 검증 환경(WSL2)과 다릅니다 |
+| uv | **0.11.32** |
+| Python | **3.12.13** (uv가 조달. 시스템 파이썬은 3.14.6이라 `.python-version`이 실제로 작동하는지 함께 확인됨) |
+| 렌더 백엔드 | `MUJOCO_GL=glfw` (macOS에는 `egl`이 없습니다) |
+| 측정일 | 2026-09-22 |
+
+**돌린 것과 실측 소요**
+
+- `uv lock` **0.8초** (106 패키지) · `uv sync` **38.6초** · `.venv` **837 MB**
+- `uv run python 01_mujoco_basics.py --smoke` → **EXIT=0** (렌더·mp4 경로 정상)
+- `uv run python 04_playground_smoke.py --steps 2` → **완주**. step1 1,027 ms(컴파일 포함) / step2 658 ms / 골반 0.763~0.768 m
+- `02`·`03`은 **돌리지 않았습니다** — menagerie 2.3 GB를 이 머신에 클론하지 않았고, 이번 변경이 모델 경로 로직을 건드리지 않았습니다
+- `jupytext --sync 04_playground_smoke.py`로 `.ipynb` 재동기화. `scripts/lint-lesson.sh` **52 PASS / 0 FAIL / 0 WARN** (이관 전후 동일)
+
+**막힌 지점 (2건)**
+
+| # | 증상 | 원인 | 해결 (반영처) |
+|---|---|---|---|
+| 1 | `04`가 `mjx.put_model(impl="warp")`에서 `AttributeError: type object 'int' has no attribute 'WARP'` | **`warp-lang` 상한이 열려 있어 1.17.0이 설치됨.** mujoco-mjx 3.11.0이 벤더한 warp 심이 `warp._src.context._build_launch_bounds`를 찾는데 1.17.0에 없어 `GraphMode`가 `int` 스텁으로 폴백. `playground` 0.2.0의 선언이 `warp-lang>=1.11`이고, mujoco-mjx 3.11.0은 자기 `warp` extra에 `warp-lang==1.14.0`을 못박아 둠 | `pyproject.toml`에 `mujoco-mjx[warp]==3.11.0`을 명시 의존성으로 추가 → **warp-lang 1.14.0으로 잠김**, `04` 완주 확인 |
+| 2 | 맥에서 `uv sync --group cuda`가 "휠이 없다"며 실패 | jax의 `cuda12` extra는 **`nvidia-*` 의존성에만** 리눅스 마커가 붙어 있고 `jax-cuda12-plugin` 자체에는 없음 | 그룹 선언에 `; sys_platform == 'linux'`를 직접 부착. 리눅스가 아니면 아무것도 설치하지 않고 통과 |
+
+> ⚠️ **1번은 uv 전환이 만든 문제가 아닙니다.** 옛 `requirements.txt`에도 `warp-lang`이 없었으므로 **오늘 새로 `pip install -r requirements.txt` 해도 똑같이 깨집니다.** 잠금 파일이 없어서 드러나지 않던 전이 의존성 드리프트이고, 이번 이관이 그것을 드러내고 고정한 것입니다. 2026-08-01 검증 당시의 최신 warp-lang은 1.15.0(1.16.0이 08-03 배포)이었습니다.
+
+**GPU 비용**: **$0.** 클라우드 미사용, 로컬 GPU 미사용(이 머신에는 없습니다).
+
+**미검증**
+
+- **`MUJOCO_GL=egl` 경로.** macOS에는 EGL이 없어 `glfw`로 대체 검증했습니다. 리눅스 인스턴스에서의 egl 경로는 2026-08-01 실측이 정본입니다.
+- **`uv sync --group cuda`의 실제 설치.** 맥에서는 마커로 스킵되므로 **리눅스 GPU 인스턴스에서 아직 확인하지 않았습니다.** 잠금 파일에 리눅스 CUDA 휠 8종이 들어 있는 것까지만 확인했습니다.
+- **`02`·`03` 재실행.** 위 참조.
+- **작업에 든 사람 시간.** 또 재지 않았습니다.
+
+---
+
 ## 자료 간 수치 불일치 (집필 검증 중 발견)
 
 이 로그를 작성하며 문서 간 값이 어긋난 곳입니다. **이 문서에서는 고치지 않고 어느 쪽이 정본인지만 기록합니다**(해당 파일 수정은 별도 작업).

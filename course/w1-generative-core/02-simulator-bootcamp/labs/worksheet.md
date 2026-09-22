@@ -468,7 +468,7 @@ $M_{\text{eff}} = 0.14$ → ______ rad/s = ______ Hz. 이 값이 W3에서 정책
 |---|---|
 | 지금 GPU JAX를 설치했는가 | 예 / 아니오(W3까지 미룸) |
 | 미뤘다면 그 이유 | |
-| `pip install -U "jax[cuda12]"` 후 `jax.devices()` | 해당 없음 / |
+| `uv sync --group cuda` 후 `jax.devices()` | 해당 없음 / |
 
 ---
 

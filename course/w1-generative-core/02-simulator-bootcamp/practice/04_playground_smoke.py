@@ -49,8 +49,8 @@
 # ## 설치 — 이름 함정
 #
 # ```bash
-# pip install "playground==0.2.0"   # ✅ PyPI 배포명은 playground
-# # pip install mujoco_playground   # ❌ 존재하지 않는 패키지
+# uv sync                           # ✅ pyproject.toml에 "playground==0.2.0"
+# # uv add mujoco_playground        # ❌ 존재하지 않는 패키지 (PyPI 배포명은 playground)
 # ```
 # ```python
 # import mujoco_playground           # ✅ import 이름은 mujoco_playground
@@ -58,7 +58,7 @@
 #
 # GPU 인스턴스라면 JAX를 GPU 빌드로 바꿔야 합니다.
 # ```bash
-# pip install -U "jax[cuda12]"
+# uv sync --group cuda
 # export JAX_DEFAULT_MATMUL_PRECISION=highest   # Ampere 계열 공식 권장
 # ```
 
@@ -141,7 +141,7 @@ def report_backend() -> bool:
         print("     Ampere 계열이면: export JAX_DEFAULT_MATMUL_PRECISION=highest")
     else:
         print("  ⚠️ CPU JAX입니다. 이 스모크는 통과하지만 **본 학습(W3-M1)은 불가능**합니다.")
-        print("     GPU 인스턴스에서: pip install -U 'jax[cuda12]'")
+        print("     GPU 인스턴스에서: uv sync --group cuda")
         print("     아래 reset/step 호출이 수십 초 걸릴 수 있습니다. 정상입니다.")
     return is_gpu
 
@@ -367,8 +367,8 @@ def main(argv: list[str] | None = None) -> None:
     except ImportError:
         raise SystemExit(
             "[에러] mujoco_playground를 import할 수 없습니다.\n"
-            "  설치: pip install 'playground==0.2.0'\n"
-            "  ⚠️ 'pip install mujoco_playground'는 존재하지 않는 패키지입니다 (lesson §7.1)"
+            "  설치: practice/ 에서 uv sync (pyproject.toml에 playground==0.2.0)\n"
+            "  ⚠️ 'mujoco_playground'는 설치 이름이 아닙니다. 존재하지 않는 패키지입니다 (lesson §7.1)"
         )
     print(f"\n  import mujoco_playground : {time.perf_counter() - t0:.1f} s")
 

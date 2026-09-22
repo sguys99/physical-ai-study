@@ -643,9 +643,8 @@ import mujoco
 나머지는 `numpy` 2.5.1, `mediapy` 1.2.7, `imageio` 2.37.4, `jupytext` 1.19.5, `matplotlib` 3.11.1, `pyopengl` 3.1.10입니다. `jax`가 파이썬 3.12 이상을 요구하니 전체를 3.12로 맞추는 것이 안전합니다.
 
 ```bash
-uv pip install mujoco==3.11.0 mediapy==1.2.7 imageio==2.37.4 imageio-ffmpeg jupytext==1.19.5 matplotlib==3.11.1
-uv pip install "playground==0.2.0"          # mujoco_playground + jax(CPU) + mujoco-mjx
-uv pip install -U "jax[cuda12]"             # 그래픽카드 인스턴스에서만
+uv sync                # practice/ 에서 실행. 위 버전이 uv.lock에 잠겨 있습니다
+uv sync --group cuda   # 그래픽카드 인스턴스에서만. 같은 버전의 GPU JAX를 얹습니다
 ```
 
 ### 6.4 인스턴스를 쓰는 방식
@@ -676,7 +675,7 @@ uv pip install -U "jax[cuda12]"             # 그래픽카드 인스턴스에서
 설치할 때 쓰는 이름과 코드에서 불러올 때 쓰는 이름이 다릅니다.
 
 ```bash
-uv pip install "playground==0.2.0"            # 설치할 때의 이름
+uv add "playground==0.2.0"                    # 설치할 때의 이름. pyproject.toml에 이렇게 적힙니다
 export JAX_DEFAULT_MATMUL_PRECISION=highest   # Ampere 계열 그래픽카드 공식 권장
 ```
 ```python

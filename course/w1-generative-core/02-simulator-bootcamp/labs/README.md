@@ -104,7 +104,7 @@ Step 1에서 2시간을 넘기면 **1.5일 모드**로 전환하고, 넘어간 �
 
 | | 그냥 붙여넣으세요 | 판단이 필요합니다 |
 |---|---|---|
-| **Step 1** | venv 생성, `pip install -r requirements.txt`, `git clone` | 어느 백엔드를 쓸 것인가(1.4 순서도), 볼륨을 어디에 마운트할 것인가 |
+| **Step 1** | `uv sync`, `git clone` | 어느 백엔드를 쓸 것인가(1.4 순서도), 볼륨을 어디에 마운트할 것인가 |
 | **Step 2** | `python 01_mujoco_basics.py --smoke` | timestep 스윕 표에서 **어느 dt를 고를 것인가** |
 | **Step 3** | `python 02_g1_inspect.py --csv` | 워크시트의 빈칸 — **여기는 손으로 채우는 게 목적** |
 | **Step 4** | `--smoke` → `--joints arms` | `--freq`를 어디까지 올릴 것인가(심화 ①), `legs`가 넘어지는 걸 어떻게 해석할 것인가 |
@@ -146,7 +146,7 @@ df -h                      # ③ 디스크와 볼륨 마운트
 | 명령 | 이 출력이면 정상 | 아니면 |
 |---|---|---|
 | `nvidia-smi` | GPU 이름과 `Driver Version` / `CUDA Version`이 담긴 표가 뜬다 | **이 랩은 그래도 진행됩니다.** `command not found`면 CPU 인스턴스라는 뜻 — 1.4 순서도에서 `osmesa` 경로로 |
-| `python3 --version` | **`Python 3.12.x` 이상** | 3.11 이하면 아래 1.2의 `uv` 경로를 쓰세요. `jax`가 3.12+를 요구합니다 |
+| `python3 --version` | **`Python 3.12.x` 이상** | 3.11 이하여도 그냥 진행하세요. 1.2의 `uv sync`가 3.12를 따로 내려받습니다(`jax`가 3.12+를 요구합니다) |
 | `df -h` | 퍼시스턴트 볼륨의 마운트 경로(`/workspace`, `/mnt/persistent` 등)가 보이고 **여유 20 GB 이상** | 마운트가 안 보이면 제공자 콘솔에서 볼륨 연결 확인. 여기서 넘어가면 인스턴스를 지울 때 전부 날아갑니다 |
 
 > 📌 **볼륨 경로를 지금 정하고 적어두세요.** 이 문서는 `$WORK`로 부릅니다.
@@ -160,41 +160,48 @@ df -h                      # ③ 디스크와 볼륨 마운트
 ### 1.2 리포와 가상환경
 
 ```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh   # uv가 이미 있으면 생략
+source $HOME/.local/bin/env                       # 같은 셸에서 바로 쓰려면
+
 cd $WORK
 git clone <이 저장소 URL> physical-ai-study     # 이미 있으면 생략
 cd physical-ai-study/course/w1-generative-core/02-simulator-bootcamp/practice
 
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -U pip
-pip install -r requirements.txt
+uv sync
 ```
 
-`python3`가 3.11 이하라면 `uv`로 3.12를 따로 잡습니다.
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv venv --python 3.12 .venv
-source .venv/bin/activate
-uv pip install -r requirements.txt
-```
+`uv sync` 하나가 파이썬 3.12 확보 · `.venv` 생성 · 설치를 전부 합니다.
+시스템 `python3`가 3.11 이하여도 상관없습니다 — `.python-version`에 3.12가 적혀 있어 uv가 따로 내려받습니다.
+버전은 `uv.lock`에 잠겨 있어 **인스턴스를 갈아도 같은 조합이 재현됩니다.**
 
 **성공 판정 기준**
 
 ```bash
-which python                    # .../practice/.venv/bin/python 이어야 정상
-python -c "import mujoco; print(mujoco.__version__)"
+uv run python -c "import mujoco; print(mujoco.__version__)"
 ```
 
 ```
 3.11.0
 ```
 
+이후 명령은 `uv run python ...` 으로 돌리거나, 한 번 활성화하고 평소처럼 `python ...` 으로 돌립니다.
+**이 랩의 나머지 명령은 활성화한 상태를 가정합니다.**
+
+```bash
+source .venv/bin/activate
+which python                    # .../practice/.venv/bin/python 이어야 정상
+```
+
 > ⚠️ **`.venv`는 반드시 퍼시스턴트 볼륨 안에** 만드세요. 인스턴스 로컬 디스크에 만들면 인스턴스를 지울 때 3 GB 넘는 설치를 다시 합니다.
+> 리포 자체를 볼륨에 클론했다면 `.venv`도 자동으로 볼륨 안입니다. 리포는 로컬에 두고 환경만 볼륨에 두려면 경로를 지정하세요.
+>
+> ```bash
+> export UV_PROJECT_ENVIRONMENT=$WORK/.venv-w1m2
+> ```
 
 ### 1.3 ★ 렌더링 관문 — 여기가 통과되기 전에는 Step 2로 가지 마세요
 
-`pip install`이 성공했다고 렌더가 되는 건 아닙니다. **물리 계산과 렌더링은 완전히 다른 경로**이고, 클라우드에서 죽는 쪽은 항상 렌더링입니다.
+`uv sync`가 성공했다고 렌더가 되는 건 아닙니다. **물리 계산과 렌더링은 완전히 다른 경로**이고, 클라우드에서 죽는 쪽은 항상 렌더링입니다.
 G1 같은 큰 모델로 확인하면 실패했을 때 원인이 모델인지 백엔드인지 구분이 안 되니, **가장 작은 모델로 먼저** 확인합니다.
 
 ```bash
@@ -906,7 +913,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
   jax 0.11.0   default_backend=cpu
   devices: [CpuDevice(id=0)]
   ⚠️ CPU JAX입니다. 이 스모크는 통과하지만 **본 학습(W3-M1)은 불가능**합니다.
-     GPU 인스턴스에서: pip install -U 'jax[cuda12]'
+     GPU 인스턴스에서: uv sync --group cuda
 ```
 
 **이 상태로도 Step 5는 통과합니다.** 대처는 5.3에서.
@@ -987,10 +994,10 @@ EXIT=0
 ### 5.3 CPU가 나왔는데 GPU 인스턴스라면
 
 `jax.devices()`가 `[CpuDevice(id=0)]`인데 `nvidia-smi`는 GPU를 보여준다면, **CPU jaxlib이 설치된 것**입니다.
-`requirements.txt`의 `playground==0.2.0`이 CPU JAX를 함께 끌어오기 때문이고, **정상 동작입니다.**
+`pyproject.toml`의 `playground==0.2.0`이 CPU JAX를 함께 끌어오기 때문이고, **정상 동작입니다.**
 
 ```bash
-pip install -U "jax[cuda12]"
+uv sync --group cuda
 export JAX_DEFAULT_MATMUL_PRECISION=highest      # Ampere 계열 공식 권장 (lesson §7.1)
 echo 'export JAX_DEFAULT_MATMUL_PRECISION=highest' >> ~/.bashrc
 
@@ -1202,11 +1209,11 @@ ERROR: No matching distribution found for mujoco_playground
 | | |
 |---|---|
 | **원인** | **PyPI 배포명은 `playground`, import 이름이 `mujoco_playground`입니다.** 배포명과 모듈명이 다른 흔치 않은 케이스 |
-| **대처** | `pip install "playground==0.2.0"` |
+| **대처** | `uv sync` (`pyproject.toml`에 `playground==0.2.0`으로 적혀 있습니다) |
 
 PyPI 조회로도 확인됩니다(2026-08-01): `pypi.org/pypi/mujoco_playground/json` → **404**, `mujoco-playground` → **404**, `playground` → **200**.
 
-반대로 `import playground`도 안 됩니다. `requirements.txt`를 쓰면 애초에 겪지 않지만, 손으로 설치하다 한 번은 밟습니다 (lesson §7.1).
+반대로 `import playground`도 안 됩니다. `uv sync`를 쓰면 애초에 겪지 않지만, 손으로 설치하다 한 번은 밟습니다 (lesson §7.1).
 
 ### E5. menagerie 경로를 못 찾는다
 
@@ -1267,7 +1274,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 | **대처** | Step 5는 이대로 통과합니다. GPU가 필요해지는 건 W3-M1 |
 
 ```bash
-pip install -U "jax[cuda12]"
+uv sync --group cuda
 export JAX_DEFAULT_MATMUL_PRECISION=highest
 python -c "import jax; print(jax.devices())"     # [CudaDevice(id=0)] 이면 성공
 ```
@@ -1304,7 +1311,7 @@ Module ... load on device 'cpu' took ... (cached)
 ```
 OSError: [Errno 28] No space left on device
 ```
-또는 `pip install` 중간에 조용히 실패합니다.
+또는 `uv sync` 중간에 조용히 실패합니다.
 
 | | |
 |---|---|

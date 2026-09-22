@@ -21,20 +21,39 @@ MJCF(XML) → mjModel → mjData → mj_step 루프 → Renderer → mp4/png
 
 ### 1.1 패키지
 
+의존성은 [`pyproject.toml`](pyproject.toml)에 적혀 있고 버전은 [`uv.lock`](uv.lock)에 잠겨 있습니다.
+설치는 한 줄입니다.
+
 ```bash
 cd course/w1-generative-core/02-simulator-bootcamp/practice
 
-python3 -m venv .venv          # 또는  uv venv .venv   (Python 3.12 이상 필요)
-source .venv/bin/activate
-pip install -r requirements.txt
+uv sync
 ```
 
-버전은 집필 환경(Python 3.12.12, 2026-08-01)에서 실제로 설치·실행 검증한 값으로 고정돼 있습니다.
+이 한 줄이 셋을 한 번에 합니다 — 파이썬 3.12 확보(`.python-version` 참조. 시스템 파이썬이 3.11 이하여도
+uv가 직접 내려받습니다), `.venv` 생성, `uv.lock`에 적힌 버전 그대로 설치.
+잠긴 버전은 집필 환경(Python 3.12, 2026-08-01)에서 실제로 설치·실행 검증한 값입니다.
+
+`uv`가 없으면 먼저 설치합니다 — `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+스크립트를 돌릴 때는 `uv run`을 앞에 붙이거나, 한 번 활성화해두고 평소처럼 `python`을 씁니다.
+**이 문서의 나머지 명령은 활성화한 상태를 가정합니다.**
+
+```bash
+uv run python 01_mujoco_basics.py --smoke     # 활성화 없이 매번
+# 또는
+source .venv/bin/activate                     # 한 번 활성화해두고
+python 01_mujoco_basics.py --smoke
+```
 
 > ⚠️ **이름 함정**: PyPI 배포명은 `playground`, import 이름은 `mujoco_playground`입니다.
-> `pip install mujoco_playground`는 **존재하지 않는 패키지**입니다 (lesson §7.1).
+> `pyproject.toml`에 `playground==0.2.0`으로 적혀 있는 이유입니다.
+> `uv add mujoco_playground`도 `pip install mujoco_playground`도 **존재하지 않는 패키지**입니다 (lesson §7.1).
 
-### 1.2 G1 로봇 모델 — pip이 아니라 git clone
+> 📌 **그래픽카드 인스턴스**에서 04의 본 학습(W3-M1)을 돌릴 때는 `uv sync --group cuda`로 GPU JAX를 얹습니다.
+> 기본 설치는 CPU JAX입니다 — 이 모듈의 스모크는 그걸로 통과합니다.
+
+### 1.2 G1 로봇 모델 — 패키지가 아니라 git clone
 
 `02`·`03`은 mujoco_menagerie의 G1 MJCF가 필요합니다. **약 2.3 GB**입니다.
 
