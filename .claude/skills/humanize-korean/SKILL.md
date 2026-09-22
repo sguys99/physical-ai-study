@@ -12,6 +12,7 @@ description: AI(ChatGPT·Claude·Gemini 등)가 쓴 한글 텍스트를 "사람�
 > - **신설**: `register: course` — strict 강제 + 산문 라인 기준 판정 + 문단 흐름 복원 + plain-language 가드.
 > - **판정 지표 SSOT 이관**: `register: course`의 변경률 판정은 `docs/course-plan.md` **§1의 「변경률 판정 지표」 박스**를 따릅니다. 전체 문자 변경률은 기록만 하고 단독 판정 근거로 쓰지 않습니다. (v1.6 원문은 SSOT를 「§9.1(티어별 지표)」로 적었는데 §9.1은 W1-M2 윤문 실측 기록이고 규정이 아닙니다. 2026-09-01에 §1로 바로잡았습니다.)
 > - 출처: `sguys99/ai-wiki`의 `register: wiki`(2026-07-10)를 이 저장소 문서 구조에 맞춰 이식.
+> - **2026-09-22 보강**: plain-language 가드를 양방향으로. 문학체 드리프트뿐 아니라 구어 은유·영어 관용구 직역(`칸을 먹다`, `걸려 넘어지는 지점`, `되는 길`)도 잡는다. W1-M2 eli5 학습자 피드백이 계기이고 근거는 `docs/course-plan-log.md` §9.22.
 
 > **v1.5 변경 고지 (2026-04-26) — v1.1 베이스라인 + Monolith Fast Path**
 > v1.2(voice profile)·v1.3(candidate pool)·v1.4(역할별 모델 분산)는 모두 핫패스 비용을 잡지 못해 5,000자 입력에 25분이 걸렸습니다. v1.5는 **v1.1 단순 구조로 롤백한 뒤 단일 호출 monolith 에이전트만 추가**한 설계입니다.
@@ -42,7 +43,7 @@ humanize-korean v1.6 — {fast|strict} 모드{, register: course} / run_id: {YYY
 1. **strict 강제** — 위 모드 결정대로 5인 파이프라인으로 라우팅.
 2. **판정 지표를 산문 라인 기준으로 전환** — 아래 밴드 블록 참조. lesson.md는 문자의 40% 이상이 코드·표·수식(전량 보존 대상)이라 **전체 문자 변경률이 구조적으로 낮게 나온다.** 그 수치로 저윤문을 판정하면 오판이고, 재윤문을 지시하면 오히려 과윤문을 유발한다.
 3. **문단 흐름 복원 허용** — 국소 span 편집을 넘어 문단 단위 재구조화 허용(문서 전체 재작성은 여전히 금지). `rewriting-playbook.md §1.Y` 참조.
-4. **plain-language 가드** — 번역투를 피하려다 잘 안 쓰는 문어체·문학체 어휘로 갈아타지 않는다. `quick-rules.md`·`rewriting-playbook.md`의 "흔한 어휘 우선" 규칙 적용.
+4. **plain-language 가드** — 번역투를 피하려다 잘 안 쓰는 문어체·문학체 어휘로 갈아타지 않는다. `quick-rules.md`·`rewriting-playbook.md`의 "흔한 어휘 우선" 규칙 적용. 2026-09-22부터 **양방향**이다. 구어 은유·영어 관용구 직역(`칸을 먹다`, `걸려 넘어지는 지점`, `되는 길`)도 평이한 서술어로 바꾼다.
 
 **변경률 판정 밴드** (SSOT는 `docs/course-plan.md` §1의 「변경률 판정 지표」 박스. 아래는 사본이며, 불일치 시 course-plan이 우선한다)
 
@@ -56,7 +57,7 @@ humanize-korean v1.6 — {fast|strict} 모드{, register: course} / run_id: {YYY
 - **산문 = 코드펜스·표 행·LaTeX 블록·Mermaid·frontmatter를 제외한 라인.**
 - 전체 문자 변경률은 **기록만** 하고 단독 판정 근거로 쓰지 않는다.
 - **저윤문** — 주지표가 하한 미달이면서 S1이 잔존 → `rewrite_round_2`.
-- **과윤문** — 주지표 상한 초과, 또는 문학체 드리프트 어휘 3개 이상 → `rollback_and_rewrite`.
+- **과윤문** — 주지표 상한 초과, 또는 문학체 드리프트와 구어 은유·관용구 직역 어휘를 합쳐 3개 이상 → `rollback_and_rewrite`.
 - 상한을 올려도 안전한 이유는 strict의 `content-fidelity-auditor`가 의미 불변을 독립 감사하기 때문이다.
 
 장르 힌트(칼럼·리포트 등)와 별개 축이다. register는 문체 register를, genre_hint는 글의 장르를 가리킨다. 오케스트레이터는 register=course일 때 하위 에이전트(`korean-style-rewriter`·`naturalness-reviewer`)에 `register: course`와 티어를 전달한다.
