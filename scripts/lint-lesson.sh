@@ -4,8 +4,8 @@
 # SSOT: docs/course-plan.md §2.1 3층 문서 · §3.1 frontmatter · §3.2 시각자료
 #       §3.7 문서 구조 · §3.8 용어 도입 · §3.9 학습자 전제와 비유
 #       §3.10 문장부호 · §3.11 독자를 데려가는 장치 · §4 분량
-# 근거: docs/course-plan.md §9.11 (2026-08-09 규약 개정)
-#       docs/course-plan.md §9.19 (2026-08-25 규약 2차 개정)
+# 근거: docs/course-plan-log.md §9.11 (2026-08-09 규약 개정)
+#       docs/course-plan-log.md §9.19 (2026-08-25 규약 2차 개정)
 #
 # 사용법:
 #   bash scripts/lint-lesson.sh course/w1-generative-core/01-physical-ai-landscape/lesson.md
@@ -26,7 +26,7 @@ c_info() { printf '  ----  %s\n' "$1"; }
 # 산문 = 총 문자 − 구조물(frontmatter + 코드펜스 + $$ 블록 + 표 행)
 # 보호 구간 = 구조물 + 인라인 수식
 #
-# ⚠️ 알고리즘은 docs/course-plan.md §9.6의 계산 스크립트와 **글자 그대로 동일**해야 합니다.
+# ⚠️ 알고리즘은 docs/course-plan-log.md §9.6의 계산 스크립트와 **글자 그대로 동일**해야 합니다.
 #    §9.2·§9.4·§9.6·§9.7에 기록된 실측값과 §4 밴드, 그리고 독해 회귀식
 #    (분 = 19.5 + 0.001186 × 산문)이 전부 이 정의 위에 서 있습니다.
 #    헤딩을 빼거나 공백을 지우면 값이 ~25% 낮아져 과거 기록과 비교 불가가 됩니다.

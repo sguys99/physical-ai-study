@@ -160,6 +160,6 @@
 - **C**: S1 잔존 1~2 또는 자체검증 4항 이하 통과 — 사용자에게 strict 모드 권고
 - **D**: S1 잔존 3+ 또는 변경률 50% 초과 — 작업 중단 권고
 
-> **register: course 예외** — 교육자료 산문(`course/**/lesson.md`)은 strict 파이프라인이 처리하며, 등급 A의 변경률 기준이 **전체 문자율이 아니라 산문 라인 변경률 20~50% + 잔존 burden 80%↓**로 바뀐다(Tier A 기준). lesson.md는 문자의 40%+가 코드·표·수식이라 전체 문자율이 구조적으로 낮게 나오기 때문이다. fidelity-auditor가 의미 불변을 독립 감사하므로 더 과감한 편집을 A로 인정한다. 상세는 `SKILL.md §register: course`와 `docs/course-plan.md` §9.1, 등급 루브릭은 `naturalness-reviewer` 참조.
+> **register: course 예외** — 교육자료 산문(`course/**/lesson.md`)은 strict 파이프라인이 처리하며, 등급 A의 변경률 기준이 **전체 문자율이 아니라 산문 라인 변경률 20~50% + 잔존 burden 80%↓**로 바뀐다(2026-09-01 개정으로 **티어와 무관**하게 모든 lesson에 적용된다). lesson.md는 문자의 40%+가 코드·표·수식이라 전체 문자율이 구조적으로 낮게 나오기 때문이다. fidelity-auditor가 의미 불변을 독립 감사하므로 더 과감한 편집을 A로 인정한다. 상세는 `SKILL.md §register: course`와 `docs/course-plan-log.md` §9.1, 등급 루브릭은 `naturalness-reviewer` 참조.
 
 > v2.0 신규/보강은 A-7·A-15·A-16·A-18·A-19·E-2·E-7·F-4 **8건 (A-17 hold)**. 학술 인용 전문은 `references/scholarship.md`. post-editese 3축 metric은 본 룰북 미반영(metric only 트랙). A-17 무정물·추상명사 '-들'은 학술 anchor(전영철 2007·곽은주·진실로 2011) 강하나 외부 회차(2026-05-07 위키 6편)에서 양성 0건 — NMT 원본 출력 회차 후 v2.1에서 동일 ID로 재평가.

@@ -3,6 +3,7 @@
 > **기준 문서**: [physical-ai-4week-master-plan.md](physical-ai-4week-master-plan.md) — 커리큘럼의 Single Source of Truth(SSOT)
 > **이 문서의 역할**: **집필 규약 SSOT**(§1 절차 · §2 산출물 · §3 공통 규약 · §4 분량 · §6~§8).
 > **집필 현황**(§0 대시보드 · §5 모듈별 체크리스트)은 [course-status.md](course-status.md), **진행 메모**(§9)는 [course-plan-log.md](course-plan-log.md)에 따로 있습니다(2026-09-18 분리).
+> **본문의 「§9.x」 인용은 전부 [course-plan-log.md](course-plan-log.md)를 가리킵니다.**
 > **학습 실행 로그**는 [progress.md](progress.md)에 따로 씁니다(무엇을 돌렸나 · 막힌 지점 · 소요시간 · GPU 비용).
 > **스킬 연계**: 집필은 [`/pai-course-author`](../.claude/skills/pai-course-author/), 윤문은 [`/humanize-korean`](../.claude/skills/humanize-korean/).
 
