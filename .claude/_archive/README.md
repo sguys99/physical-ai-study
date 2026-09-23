@@ -18,6 +18,7 @@ Claude Code는 `.claude/agents/`와 `.claude/skills/`만 탐색합니다.
 | `agents/humanize/` | humanize-web-architect, taxonomy-gap-analyzer, translationese-research-distiller, korean-translation-scholar, post-editese-metric-engineer, quick-rules-integrator | 분류체계 유지보수 전용. `humanize-korean/SKILL.md`가 「필요 에이전트 6종」으로 명시한 실행 경로 밖 |
 | `skills/prd`, `skills/prd-to-plan`, `skills/to-prd` | PRD 작성·분해 | PRD 작업 없음. 세 스킬이 같은 일을 중복 |
 | `skills/frontend-design` | 웹 UI 디자인 | 마크다운 저작 저장소에 해당 없음 |
+| `commands/docs/update-roadmap.md` | `/update-roadmap` 커맨드 | 이 저장소에 `ROADMAP.md`가 없다. allowed-tools가 없는 파일(`docs/ROADMAP.md`)을 가리키고 있었다 |
 
 ## 되돌리는 법
 

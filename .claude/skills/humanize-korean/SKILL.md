@@ -119,12 +119,15 @@ v1.1 5인 파이프라인 그대로. 검증 분리·재윤문 루프가 의미 �
 
 `register: course`면 호출 인자에 `register: course`와 `tier: A|B`를 함께 전달한다. Phase C의 `naturalness-reviewer`에도 동일하게 전달한다.
 
-### Phase C: 병렬 검증 (에이전트 팀)
-`TeamCreate`로 `humanize-review-team` 구성:
+### Phase C: 병렬 검증
+검증자 둘을 **`Agent` 도구 한 메시지에서 동시에 호출**한다. 둘 사이에 의존이 없어 순차로 돌릴 이유가 없다.
+
 - `content-fidelity-auditor` → `04_fidelity_audit.json` (의미 동등성)
 - `naturalness-reviewer` → `05_naturalness_review.json` (잔존·과윤문)
 
-`TeamDelete` 후 종합 판정 매트릭스에 따라 분기:
+> ⚠️ **`TeamCreate`·`TeamDelete`를 쓰지 않는다.** v1.1 설계는 팀 도구를 전제했지만 그 도구는 이 환경에 없다. 이름을 그대로 두면 매번 즉흥 대체가 일어난다. 둘을 한 번에 띄우고 양쪽 결과가 다 오면 아래 매트릭스로 분기한다.
+
+두 결과를 받아 종합 판정 매트릭스에 따라 분기:
 
 | fidelity | naturalness | 종합 | 후속 |
 |---|---|---|---|
@@ -189,9 +192,9 @@ v1.1 5인 파이프라인 그대로. 검증 분리·재윤문 루프가 의미 �
 
 **모델:** 모두 `model: opus` 통일 (v1.1 베이스라인). 모델 다운그레이드는 v1.4에서 시도했으나 도구 호출 chain이 진짜 병목이라 효과 미미했음.
 
-**에이전트 정의 위치:** 저장소 루트 `agents/`에 12종 정의(플러그인 컨벤션). Claude Code 탐색 경로:
-1. 플러그인 설치 시 — `humanize-korean` 플러그인이 `agents/`를 번들로 제공(전역).
-2. 스크립트 설치 시 — `install.sh`가 `agents/*.md`를 `~/.claude/agents/`에 심링크(전역).
+**에이전트 정의 위치:** 이 저장소에서는 `.claude/agents/humanize/`에 **실행에 필요한 6종만** 둔다. Claude Code가 탐색하는 경로가 거기다.
+
+분류 체계 유지보수 전용 6종(`humanize-web-architect`, `taxonomy-gap-analyzer`, `translationese-research-distiller`, `korean-translation-scholar`, `post-editese-metric-engineer`, `quick-rules-integrator`)은 `.claude/_archive/agents/humanize/`에 있다. 에이전트 description은 매 세션 상주하므로 실행 경로 밖의 것을 로드된 상태로 두지 않는다. 승격 회차에 필요하면 그때만 `git mv`로 되돌리고 끝나면 다시 넣는다.
 
 필요 에이전트 6종:
 - `humanize-monolith` (v1.5 신규, fast 전용)
